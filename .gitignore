@@ -2,4 +2,3 @@ server/node_modules
 client/node_modules
 server/.env
 dist
-server/server/database/database.ts
