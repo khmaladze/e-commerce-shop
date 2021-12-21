@@ -8,11 +8,6 @@ import authSchema from "../validation/validation";
 import bcrypt from "bcrypt";
 import { isValidEmail, isValidGmailProvider } from "../validation/validation";
 import jwt from "jsonwebtoken";
-import requireUserLogin from "../middleware/requireUserLogin";
-
-router.get("/test", requireUserLogin, (req, res) => {
-  res.send("ok");
-});
 
 ///////////////////////////
 // /* Register user  */  //
