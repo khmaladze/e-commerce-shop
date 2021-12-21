@@ -1,0 +1,543 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  /* font-family: "Raleway", sans-serif; */
+  font-family: "Roboto", sans-serif;
+  background: #f7f7f7;
+  scroll-behavior: smooth;
+}
+
+/* main {
+  max-width: 1200px;
+  margin: 0 auto;
+} */
+
+header {
+  height: 80px;
+  width: 100%;
+  background: white;
+}
+
+nav {
+  height: 80px;
+  width: 95%;
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.navbar {
+  height: 80px;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.navbar__logo {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.navbar__logo img {
+  height: 50px;
+}
+
+.navbar__content__left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar__content__left ul li {
+  list-style-type: none;
+  float: left;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.navbar__content__right ul li {
+  list-style-type: none;
+  float: left;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.navbar__content__right {
+  /* width: 270px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar__content__right svg {
+  /* margin-left: 20px;
+  font-size: 20px; */
+  display: none;
+}
+
+.slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.slider img {
+  width: 100%;
+  height: 100%;
+}
+
+.slider .slider-right-arrow {
+  position: absolute;
+  top: 50%;
+  right: 32px;
+  font-size: 3rem;
+  color: #fff;
+  z-index: 10;
+  cursor: pointer;
+  user-select: none;
+}
+
+.slider .slider-left-arrow {
+  position: absolute;
+  top: 50%;
+  left: 32px;
+  font-size: 3rem;
+  color: #fff;
+  z-index: 10;
+  cursor: pointer;
+  user-select: none;
+}
+
+.slide {
+  opacity: 0;
+  transition-duration: 1s ease;
+}
+
+.slide.active {
+  opacity: 1;
+  transition-duration: 1s;
+  transform: scale(1);
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container__shop__text {
+  text-align: center;
+  padding-top: 50px;
+}
+
+.container__shop {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.container__shop .shop__container {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* background-attachment: fixed; */
+}
+
+/* .container__shop .card__container {
+  height: 250px;
+  width: 300px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 7px;
+} */
+
+.container__shop .card__container {
+  height: 250px;
+  width: 300px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 7px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: white;
+}
+
+.container__shop .card__container h3 {
+  background: red;
+  position: relative;
+  top: 110px;
+}
+
+.container__shop .card__container h4 {
+  background: red;
+  position: relative;
+  top: 110px;
+}
+
+footer {
+  background: white;
+  margin-top: 50px;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+}
+
+.footer {
+  display: flex;
+  max-width: 1200px;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  height: 180px;
+  background: white;
+  width: 100%;
+  /* position: absolute;
+  bottom: 0; */
+}
+
+.footer__content__right ul li {
+  list-style-type: none;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.footer__content__left {
+  margin-left: 30px;
+}
+
+.footer__content__right {
+  margin-right: 30px;
+}
+
+.responsive__navbar ul li {
+  opacity: 0;
+  display: none;
+  list-style-type: none;
+  padding: 5px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 1200px) {
+  .slider {
+    height: 300px;
+  }
+  .container__shop .shop__container {
+    height: 170px;
+    width: 170px;
+  }
+  .container__shop .card__container {
+    height: 170px;
+    width: 220px;
+  }
+  .container__shop .card__container h3 {
+    top: 60px;
+  }
+  .container__shop .card__container h4 {
+    top: 60px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .container__shop .shop__container {
+    height: 130px;
+    width: 130px;
+  }
+  .container__shop__text {
+    font-size: 25px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .container__shop .shop__container {
+    height: 100px;
+    width: 100px;
+  }
+  .container__shop .card__container {
+    height: 110px;
+    width: 150px;
+  }
+  .container__shop .card__container h3 {
+    top: 30px;
+  }
+  .container__shop .card__container h4 {
+    top: 30px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .slider {
+    height: 270px;
+  }
+  .navbar__content__right {
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .navbar__content__left ul {
+    display: none;
+  }
+  .navbar__content__right ul {
+    display: none;
+  }
+  .navbar__content__right svg {
+    margin-left: 20px;
+    font-size: 27px;
+    display: block;
+    cursor: pointer;
+  }
+  .navbar__content__right svg:hover {
+    transition: 1.5s ease;
+    transform: rotate(360deg);
+  }
+  .responsive__navbar {
+    opacity: 0;
+    display: none;
+    position: fixed;
+    z-index: 10;
+    /* height: 100vh; */
+    width: 100%;
+    background: #ffffff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: 1s ease;
+  }
+  .responsive__navbar ul {
+    opacity: 0;
+    text-align: center;
+    display: none;
+    list-style-type: none;
+    padding: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 1s ease;
+  }
+  .responsive__navbar ul li {
+    list-style-type: none;
+    padding: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 1s ease;
+  }
+}
+
+@media screen and (max-width: 535px) {
+  .slider {
+    height: 180px;
+  }
+  .container__shop {
+    display: block;
+  }
+  .container__shop .shop__container {
+    width: 100%;
+    height: 120px;
+    border-radius: 0%;
+    margin-top: 20px;
+  }
+  .container__shop .shop__container {
+    width: 100%;
+  }
+  .container__shop .card__container {
+    width: 100%;
+    margin-top: 20px;
+  }
+  .footer__content__left {
+    margin-left: 10px;
+  }
+  .footer__content__right {
+    margin-right: 10px;
+    font-size: 14px;
+  }
+  .slider .slider-left-arrow {
+    top: 35%;
+  }
+  .slider .slider-right-arrow {
+    top: 35%;
+  }
+}
+
+.auth-card-center {
+  margin: 0 auto;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* font-family: "Raleway", sans-serif; */
+  font-family: "Roboto", sans-serif;
+  margin-top: 50px;
+}
+
+input[type="text"] {
+  height: 35px;
+  width: 90%;
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding-left: 15px;
+  margin-top: 20px;
+  /* font-family: "Raleway", sans-serif; */
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+}
+
+input[type="password"] {
+  width: 90%;
+  height: 35px;
+  border-radius: 5px;
+  background: white;
+  border: 1px solid black;
+  margin-top: 20px;
+  padding-left: 15px;
+  float: none;
+  /* font-family: "Raleway", sans-serif; */
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+}
+
+input[type="date"] {
+  height: 35px;
+  width: 90%;
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding-left: 15px;
+  margin-top: 20px;
+  /* font-family: "Raleway", sans-serif; */
+  font-family: "Roboto", sans-serif;
+}
+
+input[type="number"] {
+  height: 35px;
+  width: 90%;
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding-left: 15px;
+  margin-top: 20px;
+  /* font-family: "Raleway", sans-serif; */
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+}
+
+button.signinbutton {
+  cursor: pointer;
+  float: none;
+  width: 90%;
+  margin-top: 20px;
+  border: 1px solid black;
+  border-radius: 3px;
+  height: 27px;
+  background: black;
+  color: white;
+  /* font-family: "Raleway", sans-serif; */
+  font-family: "Roboto", sans-serif;
+}
+
+button.signupbutton {
+  cursor: pointer;
+  float: none;
+  width: 90%;
+  margin-top: 20px;
+  border: 1px solid black;
+  border-radius: 3px;
+  height: 27px;
+  background: black;
+  color: white;
+  /* font-family: "Raleway", sans-serif; */
+  font-family: "Roboto", sans-serif;
+}
+
+.auth-card h5 {
+  margin-top: 7px;
+}
+
+.auth-card h6 {
+  margin-top: 7px;
+}
+
+.auth-card h2 {
+  margin-top: 25px;
+  /* background: linear-gradient(180deg, #00c2ff, #01158b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent; */
+}
+
+.auth-card {
+  text-align: center;
+  border: 0px solid black;
+  min-height: 300px;
+  max-width: 500px;
+  position: relative;
+  margin: 0.5rem 0 1rem 0;
+  background-color: #fff;
+  -webkit-transition: -webkit-box-shadow 0.25s;
+  transition: -webkit-box-shadow 0.25s;
+  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, -webkit-box-shadow 0.25s;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%),
+    0 1px 5px 0 rgb(0 0 0 / 20%);
+}
+
+.profile__header {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30px;
+}
+
+.profile__header__image {
+  height: 170px;
+  width: 170px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  margin-left: 20px;
+  border: 1px solid #8080807a;
+}
+
+.profile__header__info {
+  margin-right: 20px;
+}
