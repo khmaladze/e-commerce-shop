@@ -1,10 +1,4 @@
-// Update with your config settings.
 import knex, { Knex } from "knex";
-// import { Knex } from "knex";
-
-// interface IKnexConfig {
-//   [key: string]: Knex.Config;
-// }
 
 const config: Knex.Config = {
   client: "pg",

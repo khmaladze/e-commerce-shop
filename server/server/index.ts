@@ -14,9 +14,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 
-import "./models/user";
 import authRoutes from "./routes/auth";
+import shopRoutes from "./routes/shop";
+
 app.use("/api/auth", authRoutes);
+app.use("/api/shop", shopRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

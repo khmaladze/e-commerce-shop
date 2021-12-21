@@ -1,6 +1,7 @@
-import Joi from "joi";
+import Joi, { string } from "joi";
 
-const authSchema = Joi.object({
+// validate auth
+export const authSchema = Joi.object({
   firstName: Joi.string()
     .pattern(/^[a-z]+$/)
     .lowercase()
@@ -28,14 +29,8 @@ const authSchema = Joi.object({
   userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
   userCard: Joi.string().lowercase().length(10).trim().required(),
   cardPassword: Joi.string().length(4).required(),
-  //   isBlocked: Joi.boolean().required(),
   budget: Joi.string().lowercase().min(2).max(50).trim().required(),
   confirmPassword: Joi.any().valid(Joi.ref("userPassword")).required(),
-  //   ipAddress: Joi.string().required(),
-  //   browserType: Joi.string().required(),
-  //   userOs: Joi.string().required(),
-  //   userOsRelease: Joi.string().required(),
-  //   userOsPlatform: Joi.string().required(),
 });
 
 // check if email is valid
@@ -50,4 +45,21 @@ export function isValidGmailProvider(email: string) {
   return /.+@(gmail)\.com$/.test(email.toLowerCase());
 }
 
-export default authSchema;
+// validate product
+export const productSchema = Joi.object({
+  title: Joi.string().min(2).max(50).trim().required(),
+  productDescription: Joi.string().max(50),
+  category: Joi.number().required(),
+  price: Joi.number().required(),
+  productCount: Joi.number().required(),
+  postedByUser: Joi.number(),
+  postedByShop: Joi.number(),
+});
+
+// validate shop
+export const shopSchema = Joi.object({
+  shopName: Joi.string().max(50).required(),
+  category: Joi.number().required(),
+  budget: Joi.string().required(),
+  shopImage: Joi.string().required(),
+});

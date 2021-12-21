@@ -1,10 +1,10 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 const router = express.Router();
 import db from "../db/db";
 import os from "os";
-import authSchema from "../validation/validation";
+import { authSchema } from "../validation/validation";
 import bcrypt from "bcrypt";
 import { isValidEmail, isValidGmailProvider } from "../validation/validation";
 import jwt from "jsonwebtoken";
@@ -28,12 +28,9 @@ router.post("/register", async (req: Request, res: Response) => {
     budget,
     confirmPassword,
   } = req.body;
-  // check if fields not empty
 
   try {
     let test = await authSchema.validateAsync(req.body);
-
-    // let test = await authSchema.validateAsync(req.body);
 
     let ipAddress = req.ip || "0";
     let browserType = req.headers["user-agent"] || "0";
@@ -45,6 +42,8 @@ router.post("/register", async (req: Request, res: Response) => {
     let hostname = os.hostname() || "0";
     let operationSystemUsername = os.userInfo().username || "0";
     let operationSystemVersion = os.version() || "0";
+
+    // check if fields not empty
     if (
       !ipAddress ||
       !operationSystem ||
@@ -61,28 +60,6 @@ router.post("/register", async (req: Request, res: Response) => {
         .status(422)
         .json({ success: false, error: "please add all the fields" });
     }
-    // console.log(
-    //   firstName,
-    //   lastName,
-    //   birthDate,
-    //   country,
-    //   userAddress,
-    //   email,
-    //   userCard,
-    //   false,
-    //   budget,
-    //   userImage,
-    //   ipAddress,
-    //   browserType,
-    //   operationSystemCpu,
-    //   homeDir,
-    //   hostname,
-    //   operationSystemUsername,
-    //   operationSystemVersion,
-    //   operationSystem,
-    //   operationSystemRelease,
-    //   operationSystemPlatform
-    // );
 
     if (isValidEmail(email) && isValidGmailProvider(email)) {
       let userImage =
