@@ -87,7 +87,13 @@ CREATE TABLE public.product(
 	price BIGINT NOT NULL,
 	product_count BIGINT NOT NULL,
 	posted_by_user BIGINT,
-	posted_by_shop BIGINT 
+	posted_by_shop BIGINT ,
+	CONSTRAINT fkey_product_posted_by_user FOREIGN KEY (posted_by_shop)
+	REFERENCES public.user(user_id) MATCH SIMPLE,
+	CONSTRAINT fkey_product_posted_by_shop FOREIGN KEY(posted_by_shop)
+	REFERENCES public.shop(shop_id) MATCH SIMPLE
+	ON UPDATE NO ACTION
+	ON DELETE NO ACTION
 )
 
 
