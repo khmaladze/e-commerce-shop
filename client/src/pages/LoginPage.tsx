@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 toast.configure();
 
 export const LoginPage: FC = () => {
-  const { state, dispatch } = useContext(UserContext);
+  const { dispatch } = useContext(UserContext);
   const history = useHistory();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

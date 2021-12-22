@@ -6,7 +6,12 @@ import React, {
   useContext,
 } from "react";
 import "./App.css";
-import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Switch,
+  // useHistory
+} from "react-router-dom";
 import { reducer, initialState } from "./reducers/userReducer";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
@@ -48,8 +53,8 @@ import { Settings } from "./components/Settings";
 export const UserContext = createContext<any>(null);
 
 const Routing = () => {
-  const history = useHistory();
-  const { state, dispatch } = useContext(UserContext);
+  // const history = useHistory();
+  const { dispatch } = useContext(UserContext);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     if (user) {

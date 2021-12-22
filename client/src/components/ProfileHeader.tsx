@@ -2,7 +2,7 @@ import React, { FC, useContext } from "react";
 import { UserContext } from "../App";
 
 export const ProfileHeader: FC = () => {
-  const { state, dispatch } = useContext(UserContext);
+  const { state } = useContext(UserContext);
   return (
     <div>
       <div className="profile__header">
