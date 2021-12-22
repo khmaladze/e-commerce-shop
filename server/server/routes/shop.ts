@@ -1,9 +1,12 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, Router } from "express";
 import db from "../db/db";
 import requireUserLogin from "../middleware/requireUserLogin";
 import { shopSchema } from "../validation/validation";
 const router = express.Router();
 
+///////////////////////////
+// /*   Add Shop      */ //
+///////////////////////////
 router.post(
   "/add/shop",
   requireUserLogin,
@@ -25,7 +28,7 @@ router.post(
         res.send({ success: true });
       }
     } catch (error) {
-      res.status(422).json({
+      res.status(500).json({
         success: false,
         message: "Invalid Credentials",
         error: error,
@@ -33,4 +36,21 @@ router.post(
     }
   }
 );
+
+///////////////////////////
+// /*   Get Shop     */  //
+///////////////////////////
+router.get("/shop", async (req: Request, res: Response) => {
+  try {
+    let shopList = await db("shop").where({ is_blocked: false }).select("*");
+    res.send({ success: true, shopList });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error",
+      error: error,
+    });
+  }
+});
+
 export default router;

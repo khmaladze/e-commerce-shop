@@ -24,7 +24,6 @@ router.post("/register", async (req: Request, res: Response) => {
     userAddress,
     userPassword,
     cardPassword,
-    // isBlocked,
     budget,
     confirmPassword,
   } = req.body;
@@ -96,7 +95,7 @@ router.post("/register", async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    res.status(422).json({
+    res.status(500).json({
       success: false,
       message: "Invalid Credentials",
       error: error,

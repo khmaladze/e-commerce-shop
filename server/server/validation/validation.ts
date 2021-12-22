@@ -1,4 +1,4 @@
-import Joi, { string } from "joi";
+import Joi from "joi";
 
 // validate auth
 export const authSchema = Joi.object({
@@ -52,8 +52,8 @@ export const productSchema = Joi.object({
   category: Joi.number().required(),
   price: Joi.number().required(),
   productCount: Joi.number().required(),
-  postedByUser: Joi.number(),
-  postedByShop: Joi.number(),
+  productImage: Joi.string().max(500).required(),
+  requestedBy: Joi.string().max(500).required(),
 });
 
 // validate shop
@@ -62,4 +62,12 @@ export const shopSchema = Joi.object({
   category: Joi.number().required(),
   budget: Joi.string().required(),
   shopImage: Joi.string().required(),
+});
+
+// valid update user
+export const updateUserSchema = Joi.object({
+  country: Joi.string().lowercase().min(2).max(50).trim().required(),
+  userAddress: Joi.string().lowercase().min(2).max(50).trim().required(),
+  userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
+  confirmPassword: Joi.any().valid(Joi.ref("userPassword")).required(),
 });

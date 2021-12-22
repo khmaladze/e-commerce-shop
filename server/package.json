@@ -6,8 +6,7 @@
   "scripts": {
     "start": "nodemon dist/index.js",
     "dev": "ts-node-dev server/index.ts",
-    "build": "tsc",
-    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",

@@ -17,7 +17,7 @@ export const ProfileHeader: FC = () => {
           <h3>country: {state?.country}</h3>
           <h3>address: {state?.user_address}</h3>
           <h3>user_card: {state?.user_card}</h3>
-          <h3>budget: {state?.budget}</h3>
+          <h3>budget: {state?.budget}$</h3>
         </div>
       </div>
     </div>

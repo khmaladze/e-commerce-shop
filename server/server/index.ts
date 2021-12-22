@@ -16,9 +16,15 @@ app.use(morgan("dev"));
 
 import authRoutes from "./routes/auth";
 import shopRoutes from "./routes/shop";
+import productRoutes from "./routes/product";
+import historyRoutes from "./routes/history";
+import userRoute from "./routes/user";
 
-app.use("/api/auth", authRoutes);
-app.use("/api/shop", shopRoutes);
+app.use("/api/authRoute", authRoutes);
+app.use("/api/shopRoute", shopRoutes);
+app.use("/api/productRoute", productRoutes);
+app.use("/api/historyRoute", historyRoutes);
+app.use("/api/userRoute", userRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

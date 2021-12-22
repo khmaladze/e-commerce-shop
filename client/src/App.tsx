@@ -7,13 +7,15 @@ import React, {
 } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
+import { reducer, initialState } from "./reducers/userReducer";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { MainPage } from "./pages/MainPage";
-import { reducer, initialState } from "./reducers/userReducer";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { CreateShopPage } from "./pages/CreateShopPage";
+import { Settings } from "./components/Settings";
 
 // interface UserInfo {
 //   user_id?: string;
@@ -68,6 +70,12 @@ const Routing = () => {
       <Route exact path="/profile">
         <ProfilePage />
       </Route>
+      <Route exact path="/shop">
+        <CreateShopPage />
+      </Route>
+      <Route exact path="/settings">
+        <Settings />
+      </Route>
     </Switch>
   );
 };
@@ -86,14 +94,5 @@ const App: FC = () => {
     </UserContext.Provider>
   );
 };
-//  <main>
-//       <Navbar />
-//       <Carusel />
-//       <PopularShops />
-//       <PopularCategories />
-//       <LatestUploads />
-//       <LowestPrice />
-//       <Sale />
-//       <Footer />
-//     </main>
+
 export default App;

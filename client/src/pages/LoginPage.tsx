@@ -1,23 +1,17 @@
 import React, { FC, useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { UserContext } from "../App";
-
-// Importing toastify module
 import { toast } from "react-toastify";
-
-// Import toastify css file
 import "react-toastify/dist/ReactToastify.css";
-
-// toast-configuration method,
-// it is compulsory method.
 toast.configure();
+
 export const LoginPage: FC = () => {
   const { state, dispatch } = useContext(UserContext);
   const history = useHistory();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const PostData = () => {
-    fetch("http://localhost:5000/api/auth/login", {
+    fetch("http://localhost:5000/api/authRoute/login", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +62,7 @@ export const LoginPage: FC = () => {
           <Link to="/register">Dont have an account ?</Link>
         </h5>
         <div>
-          <h3 className="mobile-signin" style={{ marginTop: "10px" }}>
+          <h3 style={{ marginTop: "10px" }}>
             <Link to="/">Home Page</Link>
           </h3>
         </div>

@@ -1,12 +1,9 @@
 import React, { FC, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-// Import toastify css file
 import "react-toastify/dist/ReactToastify.css";
-
-// toast-configuration method,
-// it is compulsory method.
 toast.configure();
+
 export const RegisterPage: FC = () => {
   const history = useHistory();
   const [firstName, setFirstName] = useState<string>("");
@@ -40,7 +37,7 @@ export const RegisterPage: FC = () => {
       budget,
       confirmPassword
     );
-    fetch("http://localhost:5000/api/auth/register", {
+    fetch("http://localhost:5000/api/authRoute/register", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -63,6 +60,7 @@ export const RegisterPage: FC = () => {
       .then((data) => {
         if (data.success) {
           history.push("/");
+          window.scrollTo({ top: 0, behavior: "smooth" });
           toast.success("USER REGISTER SUCCESSFULLY");
         }
         if (data.message) {
@@ -74,8 +72,20 @@ export const RegisterPage: FC = () => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.message) {
+          toast.warn(err.message);
+        }
+        if (err.error.details[0].message) {
+          toast.warn(err.error.details[0].message);
+        }
       });
   };
+
+  const handleClick = (e: any) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="auth-card-center">
       <div className="auth-card">
@@ -154,7 +164,7 @@ export const RegisterPage: FC = () => {
           <Link to="/login"> have an account ?</Link>
         </h5>
         <div>
-          <h3 className="mobile-signin" style={{ marginTop: "10px" }}>
+          <h3 onClick={(e) => handleClick(e)} style={{ marginTop: "10px" }}>
             <Link to="/">Home Page</Link>
           </h3>
         </div>

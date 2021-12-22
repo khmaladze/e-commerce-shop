@@ -541,3 +541,112 @@ button.signupbutton {
 .profile__header__info {
   margin-right: 20px;
 }
+
+.profile__container__component {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+}
+
+.profile__container__component__card {
+  width: calc(100% / 5.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 180px;
+  margin: 4px;
+  border-radius: 9px;
+  color: white;
+  cursor: pointer;
+}
+
+.profile__container__component__card a {
+  color: white;
+}
+
+.profile__container__component__card:nth-child(1) {
+  background: #e43137;
+}
+
+.profile__container__component__card:nth-child(1):hover {
+  color: #e43137;
+  border: 1px solid #e43137;
+}
+
+.profile__container__component__card:nth-child(1):hover a {
+  color: #e43137;
+}
+
+.profile__container__component__card:nth-child(2) {
+  background: #0264d1;
+}
+
+.profile__container__component__card:nth-child(2):hover {
+  color: #0264d1;
+  border: 1px solid #0264d1;
+}
+
+.profile__container__component__card:nth-child(2):hover a {
+  color: #0264d1;
+}
+
+.profile__container__component__card:nth-child(3) {
+  background: #f4ae01;
+}
+
+.profile__container__component__card:nth-child(3):hover {
+  color: #f4ae01;
+  border: 1px solid #f4ae01;
+}
+
+.profile__container__component__card:nth-child(3):hover a {
+  color: #f4ae01;
+}
+
+.profile__container__component__card:nth-child(4) {
+  background: #85b716;
+}
+
+.profile__container__component__card:nth-child(4):hover {
+  color: #85b716;
+  border: 1px solid #85b716;
+}
+
+.profile__container__component__card:nth-child(4):hover a {
+  color: #85b716;
+}
+
+.profile__container__component__card:nth-child(5) {
+  background: #009688;
+}
+
+.profile__container__component__card:nth-child(5):hover {
+  color: #009688;
+  border: 1px solid #009688;
+}
+
+.profile__container__component__card:nth-child(5):hover a {
+  color: #009688;
+}
+
+.profile__container__component__card:nth-child(6) {
+  background: #2196f3;
+}
+
+.profile__container__component__card:nth-child(6):hover {
+  color: #2196f3;
+  border: 1px solid #2196f3;
+}
+
+.profile__container__component__card:nth-child(6):hover a {
+  color: #2196f3;
+}
+
+.profile__container__component__card:hover {
+  background: #fff;
+  transition: 0.7s ease;
+}

@@ -1,3 +1,11 @@
+CREATE SCHEMA public;
+SET search_path = public;
+
+DROP TABLE IF EXISTS public.user CASCADE;
+DROP TABLE IF EXISTS public.category CASCADE;
+DROP TABLE IF EXISTS public.shop CASCADE;
+DROP TABLE IF EXISTS public.product CASCADE;
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE OR REPLACE FUNCTION next_id(IN seq_name varchar, OUT result bigint) AS $$
 DECLARE
@@ -83,11 +91,13 @@ CREATE TABLE public.product(
 	product_id BIGSERIAL PRIMARY KEY,
 	title CHARACTER VARYING(30) NOT NULL,
 	product_description CHARACTER VARYING(30),
+	product_image CHARACTER VARYING(500) NOT NULL, 
 	category BIGINT NOT NULL,
 	price BIGINT NOT NULL,
 	product_count BIGINT NOT NULL,
 	posted_by_user BIGINT,
 	posted_by_shop BIGINT ,
+	is_blocked BOOLEAN NOT NULL,
 	CONSTRAINT fkey_product_posted_by_user FOREIGN KEY (posted_by_shop)
 	REFERENCES public.user(user_id) MATCH SIMPLE,
 	CONSTRAINT fkey_product_posted_by_shop FOREIGN KEY(posted_by_shop)
@@ -96,6 +106,21 @@ CREATE TABLE public.product(
 	ON DELETE NO ACTION
 )
 
+CREATE TABLE public.history(
+	history_id BIGSERIAL PRIMARY KEY,
+	product_id BIGINT NOT NULL,
+	person_id BIGINT NOT NULL,
+	CONSTRAINT fkey_history_product_id FOREIGN KEY(product_id)
+	REFERENCES public.product(product_id) MATCH SIMPLE,
+	CONSTRAINT fkey_history_person_id FOREIGN KEY(person_id)
+	REFERENCES public.user(user_id) MATCH SIMPLE
+	ON UPDATE NO ACTION
+	ON DELETE NO ACTION
+)
 
--- register/login is ready
--- category is ready
+-- Get id of user shop
+SELECT shop_id as "shop id"
+FROM public.shop as "shop", public.user as "user"
+WHERE shop.shop_owner =  72 `user_id`
+GROUP BY shop_id
+ORDER BY "shop id"
