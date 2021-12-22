@@ -15,7 +15,8 @@ export const Settings: FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const userId = state.user_id;
   const PostData = () => {
-    fetch(`http://localhost:5000/api/userRoute/user?Id=${userId}`, {
+    // fetch(`http://localhost:5000/api/userRoute/user?Id=${userId}`, {
+    fetch(`http://localhost:5000/api/userRoute/user/:${userId}`, {
       method: "put",
       headers: {
         "Content-Type": "application/json",
@@ -35,12 +36,17 @@ export const Settings: FC = () => {
         } else if (data.message) {
           toast.warn(data.message);
         } else {
-          localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify(data.userData));
-          console.log(data.userData);
-          // dispatch({ type: "", payload: data.userData });
-          toast.success("LOG IN SUCCESS");
-          history.push("/");
+          dispatch({
+            type: "UPDATE",
+            payload: {
+              country: data.data.country,
+              user_address: data.data.user_address,
+              user_password: data.data.user_password,
+            },
+          });
+          localStorage.setItem("user", JSON.stringify(data.data));
+          toast.success("SETTINGS UPDATED SUCCESSFULLY");
+          history.push("/profile");
         }
       })
       .catch((err) => {
@@ -50,7 +56,8 @@ export const Settings: FC = () => {
 
   return (
     <div className="settings__page">
-      <div className="settings__form auth-card">
+      <div className="auth-card">
+        <h3>Update User Data</h3>
         <input
           type="text"
           placeholder="country"
