@@ -25,7 +25,7 @@ router.post(
           shop_image: shopImage,
         });
 
-        res.send({ success: true });
+        res.status(20).send({ success: true });
       }
     } catch (error) {
       res.status(500).json({
@@ -43,7 +43,7 @@ router.post(
 router.get("/shop", async (req: Request, res: Response) => {
   try {
     let shopList = await db("shop").where({ is_blocked: false }).select("*");
-    res.send({ success: true, shopList });
+    res.status(200).send({ success: true, shopList });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -52,5 +52,27 @@ router.get("/shop", async (req: Request, res: Response) => {
     });
   }
 });
+
+///////////////////////////
+// /* Get Owner Shop */  //
+///////////////////////////
+router.get(
+  "/my/shop",
+  requireUserLogin,
+  async (req: Request | any, res: Response) => {
+    try {
+      let shopList = await db("shop")
+        .where({ shop_owner: req.user[0].user_id, is_blocked: false })
+        .select("*");
+      res.status(200).send({ success: true, shopList });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Error",
+        error: error,
+      });
+    }
+  }
+);
 
 export default router;

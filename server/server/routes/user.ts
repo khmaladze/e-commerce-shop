@@ -11,24 +11,41 @@ const router = express.Router();
 router.put(
   "/user/:id",
   requireUserLogin,
-  async (req: Request, res: Response) => {
+  async (req: Request | any, res: Response) => {
     try {
-      let { country, userAddress, userPassword, confirmPassword } = req.body;
+      let { country, userAddress, userPassword, userImage, confirmPassword } =
+        req.body;
       let test = await updateUserSchema.validateAsync(req.body);
       let userId = req.params.id;
       console.log(userId);
       let validUserId = userId.substring(1, userId.length);
       console.log(validUserId);
       // let userId = req.query.Id;
-      let userUpdate = await db("user")
-        .where({
-          user_id: validUserId,
-        })
-        .update({
-          country: country,
-          user_address: userAddress,
-          user_password: bcrypt.hashSync(userPassword, 12),
-        });
+      let userUpdate;
+      if (userImage == "same") {
+        userUpdate = await db("user")
+          .where({
+            user_id: validUserId,
+          })
+          .update({
+            country: country,
+            user_address: userAddress,
+            user_image: req.user.user_image,
+            user_password: bcrypt.hashSync(userPassword, 12),
+          });
+      } else {
+        userUpdate = await db("user")
+          .where({
+            user_id: validUserId,
+          })
+          .update({
+            country: country,
+            user_address: userAddress,
+            user_image: userImage,
+            user_password: bcrypt.hashSync(userPassword, 12),
+          });
+      }
+
       let newUserData = await db("user")
         .where({ user_id: validUserId })
         .select("*");

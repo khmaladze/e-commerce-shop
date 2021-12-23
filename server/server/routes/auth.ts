@@ -138,7 +138,15 @@ router.post("/login", async (req: Request, res: Response) => {
       ) {
         let jwtSecret: any = process.env.JWT_SECRET;
         const token = jwt.sign({ user_id: userData[0].user_id }, jwtSecret);
-        res.send({ success: true, token, userData: userData[0] });
+        let shopList = await db("shop")
+          .where({ shop_owner: userData[0].user_id, is_blocked: false })
+          .select("*");
+        res.send({
+          success: true,
+          token,
+          userData: userData[0],
+          shopList,
+        });
       } else {
         res.status(400).send({
           success: "false",

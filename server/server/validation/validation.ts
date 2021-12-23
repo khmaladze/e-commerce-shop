@@ -67,6 +67,7 @@ export const shopSchema = Joi.object({
 // valid update user
 export const updateUserSchema = Joi.object({
   country: Joi.string().lowercase().min(2).max(50).trim().required(),
+  userImage: Joi.string().max(500).required(),
   userAddress: Joi.string().lowercase().min(2).max(50).trim().required(),
   userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
   confirmPassword: Joi.any().valid(Joi.ref("userPassword")).required(),

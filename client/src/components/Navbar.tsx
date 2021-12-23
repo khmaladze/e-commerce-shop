@@ -10,6 +10,57 @@ export const Navbar: FC = () => {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const handleClick = (e: any) => {
+    e.preventDefault();
+    setIsOpen(true);
+    document.querySelector<HTMLElement | any>("html").style.overflow = "hidden";
+    let responsiveNavbar: HTMLElement = document.querySelector<
+      HTMLElement | any
+    >("div.responsive__navbar");
+    responsiveNavbar.style.display = "flex";
+    responsiveNavbar.style.height = "calc(100vh - 80px)";
+    responsiveNavbar.style.opacity = "1";
+    let responsiveNavbarContentUl = document.querySelector<HTMLElement | any>(
+      "ul.responsive__navbar__content"
+    );
+    responsiveNavbarContentUl.style.opacity = "1";
+    responsiveNavbarContentUl.style.display = "block";
+    let responsiveNavbarContentLi = document.querySelectorAll<
+      HTMLElement | any
+    >("li.responsive__navbar__content");
+    for (let i = 0; i < responsiveNavbarContentLi.length; i++) {
+      responsiveNavbarContentLi[i].style.opacity = "1";
+      responsiveNavbarContentLi[i].style.display = "block";
+    }
+  };
+
+  const closeNav = (e: any) => {
+    e.preventDefault();
+    setIsOpen(false);
+    document.querySelector<HTMLElement | any>("html").style.overflow =
+      "visible";
+    let responsiveNavbar: HTMLElement = document.querySelector<
+      HTMLElement | any
+    >("div.responsive__navbar");
+    responsiveNavbar.style.display = "none";
+    responsiveNavbar.style.height = "0";
+    responsiveNavbar.style.opacity = "0";
+    let responsiveNavbarContentUl = document.querySelector<HTMLElement | any>(
+      "ul.responsive__navbar__content"
+    );
+
+    responsiveNavbarContentUl.style.opacity = "0";
+    responsiveNavbarContentUl.style.display = "none";
+
+    let responsiveNavbarContentLi = document.querySelectorAll<
+      HTMLElement | any
+    >("li.responsive__navbar__content");
+    for (let i = 0; i < responsiveNavbarContentLi.length; i++) {
+      responsiveNavbarContentLi[i].style.opacity = "0";
+      responsiveNavbarContentLi[i].style.display = "none";
+    }
+  };
+
   const renderList = () => {
     if (state?.user_id) {
       return [
@@ -180,55 +231,6 @@ export const Navbar: FC = () => {
       ];
     }
   };
-  const handleClick = (e: any) => {
-    e.preventDefault();
-    setIsOpen(true);
-    document.querySelector<HTMLElement | any>("html").style.overflow = "hidden";
-    let responsiveNavbar: HTMLElement = document.querySelector<
-      HTMLElement | any
-    >("div.responsive__navbar");
-    responsiveNavbar.style.display = "flex";
-    responsiveNavbar.style.height = "calc(100vh - 80px)";
-    responsiveNavbar.style.opacity = "1";
-    let responsiveNavbarContentUl = document.querySelector<HTMLElement | any>(
-      "ul.responsive__navbar__content"
-    );
-    responsiveNavbarContentUl.style.opacity = "1";
-    responsiveNavbarContentUl.style.display = "block";
-    let responsiveNavbarContentLi = document.querySelectorAll<
-      HTMLElement | any
-    >("li.responsive__navbar__content");
-    for (let i = 0; i < responsiveNavbarContentLi.length; i++) {
-      responsiveNavbarContentLi[i].style.opacity = "1";
-      responsiveNavbarContentLi[i].style.display = "block";
-    }
-  };
 
-  const closeNav = (e: any) => {
-    e.preventDefault();
-    setIsOpen(false);
-    document.querySelector<HTMLElement | any>("html").style.overflow =
-      "visible";
-    let responsiveNavbar: HTMLElement = document.querySelector<
-      HTMLElement | any
-    >("div.responsive__navbar");
-    responsiveNavbar.style.display = "none";
-    responsiveNavbar.style.height = "0";
-    responsiveNavbar.style.opacity = "0";
-    let responsiveNavbarContentUl = document.querySelector<HTMLElement | any>(
-      "ul.responsive__navbar__content"
-    );
-
-    responsiveNavbarContentUl.style.opacity = "0";
-    responsiveNavbarContentUl.style.display = "none";
-
-    let responsiveNavbarContentLi = document.querySelectorAll<
-      HTMLElement | any
-    >("li.responsive__navbar__content");
-    for (let i = 0; i < responsiveNavbarContentLi.length; i++) {
-      responsiveNavbarContentLi[i].style.opacity = "0";
-      responsiveNavbarContentLi[i].style.display = "none";
-    }
-  };
   return <div>{renderList()}</div>;
 };

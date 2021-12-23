@@ -21,6 +21,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { CreateShopPage } from "./pages/CreateShopPage";
 import { Settings } from "./components/Settings";
+import { MyShop } from "./pages/MyShop";
 
 // interface UserInfo {
 //   user_id?: string;
@@ -75,8 +76,11 @@ const Routing = () => {
       <Route exact path="/profile">
         <ProfilePage />
       </Route>
-      <Route exact path="/shop">
+      <Route exact path="/add/shop">
         <CreateShopPage />
+      </Route>
+      <Route exact path="/my/shop">
+        <MyShop />
       </Route>
       <Route exact path="/settings">
         <Settings />

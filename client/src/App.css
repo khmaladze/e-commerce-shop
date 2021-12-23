@@ -168,6 +168,7 @@ a {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  cursor: pointer;
   /* background-attachment: fixed; */
 }
 
@@ -534,6 +535,7 @@ button.signupbutton {
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 50%;
+  background-size: cover;
   margin-left: 20px;
   border: 1px solid #8080807a;
 }
@@ -658,4 +660,25 @@ button.signupbutton {
   justify-content: center;
   align-items: center;
   margin-top: 50px;
+}
+
+.myshop__page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.myshop__page__shop__header {
+  height: 200px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.myshop__page__image {
+  height: 170px;
+  width: 170px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  border: 1px solid #8080807a;
 }

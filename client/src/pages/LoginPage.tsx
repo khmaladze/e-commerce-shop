@@ -28,8 +28,12 @@ export const LoginPage: FC = () => {
         } else if (data.message) {
           toast.warn(data.message);
         } else {
+          console.log(data);
           localStorage.setItem("jwt", data.token);
           localStorage.setItem("user", JSON.stringify(data.userData));
+          if (data.shopList[0]) {
+            localStorage.setItem("shop", JSON.stringify(data.shopList[0]));
+          }
           dispatch({ type: "USER", payload: data.userData });
           toast.success("LOG IN SUCCESS");
           history.push("/");

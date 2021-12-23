@@ -1,5 +1,9 @@
 import React, { FC } from "react";
-import img1 from "../assets/img1.jpg";
+import img1 from "../assets/category1.jpg";
+import img2 from "../assets/category2.jpg";
+import img3 from "../assets/category3.jpg";
+import img4 from "../assets/category4.jpg";
+import img5 from "../assets/category5.jpg";
 
 export const PopularCategories: FC = () => {
   return (
@@ -15,25 +19,25 @@ export const PopularCategories: FC = () => {
         <div
           className="shop__container"
           style={{
-            backgroundImage: `url(${img1})`,
+            backgroundImage: `url(${img2})`,
           }}
         ></div>
         <div
           className="shop__container"
           style={{
-            backgroundImage: `url(${img1})`,
+            backgroundImage: `url(${img3})`,
           }}
         ></div>
         <div
           className="shop__container"
           style={{
-            backgroundImage: `url(${img1})`,
+            backgroundImage: `url(${img4})`,
           }}
         ></div>
         <div
           className="shop__container"
           style={{
-            backgroundImage: `url(${img1})`,
+            backgroundImage: `url(${img5})`,
           }}
         ></div>
       </div>

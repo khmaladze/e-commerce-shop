@@ -12,6 +12,7 @@ export const reducer = (state: any, action: any) => {
       ...state,
       country: action.payload.country,
       user_address: action.payload.user_address,
+      user_image: action.payload.user_image,
       user_password: action.payload.user_password,
     };
   }
