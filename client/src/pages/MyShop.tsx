@@ -21,6 +21,7 @@ export const MyShop: FC = () => {
   const [productCount, setProductCount] = useState<string>("");
   const [image, setImage] = useState<any>([]);
   const [imageUrl, setImageUrl] = useState<any>("");
+  let imageList: any = [];
   useEffect(() => {
     console.log("hello world");
     fetch("http://localhost:5000/api/shopRoute/my/shop", {
@@ -104,7 +105,9 @@ export const MyShop: FC = () => {
           })
             .then((res) => res.json())
             .then((data) => {
-              setImageUrl([data.url]);
+              setImageUrl(data.url);
+              imageList.push(imageUrl);
+              console.log(imageList, "imageList");
               toast.success("Image Uploaded");
               console.log(imageUrl);
               if (i == image.length - 1) {
@@ -121,7 +124,7 @@ export const MyShop: FC = () => {
                     category: shop[0]?.category,
                     price,
                     productCount,
-                    productImage: imageUrl,
+                    productImage: String(imageList),
                     requestedBy: "shop",
                   }),
                 })
