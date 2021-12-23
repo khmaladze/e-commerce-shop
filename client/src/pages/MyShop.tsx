@@ -20,6 +20,7 @@ export const MyShop: FC = () => {
   const [price, setPrice] = useState<string>("");
   const [productCount, setProductCount] = useState<string>("");
   const [image, setImage] = useState<any>([]);
+  const [imageUrl, setImageUrl] = useState<any>("");
   useEffect(() => {
     console.log("hello world");
     fetch("http://localhost:5000/api/shopRoute/my/shop", {
@@ -38,29 +39,111 @@ export const MyShop: FC = () => {
   }, []);
 
   const AddProduct = () => {
-    fetch("localhost:5000/api/productRoute/add/product", {
-      method: "post",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify({
-        title,
-        productDescription: description,
-        category: shop[0]?.category,
-        price,
-        productCount,
-        image,
-        requestedBy: "shop",
-      }),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.success) {
-          toast.success("Product Add Successfully");
+    if (image.length == 1) {
+      const data = new FormData();
+      data.append("file", image[0].file);
+      data.append(
+        "upload_preset",
+        "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+      );
+      data.append("cloud_name", "dtlhyd02w");
+      console.log(data);
+      fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setImageUrl(data.url);
+          toast.success("Image Uploaded");
+          console.log(imageUrl);
+          if (imageUrl) {
+            console.log("it works good", imageUrl);
+            fetch("http://localhost:5000/api/productRoute/add/product", {
+              method: "post",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+              },
+              body: JSON.stringify({
+                title,
+                productDescription: description,
+                category: shop[0]?.category,
+                price,
+                productCount,
+                productImage: imageUrl,
+                requestedBy: "shop",
+              }),
+            })
+              .then((res) => res.json())
+              .then((result) => {
+                console.log(result);
+                if (result.success) {
+                  toast.success("Product Add Successfully");
+                }
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      if (image.length > 1) {
+        for (let i = 0; i < image.length; i++) {
+          const data = new FormData();
+          data.append("file", image[i].file);
+          data.append(
+            "upload_preset",
+            "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+          );
+          data.append("cloud_name", "dtlhyd02w");
+          console.log(data);
+          fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
+            method: "post",
+            body: data,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              setImageUrl([data.url]);
+              toast.success("Image Uploaded");
+              console.log(imageUrl);
+              if (i == image.length - 1) {
+                console.log("it works good", imageUrl);
+                fetch("http://localhost:5000/api/productRoute/add/product", {
+                  method: "post",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  },
+                  body: JSON.stringify({
+                    title,
+                    productDescription: description,
+                    category: shop[0]?.category,
+                    price,
+                    productCount,
+                    productImage: imageUrl,
+                    requestedBy: "shop",
+                  }),
+                })
+                  .then((res) => res.json())
+                  .then((result) => {
+                    console.log(result);
+                    if (result.success) {
+                      toast.success("Product Add Successfully");
+                    }
+                  });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
-      });
+      }
+    }
   };
+
   console.log(image);
+  console.log(image.length);
   console.log(shop);
   const dataformat = (num: number) => {
     if (num == 1) return "ELECTRONICS";
@@ -135,17 +218,9 @@ export const MyShop: FC = () => {
                 labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
               />
             </div>
-
-            <button
-              className="signinbutton"
-              // onClick={() => handleClick(false)}
-            >
-              Update
+            <button className="signinbutton" onClick={() => AddProduct()}>
+              Add Product
             </button>
-
-            {/* <button className="signinbutton" onClick={() => PostUpdate()}>
-          Update
-        </button> */}
           </div>
         </div>
       </div>
