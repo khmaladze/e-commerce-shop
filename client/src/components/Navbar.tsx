@@ -88,7 +88,7 @@ export const Navbar: FC = () => {
                   <div className="navbar__content__right">
                     <ul>
                       <li>
-                        <Link to={"/post/products"}>add products</Link>
+                        <Link to={"/add/products"}>add products</Link>
                       </li>
                       <li>
                         <Link to={"/profile"}>Profile</Link>
@@ -132,7 +132,7 @@ export const Navbar: FC = () => {
                   onClick={(e) => closeNav(e)}
                   className="responsive__navbar__content"
                 >
-                  <Link to={"/post/products"}>add products</Link>
+                  <Link to={"/add/products"}>add products</Link>
                 </li>
                 <li
                   onClick={(e) => closeNav(e)}

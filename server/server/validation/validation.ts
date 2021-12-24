@@ -48,7 +48,7 @@ export function isValidGmailProvider(email: string) {
 // validate product
 export const productSchema = Joi.object({
   title: Joi.string().min(2).max(50).trim().required(),
-  productDescription: Joi.string().max(50),
+  productDescription: Joi.string().max(1000),
   category: Joi.number().required(),
   price: Joi.number().required(),
   productCount: Joi.number().required(),

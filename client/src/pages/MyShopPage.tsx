@@ -8,11 +8,29 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import { MyShop, UserShop } from "../components/MyShop";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-export const MyShop: FC = () => {
+export const dataformat = (num: number) => {
+  if (num == 1) return "ELECTRONICS";
+  if (num == 2) return "HOME";
+  if (num == 3) return "FASHION";
+  if (num == 4) return "SPORT";
+  if (num == 5) return "ITEM";
+};
+
+export const imageFormat = (img: string) => {
+  let firstImage = img?.split(",");
+  if (firstImage && firstImage[0]) {
+    return firstImage[0];
+  } else if (firstImage) {
+    return firstImage;
+  }
+};
+
+export const MyShopPage: FC = () => {
   const { state, dispatch } = useContext(UserContext);
   const [shop, setShop] = useState<any>(null);
   const [show, setShow] = useState<boolean>(false);
@@ -23,9 +41,9 @@ export const MyShop: FC = () => {
   const [image, setImage] = useState<any>([]);
   const [imageUrl, setImageUrl] = useState<any>("");
   const [productData, setProductData] = useState<any>([]);
+
   let imageList: any = [];
   useEffect(() => {
-    console.log("hello world");
     fetch("http://localhost:5000/api/shopRoute/my/shop", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -58,8 +76,8 @@ export const MyShop: FC = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result.products);
-        setProductData([...productData, result.products]);
+        console.log("now update", result.products);
+        setProductData(result.products);
       });
   };
 
@@ -108,8 +126,9 @@ export const MyShop: FC = () => {
                   setDescription("");
                   setPrice("");
                   setProductCount("");
+                  imageList = [];
                   setImage([]);
-                  getData();
+                  return getData();
                 }
               });
           }
@@ -166,6 +185,7 @@ export const MyShop: FC = () => {
                       setProductCount("");
                       imageList = [];
                       setImage([]);
+                      return getData();
                     }
                   });
               }
@@ -178,41 +198,18 @@ export const MyShop: FC = () => {
     }
   };
 
-  const dataformat = (num: number) => {
-    if (num == 1) return "ELECTRONICS";
-    if (num == 2) return "HOME";
-    if (num == 3) return "FASHION";
-    if (num == 4) return "SPORT";
-    if (num == 5) return "ITEM";
-  };
-  let imgg =
-    "http://res.cloudinary.com/dtlhyd02w/image/upload/v1640337868/stgbarxjwwxqhss8obz2.png,http://res.cloudinary.com/dtlhyd02w/image/upload/v1640337868/dpkkllvkoycklamha3dm.jpg,http://res.cloudinary.com/dtlhyd02w/image/upload/v1640337868/thf5mwoclmmyykjal1ze.png";
-
-  const imageFormat = (img: string) => {
-    let firstImage = img.split(",");
-    return firstImage[0];
-  };
-  imageFormat(imgg);
-  console.log(imageFormat(imgg));
-
   return (
     <div className="myshop__page">
       {show
         ? shop.map((data: any) => {
             return (
-              <div className="myshop__page__shop__header" key={data.shop_id}>
-                <div
-                  className="myshop__page__image"
-                  style={{
-                    backgroundImage: `url(${data.shop_image})`,
-                  }}
-                ></div>
-                <div className="myshop__content">
-                  <h4>shop_name: {data.shop_name}</h4>
-                  <h4>balance: {data.budget}$</h4>
-                  <h4>category: {dataformat(data.category)}</h4>
-                </div>
-              </div>
+              <UserShop
+                shop_id={data.shop_id}
+                shop_image={data.shop_image}
+                shop_name={data.shop_name}
+                budget={data.budget}
+                category={data.category}
+              />
             );
           })
         : "loading"}
@@ -268,24 +265,17 @@ export const MyShop: FC = () => {
         </div>
       </div>
       <div className="myshop__products__container">
+        <h1 style={{ paddingTop: "20px", textAlign: "center" }}>My Products</h1>
         {productData
-          ? productData.map((item: any) => {
+          ? productData.map((item: string | any) => {
               return (
-                <div className="myshop__products__card" key={item.product_id}>
-                  <div
-                    className="myshop__produts__card__image"
-                    style={{
-                      backgroundImage: `url(${imageFormat(
-                        item.product_image
-                      )})`,
-                    }}
-                  ></div>
-                  <div className="myshop__products__card__content">
-                    <h3>{item.title}</h3>
-                    <h4>{item.product_description}</h4>
-                    <h5>Price: {item.price}$</h5>
-                  </div>
-                </div>
+                <MyShop
+                  product_id={item.product_id}
+                  product_image={item.product_image}
+                  title={item.title}
+                  product_description={item.product_description}
+                  price={item.price}
+                />
               );
             })
           : "loading"}

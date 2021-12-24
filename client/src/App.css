@@ -689,19 +689,20 @@ button.signupbutton {
 }
 
 .myshop__products__card {
-  width: 80%;
+  width: 35%;
   height: 170px;
   display: flex;
   align-items: center;
   border: 0.5px solid;
   border-radius: 7px;
-  background: #dddddd87;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background: #d9d8d84a;
+  box-shadow: rgb(33 71 98 / 63%) 0px 7px 29px 0px;
   margin: 0 auto;
-  margin-top: 20px;
+  margin-top: 35px;
 }
 
 .myshop__produts__card__image {
+  margin-left: 20px;
   height: 145px;
   width: 35%;
   background-position: center;
@@ -725,4 +726,30 @@ button.signupbutton {
 
 .myshop__products__card__content h4 {
   height: 45px;
+}
+
+@media screen and (max-width: 1200px) {
+  .myshop__products__card {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .myshop__products__card {
+    width: 99%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .profile__header {
+    justify-content: space-around;
+  }
+  .profile__header__image {
+    margin-left: 0;
+  }
+  .profile__header__info {
+    margin-right: 0;
+    width: 50%;
+    font-size: 14px;
+  }
 }

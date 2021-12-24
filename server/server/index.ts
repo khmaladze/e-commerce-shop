@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import express, { Application } from "express";
 import cors from "cors";
 import morgan from "morgan";
+import helmet from "helmet";
 
 // Middleware
 const app: Application = express();
@@ -25,6 +26,9 @@ app.use("/api/shopRoute", shopRoutes);
 app.use("/api/productRoute", productRoutes);
 app.use("/api/historyRoute", historyRoutes);
 app.use("/api/userRoute", userRoute);
+
+// Set security headers
+app.use(helmet());
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

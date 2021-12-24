@@ -6,12 +6,7 @@ import React, {
   useContext,
 } from "react";
 import "./App.css";
-import {
-  BrowserRouter,
-  Route,
-  Switch,
-  // useHistory
-} from "react-router-dom";
+import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 import { reducer, initialState } from "./reducers/userReducer";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
@@ -21,7 +16,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { CreateShopPage } from "./pages/CreateShopPage";
 import { Settings } from "./components/Settings";
-import { MyShop } from "./pages/MyShop";
+import { MyShopPage } from "./pages/MyShopPage";
 
 // interface UserInfo {
 //   user_id?: string;
@@ -54,11 +49,20 @@ import { MyShop } from "./pages/MyShop";
 export const UserContext = createContext<any>(null);
 
 const Routing = () => {
-  // const history = useHistory();
+  const history = useHistory();
   const { dispatch } = useContext(UserContext);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     if (user) {
+      if (history.location.pathname.startsWith("/login")) {
+        history.push("/");
+      }
+      if (history.location.pathname.startsWith("/register")) {
+        history.push("/");
+      }
+      if (history.location.pathname.startsWith("/admin")) {
+        history.push("/");
+      }
       dispatch({ type: "USER", payload: user });
     }
   }, []);
@@ -80,7 +84,7 @@ const Routing = () => {
         <CreateShopPage />
       </Route>
       <Route exact path="/my/shop">
-        <MyShop />
+        <MyShopPage />
       </Route>
       <Route exact path="/settings">
         <Settings />

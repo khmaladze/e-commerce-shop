@@ -111,4 +111,30 @@ router.get(
   }
 );
 
+///////////////////////////
+///*Update User Product*///
+///////////////////////////
+/*We NEED To Finish THIS */
+router.put(
+  "/my/products/:id",
+  requireUserLogin,
+  async (req: Request | any, res: Response) => {
+    try {
+      let myShop = await db("shop")
+        .where({ shop_owner: req.user[0].user_id })
+        .select("shop_id");
+      let products = await db("product")
+        .where({ posted_by_shop: myShop[0].shop_id, is_blocked: false })
+        .select("*");
+      res.send({ success: true, products, myShop });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Error",
+        error: error,
+      });
+    }
+  }
+);
+
 export default router;

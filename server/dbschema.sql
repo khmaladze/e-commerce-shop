@@ -90,7 +90,7 @@ CREATE TABLE public.shop(
 CREATE TABLE public.product(
 	product_id BIGSERIAL PRIMARY KEY,
 	title CHARACTER VARYING(30) NOT NULL,
-	product_description CHARACTER VARYING(30),
+	product_description CHARACTER VARYING(1000),
 	product_image CHARACTER VARYING(5000) NOT NULL, 
 	category BIGINT NOT NULL,
 	price BIGINT NOT NULL,
