@@ -21,6 +21,7 @@ export const MyShop: FC = () => {
   const [productCount, setProductCount] = useState<string>("");
   const [image, setImage] = useState<any>([]);
   const [imageUrl, setImageUrl] = useState<any>("");
+  const [productData, setProductData] = useState<any>([]);
   let imageList: any = [];
   useEffect(() => {
     console.log("hello world");
@@ -31,11 +32,8 @@ export const MyShop: FC = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result.shopList[0]);
         setShop(result.shopList);
-        console.log(shop);
         setShow(true);
-        console.log(shop[0]?.category);
       });
   }, []);
 
@@ -57,7 +55,6 @@ export const MyShop: FC = () => {
         .then((data) => {
           setImageUrl(data.url);
           toast.success("Image Uploaded");
-          console.log(imageUrl);
           if (imageUrl) {
             console.log("it works good", imageUrl);
             fetch("http://localhost:5000/api/productRoute/add/product", {
@@ -109,9 +106,7 @@ export const MyShop: FC = () => {
               imageList.push(imageUrl);
               console.log(imageList, "imageList");
               toast.success("Image Uploaded");
-              console.log(imageUrl);
-              if (i == image.length - 1) {
-                console.log("it works good", imageUrl);
+              if (imageList.length == image.length) {
                 fetch("http://localhost:5000/api/productRoute/add/product", {
                   method: "post",
                   headers: {
@@ -145,9 +140,6 @@ export const MyShop: FC = () => {
     }
   };
 
-  console.log(image);
-  console.log(image.length);
-  console.log(shop);
   const dataformat = (num: number) => {
     if (num == 1) return "ELECTRONICS";
     if (num == 2) return "HOME";
@@ -215,7 +207,7 @@ export const MyShop: FC = () => {
               <FilePond
                 files={image}
                 allowMultiple={true}
-                maxFiles={5}
+                maxFiles={3}
                 onupdatefiles={setImage}
                 name="files"
                 labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
