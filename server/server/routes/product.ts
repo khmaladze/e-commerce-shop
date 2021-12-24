@@ -137,4 +137,36 @@ router.put(
   }
 );
 
+///////////////////////////
+///*Delete User Product*///
+///////////////////////////
+router.delete(
+  "/my/products/:id",
+  requireUserLogin,
+  async (req: Request | any, res: Response) => {
+    try {
+      let myShop = await db("shop")
+        .where({ shop_owner: req.user[0].user_id })
+        .select("shop_id");
+      let productId = req.params.id;
+      let validProductId = productId.substring(1, productId.length);
+      let deleteProduct = await db("product")
+        .where({
+          product_id: validProductId,
+        })
+        .del();
+      let products = await db("product")
+        .where({ posted_by_shop: myShop[0].shop_id, is_blocked: false })
+        .select("*");
+      res.send({ success: true, products, myShop });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Error",
+        error: error,
+      });
+    }
+  }
+);
+
 export default router;

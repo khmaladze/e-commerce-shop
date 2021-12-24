@@ -1,8 +1,7 @@
 /* eslint-disable no-loop-func */
-import React, { FC, useState, useContext, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UserContext } from "../App";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -13,25 +12,7 @@ import { MyShop, UserShop } from "../components/MyShop";
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-export const dataformat = (num: number) => {
-  if (num == 1) return "ELECTRONICS";
-  if (num == 2) return "HOME";
-  if (num == 3) return "FASHION";
-  if (num == 4) return "SPORT";
-  if (num == 5) return "ITEM";
-};
-
-export const imageFormat = (img: string) => {
-  let firstImage = img?.split(",");
-  if (firstImage && firstImage[0]) {
-    return firstImage[0];
-  } else if (firstImage) {
-    return firstImage;
-  }
-};
-
 export const MyShopPage: FC = () => {
-  const { state, dispatch } = useContext(UserContext);
   const [shop, setShop] = useState<any>(null);
   const [show, setShow] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
@@ -209,6 +190,7 @@ export const MyShopPage: FC = () => {
                 shop_name={data.shop_name}
                 budget={data.budget}
                 category={data.category}
+                key={data.shop_id}
               />
             );
           })
@@ -269,13 +251,15 @@ export const MyShopPage: FC = () => {
         {productData
           ? productData.map((item: string | any) => {
               return (
-                <MyShop
-                  product_id={item.product_id}
-                  product_image={item.product_image}
-                  title={item.title}
-                  product_description={item.product_description}
-                  price={item.price}
-                />
+                <div>
+                  <MyShop
+                    product_id={item.product_id}
+                    product_image={item.product_image}
+                    title={item.title}
+                    product_description={item.product_description}
+                    price={item.price}
+                  />
+                </div>
               );
             })
           : "loading"}

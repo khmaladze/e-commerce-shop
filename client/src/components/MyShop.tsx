@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
 
 interface Product {
   product_id: string;
@@ -40,6 +41,9 @@ export const MyShop: FC<Product> = ({
   product_description,
   price,
 }) => {
+  const deleteProduct = (e: any) => {
+    console.log(e);
+  };
   return (
     <div>
       <div className="myshop__products__card" key={product_id}>
@@ -54,6 +58,10 @@ export const MyShop: FC<Product> = ({
           <h4>{product_description}</h4>
           <h5>Price: {price}$</h5>
         </div>
+        <AiOutlineDelete
+          onClick={() => deleteProduct(product_id)}
+          style={{ cursor: "pointer", fontSize: "20px" }}
+        />
       </div>
     </div>
   );
