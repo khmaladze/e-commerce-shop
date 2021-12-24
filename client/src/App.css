@@ -682,3 +682,47 @@ button.signupbutton {
   border-radius: 50%;
   border: 1px solid #8080807a;
 }
+
+.myshop__products__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.myshop__products__card {
+  width: 80%;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  border: 0.5px solid;
+  border-radius: 7px;
+  background: #dddddd87;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.myshop__produts__card__image {
+  height: 145px;
+  width: 35%;
+  background-position: center;
+  background-repeat: no-repeat;
+  float: left;
+  background-size: cover;
+}
+
+.myshop__products__card__content {
+  float: left;
+  width: 50%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+}
+
+.myshop__products__card__content h3 {
+  height: 45px;
+}
+
+.myshop__products__card__content h4 {
+  height: 45px;
+}

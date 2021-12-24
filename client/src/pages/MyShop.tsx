@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import React, { FC, useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -37,6 +38,31 @@ export const MyShop: FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    fetch("http://localhost:5000/api/productRoute/my/products", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result.products);
+        setProductData(result.products);
+      });
+  }, []);
+  const getData = () => {
+    fetch("http://localhost:5000/api/productRoute/my/products", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result.products);
+        setProductData([...productData, result.products]);
+      });
+  };
+
   const AddProduct = () => {
     if (image.length == 1) {
       const data = new FormData();
@@ -55,7 +81,7 @@ export const MyShop: FC = () => {
         .then((data) => {
           setImageUrl(data.url);
           toast.success("Image Uploaded");
-          if (imageUrl) {
+          if (data.url) {
             console.log("it works good", imageUrl);
             fetch("http://localhost:5000/api/productRoute/add/product", {
               method: "post",
@@ -69,7 +95,7 @@ export const MyShop: FC = () => {
                 category: shop[0]?.category,
                 price,
                 productCount,
-                productImage: imageUrl,
+                productImage: data.url,
                 requestedBy: "shop",
               }),
             })
@@ -78,6 +104,12 @@ export const MyShop: FC = () => {
                 console.log(result);
                 if (result.success) {
                   toast.success("Product Add Successfully");
+                  setTitle("");
+                  setDescription("");
+                  setPrice("");
+                  setProductCount("");
+                  setImage([]);
+                  getData();
                 }
               });
           }
@@ -103,7 +135,7 @@ export const MyShop: FC = () => {
             .then((res) => res.json())
             .then((data) => {
               setImageUrl(data.url);
-              imageList.push(imageUrl);
+              imageList.push(data.url);
               console.log(imageList, "imageList");
               toast.success("Image Uploaded");
               if (imageList.length == image.length) {
@@ -128,6 +160,12 @@ export const MyShop: FC = () => {
                     console.log(result);
                     if (result.success) {
                       toast.success("Product Add Successfully");
+                      setTitle("");
+                      setDescription("");
+                      setPrice("");
+                      setProductCount("");
+                      imageList = [];
+                      setImage([]);
                     }
                   });
               }
@@ -147,6 +185,16 @@ export const MyShop: FC = () => {
     if (num == 4) return "SPORT";
     if (num == 5) return "ITEM";
   };
+  let imgg =
+    "http://res.cloudinary.com/dtlhyd02w/image/upload/v1640337868/stgbarxjwwxqhss8obz2.png,http://res.cloudinary.com/dtlhyd02w/image/upload/v1640337868/dpkkllvkoycklamha3dm.jpg,http://res.cloudinary.com/dtlhyd02w/image/upload/v1640337868/thf5mwoclmmyykjal1ze.png";
+
+  const imageFormat = (img: string) => {
+    let firstImage = img.split(",");
+    return firstImage[0];
+  };
+  imageFormat(imgg);
+  console.log(imageFormat(imgg));
+
   return (
     <div className="myshop__page">
       {show
@@ -218,6 +266,29 @@ export const MyShop: FC = () => {
             </button>
           </div>
         </div>
+      </div>
+      <div className="myshop__products__container">
+        {productData
+          ? productData.map((item: any) => {
+              return (
+                <div className="myshop__products__card" key={item.product_id}>
+                  <div
+                    className="myshop__produts__card__image"
+                    style={{
+                      backgroundImage: `url(${imageFormat(
+                        item.product_image
+                      )})`,
+                    }}
+                  ></div>
+                  <div className="myshop__products__card__content">
+                    <h3>{item.title}</h3>
+                    <h4>{item.product_description}</h4>
+                    <h5>Price: {item.price}$</h5>
+                  </div>
+                </div>
+              );
+            })
+          : "loading"}
       </div>
     </div>
   );

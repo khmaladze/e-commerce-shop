@@ -19,7 +19,6 @@ export const Settings: FC = () => {
   const [userPassword, setUserPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [newUserImage, setNewUserImage] = useState<any | []>([]);
-  const [first, setFirst] = useState(true);
   const userId = state?.user_id;
   const [newUrl, setNewUrl] = useState("");
   console.log(newUserImage);
@@ -27,7 +26,6 @@ export const Settings: FC = () => {
   console.log(newUserImage.length);
 
   const PostUpdateWithImage = () => {
-    setFirst(true);
     const data = new FormData();
     data.append("file", newUserImage[0].file);
     data.append(
@@ -140,15 +138,6 @@ export const Settings: FC = () => {
       });
   };
 
-  const handleClick = (booltype: boolean) => {
-    if (booltype == true) {
-      PostUpdateWithImage();
-    }
-    if (booltype == false) {
-      PostUpdate();
-    }
-  };
-
   return (
     <div className="settings__page">
       <div className="auth-card">
@@ -188,11 +177,14 @@ export const Settings: FC = () => {
           />
         </div>
         {newUserImage.length == 0 ? (
-          <button className="signinbutton" onClick={() => handleClick(false)}>
+          <button className="signinbutton" onClick={() => PostUpdate()}>
             Update
           </button>
         ) : (
-          <button className="signinbutton" onClick={() => handleClick(true)}>
+          <button
+            className="signinbutton"
+            onClick={() => PostUpdateWithImage()}
+          >
             Update with image
           </button>
         )}
