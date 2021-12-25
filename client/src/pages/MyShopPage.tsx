@@ -7,7 +7,8 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import { MyShop, UserShop } from "../components/MyShop";
+import { dataformat, imageFormat, UserShop } from "../components/MyShop";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -178,7 +179,20 @@ export const MyShopPage: FC = () => {
       }
     }
   };
-
+  const deleteProduct = (e: any) => {
+    fetch(`http://localhost:5000/api/productRoute/my/products/:${e}`, {
+      method: "delete",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        toast.success(`Product id ${e} Delete Successfully`);
+        return getData();
+      });
+  };
   return (
     <div className="myshop__page">
       {show
@@ -252,13 +266,44 @@ export const MyShopPage: FC = () => {
           ? productData.map((item: string | any) => {
               return (
                 <div>
-                  <MyShop
+                  {/* <MyShop
                     product_id={item.product_id}
                     product_image={item.product_image}
                     title={item.title}
                     product_description={item.product_description}
                     price={item.price}
-                  />
+                    key={item.product_id}
+                  /> */}
+                  <div className="myshop__products__card" key={item.product_id}>
+                    <div
+                      className="myshop__produts__card__image"
+                      style={{
+                        backgroundImage: `url(${imageFormat(
+                          item.product_image
+                        )})`,
+                      }}
+                    ></div>
+                    <div className="myshop__products__card__content">
+                      <h3>{item.title}</h3>
+                      <h4>{item.product_description.substring(0, 30)}...</h4>
+                      <h5>Price: {item.price}$</h5>
+                    </div>
+                    <AiOutlineDelete
+                      onClick={() => deleteProduct(item.product_id)}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "20px",
+                        marginRight: "5px",
+                      }}
+                    />
+                    <AiOutlineEdit
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "20px",
+                        marginLeft: "5px",
+                      }}
+                    />
+                  </div>
                 </div>
               );
             })

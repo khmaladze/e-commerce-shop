@@ -1,6 +1,8 @@
 import React, { FC } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
 interface Product {
   product_id: string;
   product_image: string;
@@ -42,7 +44,18 @@ export const MyShop: FC<Product> = ({
   price,
 }) => {
   const deleteProduct = (e: any) => {
-    console.log(e);
+    fetch(`http://localhost:5000/api/productRoute/my/products/:${e}`, {
+      method: "delete",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        window.location.reload();
+        toast.success(`Product id ${e} Delete Successfully`);
+      });
   };
   return (
     <div>
