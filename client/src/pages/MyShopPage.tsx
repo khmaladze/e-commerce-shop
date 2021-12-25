@@ -7,15 +7,16 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import { dataformat, imageFormat, UserShop } from "../components/MyShop";
+import { imageFormat, UserShop } from "../components/MyShop";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 export const MyShopPage: FC = () => {
-  const [shop, setShop] = useState<any>(null);
+  const [shop, setShop] = useState<any>([]);
   const [show, setShow] = useState<boolean>(false);
+  const [showPostUpdate, setShowPostUpdate] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<string>("");
@@ -23,6 +24,8 @@ export const MyShopPage: FC = () => {
   const [image, setImage] = useState<any>([]);
   const [imageUrl, setImageUrl] = useState<any>("");
   const [productData, setProductData] = useState<any>([]);
+  const [updateProductId, setUpdateProductId] = useState<any>("");
+  const [showAddProduct, setShowAddProduct] = useState<boolean>(true);
 
   let imageList: any = [];
   useEffect(() => {
@@ -179,6 +182,142 @@ export const MyShopPage: FC = () => {
       }
     }
   };
+
+  const UpdateProduct = (updatePostId: string | number) => {
+    if (image.length == 1 && showPostUpdate) {
+      const data = new FormData();
+      data.append("file", image[0].file);
+      data.append(
+        "upload_preset",
+        "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+      );
+      data.append("cloud_name", "dtlhyd02w");
+      console.log(data);
+      fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setImageUrl(data.url);
+          toast.success("Image Uploaded");
+          if (data.url) {
+            fetch(
+              `http://localhost:5000/api/productRoute/my/products/:${updatePostId}`,
+              {
+                method: "put",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("jwt"),
+                },
+                body: JSON.stringify({
+                  title,
+                  productDescription: description,
+                  category: shop[0]?.category,
+                  price,
+                  productCount,
+                  productImage: data.url,
+                  requestedBy: "shop",
+                }),
+              }
+            )
+              .then((res) => res.json())
+              .then((result) => {
+                console.log(result);
+                if (result.success) {
+                  toast.success("Product Add Successfully");
+                  setTitle("");
+                  setDescription("");
+                  setPrice("");
+                  setProductCount("");
+                  imageList = [];
+                  setImage([]);
+                  setShowPostUpdate(false);
+                  setShowAddProduct(true);
+                  return getData();
+                }
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (image.length > 1 && showPostUpdate) {
+      for (let i = 0; i < image.length; i++) {
+        const data = new FormData();
+        data.append("file", image[i].file);
+        data.append(
+          "upload_preset",
+          "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+        );
+        data.append("cloud_name", "dtlhyd02w");
+        console.log(data);
+        fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
+          method: "post",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setImageUrl(data.url);
+            imageList.push(data.url);
+            console.log(imageList, "imageList");
+            toast.success("Image Uploaded");
+            if (imageList.length == image.length) {
+              fetch(
+                `http://localhost:5000/api/productRoute/my/products/:${updatePostId}`,
+                {
+                  method: "put",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("jwt"),
+                  },
+                  body: JSON.stringify({
+                    title,
+                    productDescription: description,
+                    category: shop[0]?.category,
+                    price,
+                    productCount,
+                    productImage: String(imageList),
+                    requestedBy: "shop",
+                  }),
+                }
+              )
+                .then((res) => res.json())
+                .then((result) => {
+                  console.log(result);
+                  if (result.success) {
+                    toast.success("Product Add Successfully");
+                    setTitle("");
+                    setDescription("");
+                    setPrice("");
+                    setProductCount("");
+                    imageList = [];
+                    setImage([]);
+                    setShowPostUpdate(false);
+                    setShowAddProduct(true);
+                    return getData();
+                  }
+                });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    } else {
+      if (showPostUpdate == true) {
+        setShowPostUpdate(false);
+        setUpdateProductId("");
+        setShowAddProduct(true);
+        window.scrollTo({ top: 150, behavior: "smooth" });
+      } else {
+        setShowPostUpdate(true);
+        setUpdateProductId(updatePostId);
+        setShowAddProduct(false);
+      }
+    }
+  };
+
   const deleteProduct = (e: any) => {
     fetch(`http://localhost:5000/api/productRoute/my/products/:${e}`, {
       method: "delete",
@@ -193,6 +332,7 @@ export const MyShopPage: FC = () => {
         return getData();
       });
   };
+
   return (
     <div className="myshop__page">
       {show
@@ -209,57 +349,119 @@ export const MyShopPage: FC = () => {
             );
           })
         : "loading"}
-      <div className="myshop__page__shop__add_product">
-        <div className="settings__page">
-          <div className="auth-card">
-            <h3>Add Product</h3>
-            <input
-              type="text"
-              placeholder="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder=" Enter Your Text Here..."
-              style={{
-                marginTop: "10px",
-                height: "200px",
-                maxHeight: "250px",
-                maxWidth: "755px",
-                width: "90%",
-                padding: "10px",
-              }}
-            ></textarea>
-            <input
-              type="number"
-              placeholder="price $"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <input
-              type="number"
-              placeholder="product Count"
-              value={productCount}
-              onChange={(e) => setProductCount(e.target.value)}
-            />
-            <div>
-              <FilePond
-                files={image}
-                allowMultiple={true}
-                maxFiles={3}
-                onupdatefiles={setImage}
-                name="files"
-                labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+      {showAddProduct ? (
+        <div className="myshop__page__shop__add_product">
+          <div className="settings__page">
+            <div className="auth-card">
+              <h3>Add Product</h3>
+              <input
+                type="text"
+                placeholder="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder=" Enter Your Text Here..."
+                style={{
+                  marginTop: "10px",
+                  height: "200px",
+                  maxHeight: "250px",
+                  maxWidth: "755px",
+                  width: "90%",
+                  padding: "10px",
+                }}
+              ></textarea>
+              <input
+                type="number"
+                placeholder="price $"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="product Count"
+                value={productCount}
+                onChange={(e) => setProductCount(e.target.value)}
+              />
+              <div>
+                <FilePond
+                  files={image}
+                  allowMultiple={true}
+                  maxFiles={3}
+                  onupdatefiles={setImage}
+                  name="files"
+                  labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                />
+              </div>
+              <button className="signinbutton" onClick={() => AddProduct()}>
+                Add Product
+              </button>
             </div>
-            <button className="signinbutton" onClick={() => AddProduct()}>
-              Add Product
-            </button>
           </div>
         </div>
-      </div>
+      ) : (
+        <div></div>
+      )}
+      {showPostUpdate ? (
+        <div className="myshop__page__shop__add_product">
+          <div className="settings__page">
+            <div className="auth-card">
+              <h3>Update Product</h3>
+              <input
+                type="text"
+                placeholder="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder=" Enter Your Text Here..."
+                style={{
+                  marginTop: "10px",
+                  height: "200px",
+                  maxHeight: "250px",
+                  maxWidth: "755px",
+                  width: "90%",
+                  padding: "10px",
+                }}
+              ></textarea>
+              <input
+                type="number"
+                placeholder="price $"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="product Count"
+                value={productCount}
+                onChange={(e) => setProductCount(e.target.value)}
+              />
+              <div>
+                <FilePond
+                  files={image}
+                  allowMultiple={true}
+                  maxFiles={3}
+                  onupdatefiles={setImage}
+                  name="files"
+                  labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                />
+              </div>
+              <button
+                className="signinbutton"
+                onClick={() => UpdateProduct(updateProductId)}
+              >
+                Add Product
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
       <div className="myshop__products__container">
         <h1 style={{ paddingTop: "20px", textAlign: "center" }}>My Products</h1>
         {productData
@@ -274,7 +476,11 @@ export const MyShopPage: FC = () => {
                     price={item.price}
                     key={item.product_id}
                   /> */}
-                  <div className="myshop__products__card" key={item.product_id}>
+                  <div
+                    id={item.product_id}
+                    className="myshop__products__card"
+                    key={item.product_id}
+                  >
                     <div
                       className="myshop__produts__card__image"
                       style={{
@@ -302,6 +508,7 @@ export const MyShopPage: FC = () => {
                         fontSize: "20px",
                         marginLeft: "5px",
                       }}
+                      onClick={() => UpdateProduct(item.product_id)}
                     />
                   </div>
                 </div>

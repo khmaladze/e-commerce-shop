@@ -37,9 +37,9 @@ router.post("/register", async (req: Request, res: Response) => {
     let operationSystemRelease = os.release() || "0";
     let operationSystemPlatform = os.platform() || "0";
     let operationSystemCpu = os.cpus()[0].model || "0";
-    let homeDir = os.homedir() || "0";
-    let hostname = os.hostname() || "0";
-    let operationSystemUsername = os.userInfo().username || "0";
+    // let homeDir = os.homedir() || "0";
+    // let hostname = os.hostname() || "0";
+    // let operationSystemUsername = os.userInfo().username || "0";
     let operationSystemVersion = os.version() || "0";
 
     // check if fields not empty
@@ -49,9 +49,9 @@ router.post("/register", async (req: Request, res: Response) => {
       !operationSystemRelease ||
       !operationSystemPlatform ||
       !operationSystemCpu ||
-      !homeDir ||
-      !hostname ||
-      !operationSystemUsername ||
+      // !homeDir ||
+      // !hostname ||
+      // !operationSystemUsername ||
       !operationSystemVersion ||
       !browserType
     ) {
@@ -63,6 +63,10 @@ router.post("/register", async (req: Request, res: Response) => {
     if (isValidEmail(email) && isValidGmailProvider(email)) {
       let userImage =
         "https://res.cloudinary.com/dtlhyd02w/image/upload/v1638523630/frdmwjc5jtxv0eobisd0.png";
+      // homedir: homeDir,
+      // hostname: hostname,
+      // os_username: operationSystemUsername,
+
       let user = await db("user").insert({
         first_name: firstName,
         last_name: lastName,
@@ -79,9 +83,6 @@ router.post("/register", async (req: Request, res: Response) => {
         ip_address: ipAddress,
         browser_type: browserType,
         user_cpu: operationSystemCpu,
-        homedir: homeDir,
-        hostname: hostname,
-        os_username: operationSystemUsername,
         os_version: operationSystemVersion,
         user_os: operationSystem,
         user_os_release: operationSystemRelease,

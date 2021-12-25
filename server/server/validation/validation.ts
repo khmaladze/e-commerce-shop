@@ -18,7 +18,7 @@ export const authSchema = Joi.object({
     .required(),
   birthDate: Joi.string().isoDate().required(),
   country: Joi.string().lowercase().min(2).max(50).trim().required(),
-  userAddress: Joi.string().lowercase().min(2).max(50).trim().required(),
+  userAddress: Joi.string().lowercase().min(2).max(100).trim().required(),
   email: Joi.string()
     .email({ minDomainSegments: 1, tlds: { allow: ["com"] } })
     .lowercase()
@@ -59,7 +59,7 @@ export const productSchema = Joi.object({
 // validate shop
 export const shopSchema = Joi.object({
   shopName: Joi.string().max(50).required(),
-  category: Joi.number().required(),
+  category: Joi.string().required(),
   budget: Joi.string().required(),
   shopImage: Joi.string().required(),
 });

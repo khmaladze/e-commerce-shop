@@ -25,7 +25,7 @@ router.post(
           shop_image: shopImage,
         });
 
-        res.status(20).send({ success: true });
+        res.status(200).send({ success: true });
       }
     } catch (error) {
       res.status(500).json({

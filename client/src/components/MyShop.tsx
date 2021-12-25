@@ -2,7 +2,9 @@ import React, { FC } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 toast.configure();
+
 interface Product {
   product_id: string;
   product_image: string;

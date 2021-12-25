@@ -58,6 +58,7 @@ export const RegisterPage: FC = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         if (data.success) {
           history.push("/");
           window.scrollTo({ top: 0, behavior: "smooth" });
@@ -66,8 +67,10 @@ export const RegisterPage: FC = () => {
         if (data.message) {
           toast.warn(data.message);
         }
-        if (data.error.details[0].message) {
-          toast.warn(data.error.details[0].message);
+        if (data.error) {
+          if (data.error.details[0].message) {
+            toast.warn(data.error.details[0].message);
+          }
         }
       })
       .catch((err) => {
@@ -75,8 +78,10 @@ export const RegisterPage: FC = () => {
         if (err.message) {
           toast.warn(err.message);
         }
-        if (err.error.details[0].message) {
-          toast.warn(err.error.details[0].message);
+        if (err.error) {
+          if (err.error.details[0].message) {
+            toast.warn(err.error.details[0].message);
+          }
         }
       });
   };
