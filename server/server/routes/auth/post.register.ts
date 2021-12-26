@@ -3,9 +3,8 @@ import Joi from "joi";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
 
-const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
-
+const userEndpointDesc = "This is how to register user (more description)";
+export const TAGS = ["auth"];
 export const requestSchema = Joi.object({
   headers: Joi.object()
     .keys({

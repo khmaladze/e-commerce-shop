@@ -4,9 +4,8 @@ import bcrypt from "bcrypt";
 import db from "../../db/db";
 import jwt from "jsonwebtoken";
 
-const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
-
+const userEndpointDesc = "This is how to login user (more description)";
+export const TAGS = ["auth"];
 export const requestSchema = Joi.object({
   headers: Joi.object()
     .keys({
