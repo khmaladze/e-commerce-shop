@@ -5,12 +5,17 @@ dotenv.config();
 import db from "../db/db";
 
 async function getUserById(user_id: string) {
-  return await db("user")
+  const userData = await db("user")
     .where({
       user_id: user_id,
       is_blocked: false,
     })
     .select("*");
+  // if (userData.length > 0) {
+  //   return userData[0];
+  // }
+  // return undefined;
+  return userData?.[0]; // this is equivalent
 }
 
 // dont use 'any' type
@@ -27,12 +32,16 @@ const requireUserLogin = (req: Request, res: Response, next: NextFunction) => {
         res.status(401).json({ error: "Not authorized" });
       } else if (payload) {
         const { user_id } = payload;
-        getUserById(user_id).then((userData) => {
-          // use it for fix this ignore for context
-          // https://stackoverflow.com/questions/37377731/extend-express-request-object-using-typescript
-          //@ts-ignore
-          req.user = userData;
-          next();
+        getUserById(user_id).then((user) => {
+          if (user) {
+            // use it for fix this ignore for context
+            // https://stackoverflow.com/questions/37377731/extend-express-request-object-using-typescript
+            //@ts-ignore
+            req.user = user;
+            next();
+          } else {
+            res.status(401).json({ error: "Not authorized" });
+          }
         });
       }
     });

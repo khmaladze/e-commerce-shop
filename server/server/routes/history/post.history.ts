@@ -19,7 +19,7 @@ export const requestSchema = Joi.object({
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
-
+// dont use 'any' type
 export const businessLogic = async (req: Request | any, res: Response) => {
   try {
     let { productId } = req.body;
