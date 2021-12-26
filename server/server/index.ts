@@ -18,7 +18,7 @@ app.use(morgan("dev"));
 import authRoutes from "./routes/auth/index";
 import shopRoutes from "./routes/shop/index";
 import productRoutes from "./routes/product/index";
-import historyRoutes from "./routes/history";
+import historyRoutes from "./routes/history/index";
 import userRoute from "./routes/user/index";
 
 app.use("/api/authRoute", authRoutes);
