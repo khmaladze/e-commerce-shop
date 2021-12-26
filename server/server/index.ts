@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config();
 import bodyParser from "body-parser";
-import express, { Application } from "express";
+import express, { Express } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 
 // Middleware
-const app: Application = express();
+const app: Express = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
@@ -20,6 +20,8 @@ import shopRoutes from "./routes/shop/index";
 import productRoutes from "./routes/product/index";
 import historyRoutes from "./routes/history/index";
 import userRoute from "./routes/user/index";
+import { getOpenApiSchemaRouter } from "./documentation/open-api-documentation";
+import config from "./swagger.config";
 
 app.use("/api/authRoute", authRoutes);
 app.use("/api/shopRoute", shopRoutes);
@@ -29,7 +31,8 @@ app.use("/api/userRoute", userRoute);
 
 // Set security headers
 app.use(helmet());
-
+app.use("/docs", express.static("server/documentation/swagger-ui-static"));
+app.use(getOpenApiSchemaRouter(app, config));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("Server is running on port", PORT);

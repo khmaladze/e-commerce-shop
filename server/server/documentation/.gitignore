@@ -1,0 +1,10 @@
+/node_modules
+/logs
+/coverage
+/temp
+dist
+.vscode
+.env
+.idea
+yarn.lock
+yarn-error.log
