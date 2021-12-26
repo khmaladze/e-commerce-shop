@@ -710,7 +710,8 @@ button.signupbutton {
   background-position: center;
   background-repeat: no-repeat;
   float: left;
-  background-size: cover;
+  /* background-size: cover; */
+  background-size: contain;
 }
 
 .myshop__products__card__content {

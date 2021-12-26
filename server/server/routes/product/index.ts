@@ -6,6 +6,8 @@ import * as products from "./get.product";
 import * as myproducts from "./get.myproducts";
 import * as updateproduct from "./put.updateproduct";
 import * as delproduct from "./delete.delproduct";
+import * as myuserproduct from "./get.myuserproducts";
+import * as updateuserproduct from "./put.updateproductsuser";
 let router = express.Router();
 
 router.post(
@@ -26,6 +28,20 @@ router.get(
   requireUserLogin,
   validationMiddleware(myproducts.requestSchema),
   myproducts.businessLogic
+);
+
+router.put(
+  "/my/user/products/:id",
+  requireUserLogin,
+  validationMiddleware(updateuserproduct.requestSchema),
+  updateuserproduct.businessLogic
+);
+
+router.get(
+  "/my/products/user",
+  requireUserLogin,
+  validationMiddleware(myuserproduct.requestSchema),
+  myuserproduct.businessLogic
 );
 
 router.put(

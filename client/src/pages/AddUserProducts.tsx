@@ -1,4 +1,3 @@
-/* eslint-disable no-loop-func */
 import React, { FC, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,11 +12,11 @@ import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-export const MyShopPage: FC = () => {
-  const [shop, setShop] = useState<any>([]);
+export const AddUserProducts = () => {
   const [show, setShow] = useState<boolean>(false);
   const [showPostUpdate, setShowPostUpdate] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [productCount, setProductCount] = useState<string>("");
@@ -28,21 +27,9 @@ export const MyShopPage: FC = () => {
   const [showAddProduct, setShowAddProduct] = useState<boolean>(true);
 
   let imageList: any = [];
-  useEffect(() => {
-    fetch("http://localhost:5000/api/shopRoute/my/shop", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setShop(result.shopList);
-        setShow(true);
-      });
-  }, []);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/productRoute/my/products", {
+    fetch("http://localhost:5000/api/productRoute/my/products/user", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -54,7 +41,7 @@ export const MyShopPage: FC = () => {
       });
   }, []);
   const getData = () => {
-    fetch("http://localhost:5000/api/productRoute/my/products", {
+    fetch("http://localhost:5000/api/productRoute/my/products/user", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -95,11 +82,11 @@ export const MyShopPage: FC = () => {
               body: JSON.stringify({
                 title,
                 productDescription: description,
-                category: shop[0]?.category,
+                category,
                 price,
                 productCount,
                 productImage: data.url,
-                requestedBy: "shop",
+                requestedBy: "user",
               }),
             })
               .then((res) => res.json())
@@ -152,11 +139,11 @@ export const MyShopPage: FC = () => {
                   body: JSON.stringify({
                     title,
                     productDescription: description,
-                    category: shop[0]?.category,
+                    category,
                     price,
                     productCount,
                     productImage: String(imageList),
-                    requestedBy: "shop",
+                    requestedBy: "user",
                   }),
                 })
                   .then((res) => res.json())
@@ -184,9 +171,12 @@ export const MyShopPage: FC = () => {
   };
 
   const UpdateProduct = (updatePostId: string | number) => {
-    if (!image[0] && (title || description || price || productCount)) {
+    if (
+      !image[0] &&
+      (title || description || category || price || productCount)
+    ) {
       fetch(
-        `http://localhost:5000/api/productRoute/my/products/:${updatePostId}`,
+        `http://localhost:5000/api/productRoute/my/user/products/:${updatePostId}`,
         {
           method: "put",
           headers: {
@@ -196,11 +186,11 @@ export const MyShopPage: FC = () => {
           body: JSON.stringify({
             title,
             productDescription: description,
-            category: shop[0]?.category,
+            category,
             price,
             productCount,
             productImage: imageUrl,
-            requestedBy: "shop",
+            requestedBy: "user",
           }),
         }
       )
@@ -208,7 +198,7 @@ export const MyShopPage: FC = () => {
         .then((result) => {
           console.log(result);
           if (result.success) {
-            toast.success("Product  Successfully");
+            toast.success("Product Updated  Successfully");
             setTitle("");
             setDescription("");
             setPrice("");
@@ -240,7 +230,7 @@ export const MyShopPage: FC = () => {
           toast.success("Image Uploaded");
           if (data.url) {
             fetch(
-              `http://localhost:5000/api/productRoute/my/products/:${updatePostId}`,
+              `http://localhost:5000/api/productRoute/my/user/products/:${updatePostId}`,
               {
                 method: "put",
                 headers: {
@@ -250,11 +240,11 @@ export const MyShopPage: FC = () => {
                 body: JSON.stringify({
                   title,
                   productDescription: description,
-                  category: shop[0]?.category,
+                  category,
                   price,
                   productCount,
                   productImage: data.url,
-                  requestedBy: "shop",
+                  requestedBy: "user",
                 }),
               }
             )
@@ -301,7 +291,7 @@ export const MyShopPage: FC = () => {
             toast.success("Image Uploaded");
             if (imageList.length == image.length) {
               fetch(
-                `http://localhost:5000/api/productRoute/my/products/:${updatePostId}`,
+                `http://localhost:5000/api/productRoute/my/user/products/:${updatePostId}`,
                 {
                   method: "put",
                   headers: {
@@ -311,11 +301,11 @@ export const MyShopPage: FC = () => {
                   body: JSON.stringify({
                     title,
                     productDescription: description,
-                    category: shop[0]?.category,
+                    category,
                     price,
                     productCount,
                     productImage: String(imageList),
-                    requestedBy: "shop",
+                    requestedBy: "user",
                   }),
                 }
               )
@@ -369,143 +359,137 @@ export const MyShopPage: FC = () => {
         return getData();
       });
   };
-
   return (
-    <div className="myshop__page">
-      {show
-        ? shop.map((data: any) => {
-            return (
-              <UserShop
-                shop_id={data.shop_id}
-                shop_image={data.shop_image}
-                shop_name={data.shop_name}
-                budget={data.budget}
-                category={data.category}
-                key={data.shop_id}
-              />
-            );
-          })
-        : "loading"}
-      {showAddProduct ? (
-        <div className="myshop__page__shop__add_product">
-          <div className="settings__page">
-            <div className="auth-card">
-              <h3>Add Product</h3>
-              <input
-                type="text"
-                placeholder="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder=" Enter Your Text Here..."
-                style={{
-                  marginTop: "10px",
-                  height: "200px",
-                  maxHeight: "250px",
-                  maxWidth: "755px",
-                  width: "90%",
-                  padding: "10px",
-                }}
-              ></textarea>
-              <input
-                type="number"
-                placeholder="price $"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-              <input
-                type="number"
-                placeholder="product Count"
-                value={productCount}
-                onChange={(e) => setProductCount(e.target.value)}
-              />
-              <div>
-                <FilePond
-                  files={image}
-                  allowMultiple={true}
-                  maxFiles={3}
-                  onupdatefiles={setImage}
-                  name="files"
-                  labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+    <div>
+      <div className="myshop__page">
+        {showAddProduct ? (
+          <div className="myshop__page__shop__add_product">
+            <div className="settings__page">
+              <div className="auth-card">
+                <h3>Add Product</h3>
+                <input
+                  type="text"
+                  placeholder="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
-              </div>
-              <button className="signinbutton" onClick={() => AddProduct()}>
-                Add Product
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div></div>
-      )}
-      {showPostUpdate ? (
-        <div className="myshop__page__shop__add_product">
-          <div className="settings__page">
-            <div className="auth-card">
-              <h3>Update Product</h3>
-              <input
-                type="text"
-                placeholder="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder=" Enter Your Text Here..."
-                style={{
-                  marginTop: "10px",
-                  height: "200px",
-                  maxHeight: "250px",
-                  maxWidth: "755px",
-                  width: "90%",
-                  padding: "10px",
-                }}
-              ></textarea>
-              <input
-                type="number"
-                placeholder="price $"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-              <input
-                type="number"
-                placeholder="product Count"
-                value={productCount}
-                onChange={(e) => setProductCount(e.target.value)}
-              />
-              <div>
-                <FilePond
-                  files={image}
-                  allowMultiple={true}
-                  maxFiles={3}
-                  onupdatefiles={setImage}
-                  name="files"
-                  labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder=" Enter Your Text Here..."
+                  style={{
+                    marginTop: "10px",
+                    height: "200px",
+                    maxHeight: "250px",
+                    maxWidth: "755px",
+                    width: "90%",
+                    padding: "10px",
+                  }}
+                ></textarea>
+                <input
+                  type="text"
+                  placeholder="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                 />
-              </div>
-              <button
-                className="signinbutton"
-                onClick={() => UpdateProduct(updateProductId)}
-              >
-                Update Product
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div></div>
-      )}
-      <div className="myshop__products__container">
-        <h1 style={{ paddingTop: "20px", textAlign: "center" }}>My Products</h1>
-        {productData
-          ? productData.map((item: string | any) => {
-              return (
+                <input
+                  type="number"
+                  placeholder="price $"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+                <input
+                  type="number"
+                  placeholder="product Count"
+                  value={productCount}
+                  onChange={(e) => setProductCount(e.target.value)}
+                />
                 <div>
-                  {/* <MyShop
+                  <FilePond
+                    files={image}
+                    allowMultiple={true}
+                    maxFiles={3}
+                    onupdatefiles={setImage}
+                    name="files"
+                    labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                  />
+                </div>
+                <button className="signinbutton" onClick={() => AddProduct()}>
+                  Add Product
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div></div>
+        )}
+        {showPostUpdate ? (
+          <div className="myshop__page__shop__add_product">
+            <div className="settings__page">
+              <div className="auth-card">
+                <h3>Update Product</h3>
+                <input
+                  type="text"
+                  placeholder="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder=" Enter Your Text Here..."
+                  style={{
+                    marginTop: "10px",
+                    height: "200px",
+                    maxHeight: "250px",
+                    maxWidth: "755px",
+                    width: "90%",
+                    padding: "10px",
+                  }}
+                ></textarea>
+                <input
+                  type="number"
+                  placeholder="price $"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+                <input
+                  type="number"
+                  placeholder="product Count"
+                  value={productCount}
+                  onChange={(e) => setProductCount(e.target.value)}
+                />
+                <div>
+                  <FilePond
+                    files={image}
+                    allowMultiple={true}
+                    maxFiles={3}
+                    onupdatefiles={setImage}
+                    name="files"
+                    labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                  />
+                </div>
+                <button
+                  className="signinbutton"
+                  onClick={() => UpdateProduct(updateProductId)}
+                >
+                  Update Product
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div></div>
+        )}
+        <div className="myshop__products__container">
+          <h1 style={{ paddingTop: "20px", textAlign: "center" }}>
+            My Products
+          </h1>
+          {productData
+            ? productData.map((item: string | any) => {
+                return (
+                  <div>
+                    {/* <MyShop
                     product_id={item.product_id}
                     product_image={item.product_image}
                     title={item.title}
@@ -513,46 +497,48 @@ export const MyShopPage: FC = () => {
                     price={item.price}
                     key={item.product_id}
                   /> */}
-                  <div
-                    id={item.product_id}
-                    className="myshop__products__card"
-                    key={item.product_id}
-                  >
                     <div
-                      className="myshop__produts__card__image"
-                      style={{
-                        backgroundImage: `url(${imageFormat(
-                          item.product_image
-                        )})`,
-                      }}
-                    ></div>
-                    <div className="myshop__products__card__content">
-                      <h3>{item.title}</h3>
-                      <h4>{item.product_description.substring(0, 30)}...</h4>
-                      <h5>Price: {item.price}$</h5>
+                      id={item.product_id}
+                      className="myshop__products__card"
+                      key={item.product_id}
+                    >
+                      <div
+                        className="myshop__produts__card__image"
+                        style={{
+                          backgroundImage: `url(${imageFormat(
+                            item.product_image
+                          )})`,
+                        }}
+                      ></div>
+                      <div className="myshop__products__card__content">
+                        <h3>{item.title}</h3>
+                        <h4>{item.product_description.substring(0, 30)}...</h4>
+                        <h5>Price: {item.price}$</h5>
+                      </div>
+                      <AiOutlineDelete
+                        onClick={() => deleteProduct(item.product_id)}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "20px",
+                          marginRight: "5px",
+                        }}
+                      />
+                      <AiOutlineEdit
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "20px",
+                          marginLeft: "5px",
+                        }}
+                        onClick={() => UpdateProduct(item.product_id)}
+                      />
                     </div>
-                    <AiOutlineDelete
-                      onClick={() => deleteProduct(item.product_id)}
-                      style={{
-                        cursor: "pointer",
-                        fontSize: "20px",
-                        marginRight: "5px",
-                      }}
-                    />
-                    <AiOutlineEdit
-                      style={{
-                        cursor: "pointer",
-                        fontSize: "20px",
-                        marginLeft: "5px",
-                      }}
-                      onClick={() => UpdateProduct(item.product_id)}
-                    />
                   </div>
-                </div>
-              );
-            })
-          : "loading"}
+                );
+              })
+            : "loading"}
+        </div>
       </div>
+      );
     </div>
   );
 };
