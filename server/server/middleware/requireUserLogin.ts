@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import db from "../db/db";
 
-async function findUser(user_id: string) {
+async function getUserById(user_id: string) {
   return await db("user")
     .where({
       user_id: user_id,
@@ -27,7 +27,7 @@ const requireUserLogin = (req: Request, res: Response, next: NextFunction) => {
         res.status(401).json({ error: "Not authorized" });
       } else if (payload) {
         const { user_id } = payload;
-        findUser(user_id).then((userData) => {
+        getUserById(user_id).then((userData) => {
           // use it for fix this ignore for context
           // https://stackoverflow.com/questions/37377731/extend-express-request-object-using-typescript
           //@ts-ignore
