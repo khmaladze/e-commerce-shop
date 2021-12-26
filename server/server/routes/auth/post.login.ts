@@ -3,6 +3,7 @@ import Joi from "joi";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
 import jwt from "jsonwebtoken";
+import { onlyGmail } from "./validators";
 
 const userEndpointDesc = "This is how to login user (more description)";
 export const TAGS = ["auth"];
@@ -15,9 +16,7 @@ export const requestSchema = Joi.object({
   params: Joi.object(),
   query: Joi.object(),
   body: Joi.object({
-    email: Joi.string()
-      .email({ minDomainSegments: 1, tlds: { allow: ["com"] } })
-      .required(),
+    email: onlyGmail.required(),
     userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
   }),
 }).description(userEndpointDesc);

@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
+import asyncHandler from "express-async-handler";
+import { onlyGmail } from "./validators";
 
 const userEndpointDesc = "This is how to register user (more description)";
 export const TAGS = ["auth"];
@@ -31,9 +33,7 @@ export const requestSchema = Joi.object({
     birthDate: Joi.string().isoDate().required(),
     country: Joi.string().lowercase().min(2).max(50).trim().required(),
     userAddress: Joi.string().lowercase().min(2).max(100).trim().required(),
-    email: Joi.string()
-      .email({ minDomainSegments: 1, tlds: { allow: ["com"] } })
-      .required(),
+    email: onlyGmail.required(),
     userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
     userCard: Joi.string().lowercase().length(10).trim().required(),
     cardPassword: Joi.string().length(4).required(),
@@ -46,46 +46,48 @@ export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
 
-export const businessLogic = async (req: Request, res: Response) => {
-  // get data from body
-  const {
-    email,
-    userCard,
-    firstName,
-    lastName,
-    birthDate,
-    country,
-    userAddress,
-    userPassword,
-    cardPassword,
-    budget,
-    confirmPassword,
-  } = req.body;
+export const businessLogic = asyncHandler(
+  async (req: Request, res: Response) => {
+    // get data from body
+    const {
+      email,
+      userCard,
+      firstName,
+      lastName,
+      birthDate,
+      country,
+      userAddress,
+      userPassword,
+      cardPassword,
+      budget,
+      confirmPassword,
+    } = req.body;
+    console.log("register/businessLogic");
+    try {
+      let ipAddress = req.ip;
+      let browserType = req.headers["user-agent"];
 
-  try {
-    let ipAddress = req.ip;
-    let browserType = req.headers["user-agent"];
-
-    let user = await db("user").insert({
-      first_name: firstName,
-      last_name: lastName,
-      birth_date: birthDate,
-      country: country,
-      user_address: userAddress,
-      email: email,
-      user_password: bcrypt.hashSync(userPassword, 12),
-      user_card: userCard,
-      card_password: bcrypt.hashSync(cardPassword, 12),
-      is_blocked: false,
-      budget: budget,
-      ip_address: ipAddress,
-      browser_type: browserType,
-    });
-    res.send({ success: true });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error,
-    });
+      let user = await db("user").insert({
+        first_name: firstName,
+        last_name: lastName,
+        birth_date: birthDate,
+        country: country,
+        user_address: userAddress,
+        email: email,
+        user_password: bcrypt.hashSync(userPassword, 12),
+        user_card: userCard,
+        card_password: bcrypt.hashSync(cardPassword, 12),
+        is_blocked: false,
+        budget: budget,
+        ip_address: ipAddress,
+        browser_type: browserType,
+      });
+      res.send({ success: true });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error,
+      });
+    }
   }
-};
+);
