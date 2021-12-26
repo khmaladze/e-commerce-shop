@@ -38,7 +38,7 @@ export const requestSchema = Joi.object({
     userCard: Joi.string().lowercase().length(10).trim().required(),
     cardPassword: Joi.string().length(4).required(),
     budget: Joi.string().lowercase().min(2).max(50).trim().required(),
-    confirmPassword: Joi.any().valid(Joi.ref("userPassword")).required(),
+    confirmPassword: Joi.string().valid(Joi.ref("userPassword")).required(),
   }),
 }).description(userEndpointDesc);
 

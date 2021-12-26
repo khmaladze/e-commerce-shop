@@ -30,26 +30,17 @@ export const businessLogic = async (req: Request, res: Response) => {
   try {
     const { email, userPassword } = req.body;
 
-    let userData = await db("user")
-      .where({
-        email: email,
-        is_blocked: false,
-      })
-      .select("*");
+    let user = await getUserByEmail(email);
 
-    if (
-      userData[0] &&
-      bcrypt.compareSync(userPassword, userData[0].user_password)
-    ) {
-      let jwtSecret: any = process.env.JWT_SECRET;
-      const token = jwt.sign({ user_id: userData[0].user_id }, jwtSecret);
-      let shopList = await db("shop")
-        .where({ shop_owner: userData[0].user_id, is_blocked: false })
-        .select("*");
+    if (user && bcrypt.compareSync(userPassword, user.user_password)) {
+      let jwtSecret: any = process.env.JWT_SECRET; // use config initialization for all env!!
+      const token = jwt.sign({ user_id: user.user_id }, jwtSecret);
+      let shopList = await getShopListByOwner(user.user_id);
       res.send({
+        // your responseSchema should match this
         success: true,
         token,
-        userData: userData[0],
+        userData: user,
         shopList,
       });
     }
@@ -57,7 +48,23 @@ export const businessLogic = async (req: Request, res: Response) => {
     res.status(500).send({
       success: false,
       error: error,
-      message: "Invalid Credentials",
+      message: "Invalid Credentials", // ??
     });
   }
 };
+
+async function getShopListByOwner(user_id: string) {
+  return await db("shop")
+    .where({ shop_owner: user_id, is_blocked: false })
+    .select("*");
+}
+
+async function getUserByEmail(email: string) {
+  let userData = await db("user")
+    .where({
+      email: email,
+      is_blocked: false,
+    })
+    .select("*");
+  return userData[0];
+}
