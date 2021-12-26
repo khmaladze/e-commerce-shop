@@ -62,7 +62,6 @@ export const businessLogic = asyncHandler(
       budget,
       confirmPassword,
     } = req.body;
-    console.log("register/businessLogic");
     try {
       let ipAddress = req.ip;
       let browserType = req.headers["user-agent"];

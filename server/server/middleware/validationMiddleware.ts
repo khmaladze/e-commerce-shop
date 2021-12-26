@@ -9,7 +9,6 @@ const options = {
 
 export default (schema: Schema) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log("register/validationMiddleware");
     if (!schema) {
       throw new Error("Validation schema is not provided");
     }
