@@ -4,35 +4,36 @@ import dotenv from "dotenv";
 dotenv.config();
 import db from "../db/db";
 
-const requireUserLogin = (
-  req: Request | any,
-  res: Response,
-  next: NextFunction
-) => {
+async function findUser(user_id: string) {
+  return await db("user")
+    .where({
+      user_id: user_id,
+      is_blocked: false,
+    })
+    .select("*");
+}
+
+// dont use 'any' type
+const requireUserLogin = (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    res.status(401).send({ error: "you must be loged in" });
+    res.status(401).send({ error: "Not authorized" });
   } else {
-    const token: any = authorization?.replace("Bearer ", "");
-    let jwtSecret: any = process.env.JWT_SECRET;
+    const token = authorization?.replace("Bearer ", "");
+    let jwtSecret = process.env.JWT_SECRET ?? "DEFOULT_JWT_SECRET"; // check it before server starting you should have InitConfigServer
 
-    jwt.verify(token, jwtSecret, (err: any, payload: any) => {
+    jwt.verify(token, jwtSecret, (err, payload) => {
       if (err) {
-        res.status(401).json({ error: "you must be logged in" });
-      }
-      if (!err) {
-        async function findUser() {
-          const { user_id } = payload;
-          let userData = await db("user")
-            .where({
-              user_id: user_id,
-              is_blocked: false,
-            })
-            .select("*");
+        res.status(401).json({ error: "Not authorized" });
+      } else if (payload) {
+        const { user_id } = payload;
+        findUser(user_id).then((userData) => {
+          // use it for fix this ignore for context
+          // https://stackoverflow.com/questions/37377731/extend-express-request-object-using-typescript
+          //@ts-ignore
           req.user = userData;
           next();
-        }
-        findUser();
+        });
       }
     });
   }
