@@ -15,11 +15,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 
-import authRoutes from "./routes/auth";
-import shopRoutes from "./routes/shop";
-import productRoutes from "./routes/product";
+import authRoutes from "./routes/auth/index";
+import shopRoutes from "./routes/shop/index";
+import productRoutes from "./routes/product/index";
 import historyRoutes from "./routes/history";
-import userRoute from "./routes/user";
+import userRoute from "./routes/user/index";
 
 app.use("/api/authRoute", authRoutes);
 app.use("/api/shopRoute", shopRoutes);

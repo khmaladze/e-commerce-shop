@@ -26,7 +26,6 @@ LANGUAGE plpgsql;
 CREATE SEQUENCE org_id_seq;
 
 CREATE TABLE public.user(
-    -- user_id BIGINT NOT NULL DEFAULT next_id('org_id_seq') PRIMARY KEY, 
     user_id BIGSERIAL PRIMARY KEY, 
     first_name CHARACTER VARYING(50)  NOT NULL,
     last_name CHARACTER VARYING(100) NOT NULL,
@@ -39,23 +38,12 @@ CREATE TABLE public.user(
 	card_password CHARACTER VARYING(60) NOT NULL,
 	is_blocked BOOLEAN NOT NULL,
 	budget CHARACTER VARYING(10) NOT NULL,
-	user_image CHARACTER VARYING(500) NOT NULL,
+	user_image CHARACTER VARYING(500),
 	ip_address CHARACTER VARYING(100) NOT NULL,
 	browser_type CHARACTER VARYING(500) NOT NULL,
-	user_cpu CHARACTER  VARYING(500) NOT NULL, 
-	-- homedir CHARACTER  VARYING(500), 
-	-- homedir CHARACTER  VARYING(500) NOT NULL, 
-	-- hostname CHARACTER  VARYING(500), 
-	-- hostname CHARACTER  VARYING(500) NOT NULL, 
-	-- os_username CHARACTER  VARYING(500), 
-	-- os_username CHARACTER  VARYING(500) NOT NULL, 
-	os_version CHARACTER  VARYING(500) NOT NULL, 
-	user_os CHARACTER  VARYING(500) NOT NULL,
-	user_os_release CHARACTER  VARYING(500) NOT NULL,
-	user_os_platform CHARACTER  VARYING(500) NOT NULL,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-)
+);
 
 
 CREATE TABLE public.category(
@@ -86,7 +74,7 @@ CREATE TABLE public.shop(
 	REFERENCES public.category(category_id) MATCH SIMPLE 
 	ON UPDATE NO ACTION
 	ON DELETE NO ACTION
-)
+);
 
 
 
@@ -107,7 +95,7 @@ CREATE TABLE public.product(
 	REFERENCES public.shop(shop_id) MATCH SIMPLE
 	ON UPDATE NO ACTION
 	ON DELETE NO ACTION
-)
+);
 
 CREATE TABLE public.history(
 	history_id BIGSERIAL PRIMARY KEY,
@@ -119,7 +107,7 @@ CREATE TABLE public.history(
 	REFERENCES public.user(user_id) MATCH SIMPLE
 	ON UPDATE NO ACTION
 	ON DELETE NO ACTION
-)
+);
 
 -- Get id of user shop
 SELECT shop_id as "shop id"
@@ -132,3 +120,47 @@ ORDER BY "shop id"
 SELECT product_id, title, product_description, category, price, product_count,  posted_by_shop, is_blocked, product_image as "product"
 FROM public.product as "products"
 WHERE products.posted_by_shop = 1 -- `shop id`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -- user_id BIGINT NOT NULL DEFAULT next_id('org_id_seq') PRIMARY KEY, 
+	-- user_cpu CHARACTER  VARYING(500) NOT NULL, 
+	-- homedir CHARACTER  VARYING(500), 
+	-- homedir CHARACTER  VARYING(500) NOT NULL, 
+	-- hostname CHARACTER  VARYING(500), 
+	-- hostname CHARACTER  VARYING(500) NOT NULL, 
+	-- os_username CHARACTER  VARYING(500), 
+	-- os_username CHARACTER  VARYING(500) NOT NULL, 
+	-- os_version CHARACTER  VARYING(500) NOT NULL, 
+	-- user_os CHARACTER  VARYING(500) NOT NULL,
+	-- user_os_release CHARACTER  VARYING(500) NOT NULL,
+	-- user_os_platform CHARACTER  VARYING(500) NOT NULL,

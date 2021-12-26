@@ -8,7 +8,13 @@ export const ProfileHeader: FC = () => {
       <div className="profile__header">
         <div
           className="profile__header__image"
-          style={{ backgroundImage: `url(${state?.user_image})` }}
+          style={{
+            backgroundImage: `url(${
+              state?.user_image == null
+                ? "https://res.cloudinary.com/dtlhyd02w/image/upload/v1638523630/frdmwjc5jtxv0eobisd0.png"
+                : state?.user_image
+            })`,
+          }}
         ></div>
         <div className="profile__header__info">
           <h3>user_id: {state?.user_id}</h3>

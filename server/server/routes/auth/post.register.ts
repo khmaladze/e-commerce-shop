@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import os from "os";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
-// import { joiValidationError } from '../utils/external.validation.error'
 
 const userEndpointDesc =
   "This is how to add swagger description for this endpoint";
@@ -35,7 +33,7 @@ export const requestSchema = Joi.object({
     country: Joi.string().lowercase().min(2).max(50).trim().required(),
     userAddress: Joi.string().lowercase().min(2).max(100).trim().required(),
     email: Joi.string()
-      .email({ minDomainSegments: 1, tlds: { allow: ["gmail.com"] } })
+      .email({ minDomainSegments: 1, tlds: { allow: ["com"] } })
       .required(),
     userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
     userCard: Joi.string().lowercase().length(10).trim().required(),
@@ -69,9 +67,6 @@ export const businessLogic = async (req: Request, res: Response) => {
     let ipAddress = req.ip;
     let browserType = req.headers["user-agent"];
 
-    let userImage =
-      "https://res.cloudinary.com/dtlhyd02w/image/upload/v1638523630/frdmwjc5jtxv0eobisd0.png";
-
     let user = await db("user").insert({
       first_name: firstName,
       last_name: lastName,
@@ -84,7 +79,6 @@ export const businessLogic = async (req: Request, res: Response) => {
       card_password: bcrypt.hashSync(cardPassword, 12),
       is_blocked: false,
       budget: budget,
-      user_image: userImage,
       ip_address: ipAddress,
       browser_type: browserType,
     });

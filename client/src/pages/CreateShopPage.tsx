@@ -58,7 +58,7 @@ export const CreateShopPage: FC = () => {
             if (result.success) {
               toast.success("shop Add Successfully");
               localStorage.setItem("shop", result);
-              history.push("/");
+              history.push("/my/shop");
             }
           });
       })

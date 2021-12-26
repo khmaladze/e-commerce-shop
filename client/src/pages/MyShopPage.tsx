@@ -454,7 +454,7 @@ export const MyShopPage: FC = () => {
                 className="signinbutton"
                 onClick={() => UpdateProduct(updateProductId)}
               >
-                Add Product
+                Update Product
               </button>
             </div>
           </div>
