@@ -46,47 +46,45 @@ export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
 
-export const businessLogic = asyncHandler(
-  async (req: Request, res: Response) => {
-    // get data from body
-    const {
-      email,
-      userCard,
-      firstName,
-      lastName,
-      birthDate,
-      country,
-      userAddress,
-      userPassword,
-      cardPassword,
-      budget,
-      confirmPassword,
-    } = req.body;
-    try {
-      let ipAddress = req.ip;
-      let browserType = req.headers["user-agent"];
+export const businessLogic = async (req: Request, res: Response) => {
+  // get data from body
+  const {
+    email,
+    userCard,
+    firstName,
+    lastName,
+    birthDate,
+    country,
+    userAddress,
+    userPassword,
+    cardPassword,
+    budget,
+    confirmPassword,
+  } = req.body;
+  try {
+    let ipAddress = req.ip;
+    let browserType = req.headers["user-agent"];
 
-      let user = await db("user").insert({
-        first_name: firstName,
-        last_name: lastName,
-        birth_date: birthDate,
-        country: country,
-        user_address: userAddress,
-        email: email,
-        user_password: bcrypt.hashSync(userPassword, 12),
-        user_card: userCard,
-        card_password: bcrypt.hashSync(cardPassword, 12),
-        is_blocked: false,
-        budget: budget,
-        ip_address: ipAddress,
-        browser_type: browserType,
-      });
-      res.send({ success: true });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        error: error,
-      });
-    }
+    let user = await db("user").insert({
+      first_name: firstName,
+      last_name: lastName,
+      birth_date: birthDate,
+      country: country,
+      user_address: userAddress,
+      email: email,
+      user_password: bcrypt.hashSync(userPassword, 12),
+      user_card: userCard,
+      card_password: bcrypt.hashSync(cardPassword, 12),
+      is_blocked: false,
+      budget: budget,
+      ip_address: ipAddress,
+      browser_type: browserType,
+    });
+    res.send({ success: true });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error,
+    });
   }
-);
+};
