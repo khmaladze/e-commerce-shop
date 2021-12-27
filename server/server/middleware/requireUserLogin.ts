@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 import db from "../db/db";
+interface User {
+  user_id: string;
+}
 
 async function getUserById(user_id: string) {
   const userData = await db("user")
@@ -15,7 +18,8 @@ async function getUserById(user_id: string) {
   //   return userData[0];
   // }
   // return undefined;
-  return userData?.[0]; // this is equivalent
+  console.log(userData);
+  return userData?.[0] as User; // this is equivalent
 }
 
 // dont use 'any' type
