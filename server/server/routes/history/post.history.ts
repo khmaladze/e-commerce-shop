@@ -19,7 +19,7 @@ export const requestSchema = Joi.object({
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
-
+// dont use 'any' type
 export const businessLogic = async (req: Request | any, res: Response) => {
   try {
     let { productId } = req.body;
@@ -31,7 +31,7 @@ export const businessLogic = async (req: Request | any, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Invalid Credentials",
+      message: "Invalid Credentials", //??
       error: error,
     });
   }

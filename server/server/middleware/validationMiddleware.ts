@@ -5,6 +5,7 @@ import asyncHandler from "express-async-handler";
 
 const options = {
   abortEarly: false,
+  convert: false,
 };
 
 export default (schema: Schema) =>

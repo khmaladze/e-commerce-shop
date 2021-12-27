@@ -2,10 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
+import asyncHandler from "express-async-handler";
+import { onlyGmail } from "./validators";
 
-const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
-
+const userEndpointDesc = "This is how to register user (more description)";
+export const TAGS = ["auth"];
 export const requestSchema = Joi.object({
   headers: Joi.object()
     .keys({
@@ -32,14 +33,12 @@ export const requestSchema = Joi.object({
     birthDate: Joi.string().isoDate().required(),
     country: Joi.string().lowercase().min(2).max(50).trim().required(),
     userAddress: Joi.string().lowercase().min(2).max(100).trim().required(),
-    email: Joi.string()
-      .email({ minDomainSegments: 1, tlds: { allow: ["com"] } })
-      .required(),
+    email: onlyGmail.required(),
     userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
     userCard: Joi.string().lowercase().length(10).trim().required(),
     cardPassword: Joi.string().length(4).required(),
     budget: Joi.string().lowercase().min(2).max(50).trim().required(),
-    confirmPassword: Joi.any().valid(Joi.ref("userPassword")).required(),
+    confirmPassword: Joi.string().valid(Joi.ref("userPassword")).required(),
   }),
 }).description(userEndpointDesc);
 
@@ -62,7 +61,6 @@ export const businessLogic = async (req: Request, res: Response) => {
     budget,
     confirmPassword,
   } = req.body;
-
   try {
     let ipAddress = req.ip;
     let browserType = req.headers["user-agent"];
