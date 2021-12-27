@@ -37,7 +37,7 @@ export const RegisterPage: FC = () => {
       budget,
       confirmPassword
     );
-    fetch("http://localhost:5000/api/authRoute/register", {
+    fetch("/api/auth/register", {
       method: "post",
       headers: {
         "Content-Type": "application/json",

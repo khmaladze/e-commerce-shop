@@ -47,14 +47,14 @@ export const Settings: FC = () => {
       .catch((err) => {
         console.log(err);
       });
-    // fetch(`http://localhost:5000/api/userRoute/user?Id=${userId}`, {
+    // fetch(`/api/user/user?Id=${userId}`, {
   };
 
   useEffect(() => {
     if (newUrl) {
       if (userId) {
-        // fetch(`http://localhost:5000/api/userRoute/user?Id=${userId}`, {
-        fetch(`http://localhost:5000/api/userRoute/user/:${userId}`, {
+        // fetch(`/api/user/user?Id=${userId}`, {
+        fetch(`/api/user/profile/update/:${userId}`, {
           method: "put",
           headers: {
             "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export const Settings: FC = () => {
   });
 
   const PostUpdate = () => {
-    fetch(`http://localhost:5000/api/userRoute/user/:${userId}`, {
+    fetch(`/api/user/profile/update/:${userId}`, {
       method: "put",
       headers: {
         "Content-Type": "application/json",
@@ -188,9 +188,6 @@ export const Settings: FC = () => {
             Update with image
           </button>
         )}
-        {/* <button className="signinbutton" onClick={() => PostUpdate()}>
-          Update
-        </button> */}
       </div>
     </div>
   );

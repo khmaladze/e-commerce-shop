@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
-import asyncHandler from "express-async-handler";
 import { onlyGmail } from "./validators";
 
 const userEndpointDesc = "This is how to register user (more description)";

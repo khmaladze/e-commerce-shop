@@ -23,6 +23,9 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
+  token: Joi.string().required(),
+  userData: Joi.object().required(),
+  shopList: Joi.array().required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -36,7 +39,6 @@ export const businessLogic = async (req: Request, res: Response) => {
       const token = jwt.sign({ user_id: user.user_id }, jwtSecret);
       let shopList = await getShopListByOwner(user.user_id);
       res.send({
-        // your responseSchema should match this
         success: true,
         token,
         userData: user,
@@ -47,7 +49,6 @@ export const businessLogic = async (req: Request, res: Response) => {
     res.status(500).send({
       success: false,
       error: error,
-      message: "Invalid Credentials", // ??
     });
   }
 };

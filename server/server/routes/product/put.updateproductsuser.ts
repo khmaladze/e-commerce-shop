@@ -4,7 +4,7 @@ import db from "../../db/db";
 
 const userEndpointDesc =
   "This is how to add swagger description for this endpoint";
-
+export const TAGS = ["product"];
 export const requestSchema = Joi.object({
   headers: Joi.object()
     .keys({

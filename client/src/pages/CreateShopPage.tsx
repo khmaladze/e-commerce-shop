@@ -7,8 +7,7 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import { imageFormat, UserShop } from "../components/MyShop";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -39,7 +38,7 @@ export const CreateShopPage: FC = () => {
         console.log(data);
         console.log(data.url);
         toast.success("Image Uploaded");
-        fetch("http://localhost:5000/api/shopRoute/add/shop", {
+        fetch("/api/shop/add/shop", {
           method: "post",
           headers: {
             "Content-Type": "application/json",

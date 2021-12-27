@@ -1,17 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
-import db from "../../db/db";
 
-const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
-export const TAGS = ["product"];
-
+const userEndpointDesc = "This is how to login user (more description)";
+export const TAGS = ["auth"];
 export const requestSchema = Joi.object({
-  headers: Joi.object()
-    .keys({
-      "user-agent": Joi.string().required(),
-    })
-    .options({ allowUnknown: true }),
+  headers: Joi.object(),
   params: Joi.object(),
   query: Joi.object(),
   body: Joi.object(),
@@ -23,12 +16,10 @@ export const responseSchema = Joi.object({
 
 export const businessLogic = async (req: Request, res: Response) => {
   try {
-    let products = await db("product").where({ is_blocked: false }).select("*");
-    res.send({ success: true, products });
+    res.send({ success: true });
   } catch (error) {
-    res.status(500).json({
+    res.status(500).send({
       success: false,
-      message: "Error",
       error: error,
     });
   }

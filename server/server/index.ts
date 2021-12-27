@@ -5,6 +5,7 @@ import express, { Express } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
+import Joi from "joi";
 
 // Middleware
 const app: Express = express();
@@ -23,19 +24,45 @@ import userRoute from "./routes/user/index";
 import { getOpenApiSchemaRouter } from "./documentation/open-api-documentation";
 import config from "./swagger.config";
 
-app.use("/api/authRoute", authRoutes);
-app.use("/api/shopRoute", shopRoutes);
-app.use("/api/productRoute", productRoutes);
-app.use("/api/historyRoute", historyRoutes);
-app.use("/api/userRoute", userRoute);
+app.use("/api/auth", authRoutes);
+app.use("/api/shop", shopRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/history", historyRoutes);
+app.use("/api/user", userRoute);
 
 // Set security headers
 app.use(helmet());
 app.use("/docs", express.static("server/documentation/swagger-ui-static"));
 app.use(getOpenApiSchemaRouter(app, config));
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log("Server is running on port", PORT);
+
+export const appConfig = {
+  JWT_SECRET: process.env.JWT_SECRET,
+  DATABASE: process.env.DATABASE,
+  PORT: process.env.PORT,
+  DB_USER: process.env.DB_USER,
+  DB_PASSWORD: process.env.DB_PASSWORD,
+};
+
+const appConfigSchema = Joi.object({
+  JWT_SECRET: Joi.string().required(),
+  DATABASE: Joi.string().required(),
+  PORT: Joi.string().required(),
+  DB_USER: Joi.string().required(),
+  DB_PASSWORD: Joi.string().required(),
 });
 
-// should add readme how it start
+const PORT: number = Number(process.env.PORT) || 5000;
+
+const { error } = appConfigSchema.validate(appConfig, {
+  abortEarly: false,
+  convert: false,
+});
+
+if (!error) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+} else {
+  console.log("error please add .env file to run this program💻💻💻");
+  console.log(error);
+}

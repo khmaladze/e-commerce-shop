@@ -46,7 +46,7 @@ export const MyShop: FC<Product> = ({
   price,
 }) => {
   const deleteProduct = (e: any) => {
-    fetch(`http://localhost:5000/api/productRoute/my/products/:${e}`, {
+    fetch(`/api/product/my/products/:${e}`, {
       method: "delete",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),

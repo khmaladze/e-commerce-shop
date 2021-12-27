@@ -3,8 +3,10 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 import db from "../db/db";
-interface User {
-  user_id: string;
+import { User } from "../interfaces/custom";
+
+interface customUserRequest extends Request {
+  user?: User;
 }
 
 async function getUserById(user_id: string) {
@@ -14,22 +16,20 @@ async function getUserById(user_id: string) {
       is_blocked: false,
     })
     .select("*");
-  // if (userData.length > 0) {
-  //   return userData[0];
-  // }
-  // return undefined;
-  console.log(userData);
-  return userData?.[0] as User; // this is equivalent
+  return userData?.[0] as User;
 }
 
-// dont use 'any' type
-const requireUserLogin = (req: Request, res: Response, next: NextFunction) => {
+const requireUserLogin = (
+  req: customUserRequest,
+  res: Response,
+  next: NextFunction
+) => {
   const { authorization } = req.headers;
   if (!authorization) {
     res.status(401).send({ error: "Not authorized" });
   } else {
     const token = authorization?.replace("Bearer ", "");
-    let jwtSecret = process.env.JWT_SECRET ?? "DEFOULT_JWT_SECRET"; // check it before server starting you should have InitConfigServer
+    let jwtSecret = process.env.JWT_SECRET ?? "DEFOULT_JWT_SECRET";
 
     jwt.verify(token, jwtSecret, (err, payload) => {
       if (err) {
@@ -38,9 +38,6 @@ const requireUserLogin = (req: Request, res: Response, next: NextFunction) => {
         const { user_id } = payload;
         getUserById(user_id).then((user) => {
           if (user) {
-            // use it for fix this ignore for context
-            // https://stackoverflow.com/questions/37377731/extend-express-request-object-using-typescript
-            //@ts-ignore
             req.user = user;
             next();
           } else {

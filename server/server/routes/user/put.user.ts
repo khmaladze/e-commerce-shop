@@ -5,6 +5,7 @@ import db from "../../db/db";
 
 const userEndpointDesc =
   "This is how to add swagger description for this endpoint";
+export const TAGS = ["user"];
 
 export const requestSchema = Joi.object({
   headers: Joi.object()
@@ -19,7 +20,7 @@ export const requestSchema = Joi.object({
     userImage: Joi.string().max(500).required(),
     userAddress: Joi.string().lowercase().min(2).max(50).trim().required(),
     userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
-    confirmPassword: Joi.any().valid(Joi.ref("userPassword")).required(),
+    confirmPassword: Joi.string().valid(Joi.ref("userPassword")).required(),
   }),
 }).description(userEndpointDesc);
 

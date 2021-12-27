@@ -4,8 +4,8 @@ import * as user from "./put.user";
 import requireUserLogin from "../../middleware/requireUserLogin";
 let router = express.Router();
 
-router.post(
-  "/add/shop",
+router.put(
+  "/profile/update/:id",
   requireUserLogin,
   validationMiddleware(user.requestSchema),
   user.businessLogic

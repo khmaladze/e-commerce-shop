@@ -11,7 +11,7 @@ export const LoginPage: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const PostData = () => {
-    fetch("http://localhost:5000/api/authRoute/login", {
+    fetch("/api/auth/login", {
       method: "post",
       headers: {
         "Content-Type": "application/json",

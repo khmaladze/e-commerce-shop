@@ -6,7 +6,7 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import { imageFormat, UserShop } from "../components/MyShop";
+import { imageFormat } from "../components/MyShop";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
 toast.configure();
@@ -29,7 +29,7 @@ export const AddUserProducts = () => {
   let imageList: any = [];
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/productRoute/my/products/user", {
+    fetch("/api/product/my/products/user", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -41,7 +41,7 @@ export const AddUserProducts = () => {
       });
   }, []);
   const getData = () => {
-    fetch("http://localhost:5000/api/productRoute/my/products/user", {
+    fetch("/api/product/my/products/user", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -73,7 +73,7 @@ export const AddUserProducts = () => {
           toast.success("Image Uploaded");
           if (data.url) {
             console.log("it works good", imageUrl);
-            fetch("http://localhost:5000/api/productRoute/add/product", {
+            fetch("/api/product/add/product", {
               method: "post",
               headers: {
                 "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export const AddUserProducts = () => {
               console.log(imageList, "imageList");
               toast.success("Image Uploaded");
               if (imageList.length == image.length) {
-                fetch("http://localhost:5000/api/productRoute/add/product", {
+                fetch("/api/product/add/product", {
                   method: "post",
                   headers: {
                     "Content-Type": "application/json",
@@ -175,25 +175,22 @@ export const AddUserProducts = () => {
       !image[0] &&
       (title || description || category || price || productCount)
     ) {
-      fetch(
-        `http://localhost:5000/api/productRoute/my/user/products/:${updatePostId}`,
-        {
-          method: "put",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-          },
-          body: JSON.stringify({
-            title,
-            productDescription: description,
-            category,
-            price,
-            productCount,
-            productImage: imageUrl,
-            requestedBy: "user",
-          }),
-        }
-      )
+      fetch(`/api/product/my/user/products/:${updatePostId}`, {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+        body: JSON.stringify({
+          title,
+          productDescription: description,
+          category,
+          price,
+          productCount,
+          productImage: imageUrl,
+          requestedBy: "user",
+        }),
+      })
         .then((res) => res.json())
         .then((result) => {
           console.log(result);
@@ -229,25 +226,22 @@ export const AddUserProducts = () => {
           setImageUrl(data.url);
           toast.success("Image Uploaded");
           if (data.url) {
-            fetch(
-              `http://localhost:5000/api/productRoute/my/user/products/:${updatePostId}`,
-              {
-                method: "put",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer " + localStorage.getItem("jwt"),
-                },
-                body: JSON.stringify({
-                  title,
-                  productDescription: description,
-                  category,
-                  price,
-                  productCount,
-                  productImage: data.url,
-                  requestedBy: "user",
-                }),
-              }
-            )
+            fetch(`/api/product/my/user/products/:${updatePostId}`, {
+              method: "put",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+              },
+              body: JSON.stringify({
+                title,
+                productDescription: description,
+                category,
+                price,
+                productCount,
+                productImage: data.url,
+                requestedBy: "user",
+              }),
+            })
               .then((res) => res.json())
               .then((result) => {
                 console.log(result);
@@ -290,25 +284,22 @@ export const AddUserProducts = () => {
             console.log(imageList, "imageList");
             toast.success("Image Uploaded");
             if (imageList.length == image.length) {
-              fetch(
-                `http://localhost:5000/api/productRoute/my/user/products/:${updatePostId}`,
-                {
-                  method: "put",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
-                  },
-                  body: JSON.stringify({
-                    title,
-                    productDescription: description,
-                    category,
-                    price,
-                    productCount,
-                    productImage: String(imageList),
-                    requestedBy: "user",
-                  }),
-                }
-              )
+              fetch(`/api/product/my/user/products/:${updatePostId}`, {
+                method: "put",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("jwt"),
+                },
+                body: JSON.stringify({
+                  title,
+                  productDescription: description,
+                  category,
+                  price,
+                  productCount,
+                  productImage: String(imageList),
+                  requestedBy: "user",
+                }),
+              })
                 .then((res) => res.json())
                 .then((result) => {
                   console.log(result);
@@ -346,7 +337,7 @@ export const AddUserProducts = () => {
   };
 
   const deleteProduct = (e: any) => {
-    fetch(`http://localhost:5000/api/productRoute/my/products/:${e}`, {
+    fetch(`/api/product/my/products/:${e}`, {
       method: "delete",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -489,14 +480,6 @@ export const AddUserProducts = () => {
             ? productData.map((item: string | any) => {
                 return (
                   <div>
-                    {/* <MyShop
-                    product_id={item.product_id}
-                    product_image={item.product_image}
-                    title={item.title}
-                    product_description={item.product_description}
-                    price={item.price}
-                    key={item.product_id}
-                  /> */}
                     <div
                       id={item.product_id}
                       className="myshop__products__card"
