@@ -27,11 +27,7 @@ export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
 
-interface customUserRequest extends Request {
-  user?: User;
-}
-
-export const businessLogic = async (req: customUserRequest, res: Response) => {
+export const businessLogic = async (req: Request, res: Response) => {
   try {
     let { shopName, category, budget, shopImage } = req.body;
 

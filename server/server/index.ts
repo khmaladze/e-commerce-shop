@@ -23,6 +23,7 @@ import historyRoutes from "./routes/history/index";
 import userRoute from "./routes/user/index";
 import { getOpenApiSchemaRouter } from "./documentation/open-api-documentation";
 import config from "./swagger.config";
+import { appConfig, isValidEnv } from "./app.config";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/shop", shopRoutes);
@@ -35,34 +36,8 @@ app.use(helmet());
 app.use("/docs", express.static("server/documentation/swagger-ui-static"));
 app.use(getOpenApiSchemaRouter(app, config));
 
-export const appConfig = {
-  JWT_SECRET: process.env.JWT_SECRET,
-  DATABASE: process.env.DATABASE,
-  PORT: process.env.PORT,
-  DB_USER: process.env.DB_USER,
-  DB_PASSWORD: process.env.DB_PASSWORD,
-};
-
-const appConfigSchema = Joi.object({
-  JWT_SECRET: Joi.string().required(),
-  DATABASE: Joi.string().required(),
-  PORT: Joi.string().required(),
-  DB_USER: Joi.string().required(),
-  DB_PASSWORD: Joi.string().required(),
-});
-
-const PORT: number = Number(process.env.PORT) || 5000;
-
-const { error } = appConfigSchema.validate(appConfig, {
-  abortEarly: false,
-  convert: false,
-});
-
-if (!error) {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+if (!isValidEnv()) {
+  app.listen(appConfig.PORT, () => {
+    console.log(`Server is running on port ${appConfig.PORT}`);
   });
-} else {
-  console.log("error please add .env file to run this program💻💻💻");
-  console.log(error);
 }

@@ -22,11 +22,7 @@ export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
 
-interface customUserRequest extends Request {
-  user?: User;
-}
-
-export const businessLogic = async (req: customUserRequest, res: Response) => {
+export const businessLogic = async (req: Request, res: Response) => {
   try {
     let shopList = await db("shop")
       .where({ shop_owner: req.user?.user_id, is_blocked: false })

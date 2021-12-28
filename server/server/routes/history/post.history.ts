@@ -20,13 +20,13 @@ export const requestSchema = Joi.object({
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
-// dont use 'any' type
-export const businessLogic = async (req: Request | any, res: Response) => {
+
+export const businessLogic = async (req: Request, res: Response) => {
   try {
     let { productId } = req.body;
     let saveData = await db("history").insert({
       product_id: productId,
-      person_id: req.user[0].user_id,
+      person_id: req.user.user_id,
     });
     res.send({ success: true });
   } catch (error) {

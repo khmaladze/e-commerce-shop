@@ -4,10 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import db from "../db/db";
 import { User } from "../interfaces/custom";
-
-interface customUserRequest extends Request {
-  user?: User;
-}
+import { appConfig } from "../app.config";
 
 async function getUserById(user_id: string) {
   const userData = await db("user")
@@ -19,17 +16,13 @@ async function getUserById(user_id: string) {
   return userData?.[0] as User;
 }
 
-const requireUserLogin = (
-  req: customUserRequest,
-  res: Response,
-  next: NextFunction
-) => {
+const requireUserLogin = (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
   if (!authorization) {
     res.status(401).send({ error: "Not authorized" });
   } else {
     const token = authorization?.replace("Bearer ", "");
-    let jwtSecret = process.env.JWT_SECRET ?? "DEFOULT_JWT_SECRET";
+    let jwtSecret = appConfig.JWT_SECRET;
 
     jwt.verify(token, jwtSecret, (err, payload) => {
       if (err) {

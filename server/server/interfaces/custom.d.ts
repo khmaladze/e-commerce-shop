@@ -19,13 +19,3 @@ export interface User {
   created_at: string;
   updated_at: string;
 }
-
-declare namespace Express {
-  export interface Request {
-    user?: object;
-  }
-}
-
-export interface customUserRequest extends Request {
-  user?: User;
-}
