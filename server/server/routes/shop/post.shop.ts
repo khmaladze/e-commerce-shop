@@ -20,7 +20,7 @@ export const requestSchema = Joi.object({
     category: Joi.string().required(),
     budget: Joi.string().required(),
     shopImage: Joi.string().required(),
-  }),
+  }).options({ convert: false }),
 }).description(userEndpointDesc);
 
 export const responseSchema = Joi.object({
