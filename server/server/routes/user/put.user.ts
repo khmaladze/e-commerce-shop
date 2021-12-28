@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
+import { User } from "../../interfaces/custom";
 
 const userEndpointDesc =
   "This is how to add swagger description for this endpoint";
@@ -28,7 +29,11 @@ export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
 
-export const businessLogic = async (req: Request | any, res: Response) => {
+interface customUserRequest extends Request {
+  user?: User;
+}
+
+export const businessLogic = async (req: customUserRequest, res: Response) => {
   try {
     let { country, userAddress, userPassword, userImage, confirmPassword } =
       req.body;
@@ -36,7 +41,6 @@ export const businessLogic = async (req: Request | any, res: Response) => {
     console.log(userId);
     let validUserId = userId.substring(1, userId.length);
     console.log(validUserId);
-    // let userId = req.query.Id;
     let userUpdate;
     if (userImage == "same") {
       userUpdate = await db("user")
@@ -46,7 +50,7 @@ export const businessLogic = async (req: Request | any, res: Response) => {
         .update({
           country: country,
           user_address: userAddress,
-          user_image: req.user.user_image,
+          user_image: req.user?.user_image,
           user_password: bcrypt.hashSync(userPassword, 12),
         });
     } else {
@@ -68,7 +72,6 @@ export const businessLogic = async (req: Request | any, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Invalid Credentials", // ??
       error: error,
     });
   }
