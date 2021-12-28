@@ -19,7 +19,13 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array().required(),
+  products: Joi.array()
+    .items(
+      Joi.object({
+        title: Joi.string().required(),
+      })
+    )
+    .required(),
   myShop: Joi.array().required(),
 });
 

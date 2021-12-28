@@ -51,7 +51,7 @@ router.get(
 
 router.put(
   "/my/products/:id",
-  requireAuthentication,
+  // requireAuthentication,
   permissionMiddleware(["user"]),
   validationMiddleware(updateproduct.requestSchema),
   updateproduct.businessLogic

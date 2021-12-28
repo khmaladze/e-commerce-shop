@@ -1,5 +1,8 @@
 import express, { Express, Request } from "express";
-
+enum Permision {
+  Admin = "admin",
+  User = "user",
+}
 export interface User {
   user_id: string;
   first_name: string;
@@ -18,4 +21,5 @@ export interface User {
   browser_type: string;
   created_at: string;
   updated_at: string;
+  permision?: string;
 }

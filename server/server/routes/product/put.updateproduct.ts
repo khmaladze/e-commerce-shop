@@ -32,33 +32,32 @@ export const businessLogic = async (req: Request, res: Response) => {
   try {
     let { title, productDescription, price, productCount, productImage } =
       req.body;
+    let productId = req.params.id;
+    console.log("productId", productId);
     let myShop = await db("shop")
       .where({ shop_owner: req.user.user_id })
       .select("shop_id");
-    let productId = req.params.id;
-    let validProductId = productId.substring(1, productId.length);
-    let products = await db("product")
+    let products = (await db("product")
       .where({
-        product_id: validProductId,
+        product_id: productId,
         posted_by_shop: myShop[0].shop_id,
         is_blocked: false,
       })
-      .select("*");
-
+      .select("*")) as Array<any>;
+    let product = products[0];
     let updateProducts = await db("product")
       .where({
-        product_id: validProductId,
+        product_id: productId,
         posted_by_shop: myShop[0].shop_id,
         is_blocked: false,
       })
       .update({
-        product_id: validProductId,
-        title: title || products[0].title,
-        product_description:
-          productDescription || products[0].product_description,
-        price: price || products[0].price,
-        product_count: productCount || products[0].product_count,
-        product_image: productImage || products[0].product_image,
+        product_id: productId,
+        title: title || product.title,
+        product_description: productDescription || product.product_description,
+        price: price || product.price,
+        product_count: productCount || product.product_count,
+        product_image: productImage || product.product_image,
       });
     let productList = await db("product")
       .where({
