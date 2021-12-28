@@ -27,6 +27,7 @@ export default (schema: Schema) =>
     } catch (error) {
       if (Joi.isError(error)) {
         const resp422 = {
+          success: false,
           detail: error.details.map((item: any) => ({
             label: item.context.label,
             message: item.message,
@@ -39,12 +40,14 @@ export default (schema: Schema) =>
       }
       if (error instanceof Error) {
         res.status(422).json({
+          success: false,
           error: error.message,
         });
         return;
       }
       // todo loging it
       res.status(500).json({
+        success: false,
         error: "Invalid server error",
       });
       return;

@@ -6,6 +6,7 @@ import {
 } from "./documentation/open-api-documentation/utils/authSchemes";
 
 const responseValidationSchema: Schema = Joi.object({
+  success: Joi.boolean().required(),
   detail: Joi.array().items(
     Joi.object({
       label: Joi.string().required(),

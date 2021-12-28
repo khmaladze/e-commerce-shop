@@ -19,14 +19,14 @@ async function getUserById(user_id: string) {
 const requireUserLogin = (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    res.status(401).send({ error: "Not authorized" });
+    res.status(401).send({ success: false, message: "Not authorized" });
   } else {
     const token = authorization?.replace("Bearer ", "");
     let jwtSecret = appConfig.JWT_SECRET;
 
     jwt.verify(token, jwtSecret, (err, payload) => {
       if (err) {
-        res.status(401).json({ error: "Not authorized" });
+        res.status(401).json({ success: false, message: "Not authorized" });
       } else if (payload) {
         const { user_id } = payload;
         getUserById(user_id).then((user) => {
@@ -34,7 +34,7 @@ const requireUserLogin = (req: Request, res: Response, next: NextFunction) => {
             req.user = user;
             next();
           } else {
-            res.status(401).json({ error: "Not authorized" });
+            res.status(401).json({ success: false, message: "Not authorized" });
           }
         });
       }
