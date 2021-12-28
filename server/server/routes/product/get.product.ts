@@ -3,7 +3,7 @@ import Joi from "joi";
 import db from "../../db/db";
 
 const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
+  "This enpoints gets all products from database created by shop or individual from user";
 export const TAGS = ["product"];
 
 export const requestSchema = Joi.object({
@@ -19,6 +19,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
+  products: Joi.array().required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

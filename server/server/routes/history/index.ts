@@ -1,12 +1,14 @@
 import express from "express";
 import validationMiddleware from "../../middleware/validationMiddleware";
-import requireUserLogin from "../../middleware/requireUserLogin";
+import requireAuthentication from "../../middleware/requireAuthentication";
 import * as history from "./post.history";
+import { permissionMiddleware } from "../../middleware/permissions";
 let router = express.Router();
 
 router.post(
   "/history",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(history.requestSchema),
   history.businessLogic
 );

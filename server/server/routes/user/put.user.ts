@@ -5,7 +5,7 @@ import db from "../../db/db";
 import { User } from "../../interfaces/custom";
 
 const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
+  "This is endpoint for some user details update like country, userImage, userAddress, userPassword";
 export const TAGS = ["user"];
 
 export const requestSchema = Joi.object({
@@ -18,7 +18,7 @@ export const requestSchema = Joi.object({
   params: Joi.object({
     id: Joi.number().required(),
   }),
-  query: Joi.object().options({ convert: true }),
+  query: Joi.object(),
   body: Joi.object({
     country: Joi.string().lowercase().min(2).max(50).trim().required(),
     userImage: Joi.string().max(500).required(),
@@ -30,43 +30,32 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
+  newUserData: Joi.array().required(),
 });
 
-interface customUserRequest extends Request {
-  user?: User;
-}
-
-export const businessLogic = async (req: customUserRequest, res: Response) => {
+export const businessLogic = async (req: Request, res: Response) => {
   try {
     let { country, userAddress, userPassword, userImage, confirmPassword } =
       req.body;
     let userId = req.params.id;
     let userUpdate;
     if (userImage == "same") {
-      userUpdate = await db("user")
-        .where({
-          user_id: userId,
-        })
-        .update({
-          country: country,
-          user_address: userAddress,
-          user_image: req.user?.user_image,
-          user_password: bcrypt.hashSync(userPassword, 12),
-        });
-    } else {
-      userUpdate = await db("user")
-        .where({
-          user_id: userId,
-        })
-        .update({
-          country: country,
-          user_address: userAddress,
-          user_image: userImage,
-          user_password: bcrypt.hashSync(userPassword, 12),
-        });
+      userImage = req.user.user_image;
     }
-    let newUserData = await db("user").where({ user_id: userId }).select("*");
-    res.send({ success: true, data: newUserData[0] });
+    userUpdate = await db("user")
+      .where({
+        user_id: userId,
+      })
+      .update({
+        country: country,
+        user_address: userAddress,
+        user_image: userImage,
+        user_password: bcrypt.hashSync(userPassword, 12),
+      });
+    let newUserData = (await db("user")
+      .where({ user_id: userId })
+      .select("*")) as Array<User>;
+    res.send({ success: true, data: newUserData });
   } catch (error) {
     res.status(500).json({
       success: false,

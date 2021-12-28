@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
 
-const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
+const userEndpointDesc = "This is endpoint to get all allowed shop";
 export const TAGS = ["shop"];
 
 export const requestSchema = Joi.object({
@@ -19,6 +18,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
+  shopList: Joi.array().required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

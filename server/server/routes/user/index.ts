@@ -1,12 +1,14 @@
 import express from "express";
 import validationMiddleware from "../../middleware/validationMiddleware";
 import * as user from "./put.user";
-import requireUserLogin from "../../middleware/requireUserLogin";
+import requireAuthentication from "../../middleware/requireAuthentication";
+import { permissionMiddleware } from "../../middleware/permissions";
 let router = express.Router();
 
 router.put(
   "/profile/update/:id",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["admin"]),
   validationMiddleware(user.requestSchema),
   user.businessLogic
 );

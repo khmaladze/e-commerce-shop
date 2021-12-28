@@ -3,24 +3,30 @@ import Joi from "joi";
 import db from "../../db/db";
 
 const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
+  "This is endpoint to  update  product from individual user. you can update anything you want if you want update all the fields or just one. you can update how many you want. it's up to you";
 export const TAGS = ["product"];
 export const requestSchema = Joi.object({
   headers: Joi.object()
     .keys({
       "user-agent": Joi.string().required(),
+      authorization: Joi.string().required(),
     })
     .options({ allowUnknown: true }),
-  params: Joi.object(),
+  params: Joi.object({
+    id: Joi.number().required(),
+  }),
   query: Joi.object(),
   body: Joi.object(),
 }).description(userEndpointDesc);
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
+  products: Joi.array().required(),
+  updateProducts: Joi.array().required(),
+  productList: Joi.array().required(),
 });
 
-export const businessLogic = async (req: Request | any, res: Response) => {
+export const businessLogic = async (req: Request, res: Response) => {
   try {
     let { title, productDescription, price, productCount, productImage } =
       req.body;
@@ -30,7 +36,7 @@ export const businessLogic = async (req: Request | any, res: Response) => {
     let products = await db("product")
       .where({
         product_id: validProductId,
-        posted_by_user: req.user[0].user_id,
+        posted_by_user: req.user.user_id,
         is_blocked: false,
       })
       .select("*");
@@ -38,7 +44,7 @@ export const businessLogic = async (req: Request | any, res: Response) => {
     let updateProducts = await db("product")
       .where({
         product_id: validProductId,
-        posted_by_user: req.user[0].user_id,
+        posted_by_user: req.user.user_id,
         is_blocked: false,
       })
       .update({
@@ -52,7 +58,7 @@ export const businessLogic = async (req: Request | any, res: Response) => {
       });
     let productList = await db("product")
       .where({
-        posted_by_user: req.user[0].user_id,
+        posted_by_user: req.user.user_id,
         is_blocked: false,
       })
       .select("*");

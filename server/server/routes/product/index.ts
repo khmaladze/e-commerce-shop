@@ -1,5 +1,5 @@
 import express from "express";
-import requireUserLogin from "../../middleware/requireUserLogin";
+import requireAuthentication from "../../middleware/requireAuthentication";
 import validationMiddleware from "../../middleware/validationMiddleware";
 import * as product from "./post.product";
 import * as products from "./get.product";
@@ -8,11 +8,13 @@ import * as updateproduct from "./put.updateproduct";
 import * as delproduct from "./delete.delproduct";
 import * as myuserproduct from "./get.myuserproducts";
 import * as updateuserproduct from "./put.updateproductsuser";
+import { permissionMiddleware } from "../../middleware/permissions";
 let router = express.Router();
 
 router.post(
   "/add/product",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(product.requestSchema),
   product.businessLogic
 );
@@ -25,35 +27,40 @@ router.get(
 
 router.get(
   "/my/products",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(myproducts.requestSchema),
   myproducts.businessLogic
 );
 
 router.put(
   "/my/user/products/:id",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(updateuserproduct.requestSchema),
   updateuserproduct.businessLogic
 );
 
 router.get(
   "/my/products/user",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(myuserproduct.requestSchema),
   myuserproduct.businessLogic
 );
 
 router.put(
   "/my/products/:id",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(updateproduct.requestSchema),
   updateproduct.businessLogic
 );
 
 router.delete(
   "/my/products/:id",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(delproduct.requestSchema),
   delproduct.businessLogic
 );

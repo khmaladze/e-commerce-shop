@@ -2,9 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
 import { User } from "../../interfaces/custom";
+import { permissionMiddleware } from "../../middleware/permissions";
 
 const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
+  "This is endpoint for user to create their shop and add products by them";
 export const TAGS = ["shop"];
 
 export const requestSchema = Joi.object({
@@ -27,18 +28,14 @@ export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
 
-interface customUserRequest extends Request {
-  user?: User;
-}
-
-export const businessLogic = async (req: customUserRequest, res: Response) => {
+export const businessLogic = async (req: Request, res: Response) => {
   try {
     let { shopName, category, budget, shopImage } = req.body;
 
     if (shopName && category && budget && shopImage) {
       await db("shop").insert({
         shop_name: shopName,
-        shop_owner: req.user?.user_id,
+        shop_owner: req.user.user_id,
         category: category,
         is_blocked: false,
         budget: budget,

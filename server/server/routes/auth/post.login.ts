@@ -5,7 +5,8 @@ import db from "../../db/db";
 import jwt from "jsonwebtoken";
 import { onlyGmail } from "./validators";
 
-const userEndpointDesc = "This is how to login user (more description)";
+const userEndpointDesc =
+  "this is how to login user you need to fill all the fields email and password. email must be gmail provider and also password must not be longer than 50";
 export const TAGS = ["auth"];
 export const requestSchema = Joi.object({
   headers: Joi.object()

@@ -3,26 +3,29 @@ import validationMiddleware from "../../middleware/validationMiddleware";
 import * as shop from "./post.shop";
 import * as getshop from "./get.shop";
 import * as myshop from "./get.myshop";
-import requireUserLogin from "../../middleware/requireUserLogin";
+import requireAuthentication from "../../middleware/requireAuthentication";
+import { permissionMiddleware } from "../../middleware/permissions";
 let router = express.Router();
 
 router.post(
   "/add/shop",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(shop.requestSchema),
   shop.businessLogic
 );
 
 router.get(
   "/shop",
-  requireUserLogin,
+  requireAuthentication,
   validationMiddleware(getshop.requestSchema),
   getshop.businessLogic
 );
 
 router.get(
   "/my/shop",
-  requireUserLogin,
+  requireAuthentication,
+  permissionMiddleware(["user"]),
   validationMiddleware(myshop.requestSchema),
   myshop.businessLogic
 );

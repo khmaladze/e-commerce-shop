@@ -3,16 +3,19 @@ import Joi from "joi";
 import db from "../../db/db";
 
 const userEndpointDesc =
-  "This is how to add swagger description for this endpoint";
+  "This is endpoint to add product you need to add all the fields like title, product_description, category, price, product_count, product_image (NOTE: for product image you can use images from min 1 to max 3 )";
 export const TAGS = ["product"];
 
 export const requestSchema = Joi.object({
   headers: Joi.object()
     .keys({
       "user-agent": Joi.string().required(),
+      authorization: Joi.string().required(),
     })
     .options({ allowUnknown: true }),
-  params: Joi.object(),
+  params: Joi.object({
+    id: Joi.number().required(),
+  }),
   query: Joi.object(),
   body: Joi.object({
     title: Joi.string().min(2).max(50).trim().required(),
@@ -29,7 +32,7 @@ export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
 });
 
-export const businessLogic = async (req: Request | any, res: Response) => {
+export const businessLogic = async (req: Request, res: Response) => {
   try {
     const {
       title,
@@ -43,15 +46,13 @@ export const businessLogic = async (req: Request | any, res: Response) => {
     let requestedBy: requestedByType = req.body.requestedBy;
     let postedById;
     if (requestedBy == "user") {
-      postedById = req.user[0].user_id;
+      postedById = req.user.user_id;
     } else {
       let shopId = await db("shop")
         .where({
-          shop_owner: req.user[0].user_id,
+          shop_owner: req.user.user_id,
         })
         .select("shop_id");
-      console.log(shopId);
-      console.log(shopId[0].shop_id);
       postedById = shopId[0].shop_id;
     }
     if (requestedBy == "user") {
