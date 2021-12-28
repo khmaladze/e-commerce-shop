@@ -5,7 +5,6 @@ import asyncHandler from "express-async-handler";
 
 const options = {
   abortEarly: false,
-  convert: false,
 };
 
 export default (schema: Schema) =>
@@ -21,7 +20,10 @@ export default (schema: Schema) =>
       }
     });
     try {
-      await schema.validateAsync({ query, body, params }, options);
+      let val = await schema.validateAsync({ query, body, params }, options);
+      req.params = val.params;
+      req.query = val.query;
+      // console.log(JSON.stringify(val, null, 2));
     } catch (error) {
       if (Joi.isError(error)) {
         const resp422 = {
