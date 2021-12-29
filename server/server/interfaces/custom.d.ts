@@ -19,3 +19,26 @@ export interface User {
   created_at: string;
   updated_at: string;
 }
+
+export interface Product {
+  product_id: string;
+  title: string;
+  product_description: string;
+  product_image: string;
+  category: number;
+  price: number;
+  product_count: number;
+  posted_by_user?: number;
+  posted_by_shop?: number;
+  is_blocked: boolean;
+}
+
+export interface Shop {
+  shop_id: string;
+  shop_name: string;
+  shop_owner: number;
+  category: number;
+  is_blocked: boolean;
+  budget: string;
+  shop_image: string;
+}

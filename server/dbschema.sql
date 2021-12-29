@@ -63,7 +63,7 @@ INSERT INTO public.category(
 CREATE TABLE public.shop(
 	shop_id BIGSERIAL PRIMARY KEY,
 	shop_name CHARACTER VARYING(50) NOT NULL,
-	shop_owner BIGINT NOT NULL,
+	shop_owner BIGINT NOT NULL UNIQUE,
 	category BIGINT NOT NULL,
 	is_blocked BOOLEAN NOT NULL,
 	budget CHARACTER VARYING(50) NOT NULL,
