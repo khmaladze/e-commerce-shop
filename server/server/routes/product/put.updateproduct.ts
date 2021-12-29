@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
+import { min } from "lodash";
 import db from "../../db/db";
 import { products, shop } from "../../utils/response.schema.items";
 
@@ -19,14 +20,14 @@ export const requestSchema = Joi.object({
     id: Joi.number().required(),
   }),
   query: Joi.object(),
-  // body: Joi.object({
-  //   title: Joi.string().min(2).max(50),
-  //   productDescription: Joi.string().max(1000),
-  //   price: Joi.string(),
-  //   productCount: Joi.string(),
-  //   productImage: Joi.string().max(500),
-  // }),
-  body: Joi.object(),
+  body: Joi.object({
+    title: Joi.string().min(0).max(50),
+    productDescription: Joi.string().min(0).max(1000),
+    price: Joi.string().min(0),
+    productCount: Joi.string().min(0),
+    productImage: Joi.string().min(0).max(500),
+    requestedBy: Joi.string().valid("shop", "user").required(),
+  }),
 }).description(userEndpointDesc);
 
 export const responseSchema = Joi.object({

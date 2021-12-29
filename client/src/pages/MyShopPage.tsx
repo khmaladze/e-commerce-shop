@@ -200,7 +200,6 @@ export const MyShopPage: FC = () => {
         body: JSON.stringify({
           title,
           productDescription: description,
-          category: shop[0]?.category,
           price,
           productCount,
           productImage: imageUrl,
@@ -251,7 +250,6 @@ export const MyShopPage: FC = () => {
               body: JSON.stringify({
                 title,
                 productDescription: description,
-                category: shop[0]?.category,
                 price,
                 productCount,
                 productImage: data.url,
