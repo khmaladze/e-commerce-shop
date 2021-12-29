@@ -36,7 +36,7 @@ export const MyShopPage: FC = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        setShop(result.shopList);
+        setShop(result.shop);
         setShow(true);
       });
   }, []);
@@ -67,6 +67,9 @@ export const MyShopPage: FC = () => {
   };
 
   const AddProduct = () => {
+    if (!title || !description || !price || !productCount || !image[0]) {
+      toast.warn("Please add minumum one filed");
+    }
     if (image.length == 1) {
       const data = new FormData();
       data.append("file", image[0].file);
@@ -121,71 +124,74 @@ export const MyShopPage: FC = () => {
         .catch((err) => {
           console.log(err);
         });
-    } else {
-      if (image.length > 1) {
-        for (let i = 0; i < image.length; i++) {
-          const data = new FormData();
-          data.append("file", image[i].file);
-          data.append(
-            "upload_preset",
-            "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
-          );
-          data.append("cloud_name", "dtlhyd02w");
-          console.log(data);
-          fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
-            method: "post",
-            body: data,
+    } else if (image.length > 1) {
+      for (let i = 0; i < image.length; i++) {
+        const data = new FormData();
+        data.append("file", image[i].file);
+        data.append(
+          "upload_preset",
+          "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+        );
+        data.append("cloud_name", "dtlhyd02w");
+        console.log(data);
+        fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
+          method: "post",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setImageUrl(data.url);
+            imageList.push(data.url);
+            console.log(imageList, "imageList");
+            toast.success("Image Uploaded");
+            if (imageList.length == image.length) {
+              fetch("/api/product/add/product", {
+                method: "post",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("jwt"),
+                },
+                body: JSON.stringify({
+                  title,
+                  productDescription: description,
+                  category: shop[0]?.category,
+                  price,
+                  productCount,
+                  productImage: String(imageList),
+                  requestedBy: "shop",
+                }),
+              })
+                .then((res) => res.json())
+                .then((result) => {
+                  console.log(result);
+                  if (result.success) {
+                    toast.success("Product Add Successfully");
+                    setTitle("");
+                    setDescription("");
+                    setPrice("");
+                    setProductCount("");
+                    imageList = [];
+                    setImage([]);
+                    return getData();
+                  }
+                });
+            }
           })
-            .then((res) => res.json())
-            .then((data) => {
-              setImageUrl(data.url);
-              imageList.push(data.url);
-              console.log(imageList, "imageList");
-              toast.success("Image Uploaded");
-              if (imageList.length == image.length) {
-                fetch("/api/product/add/product", {
-                  method: "post",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
-                  },
-                  body: JSON.stringify({
-                    title,
-                    productDescription: description,
-                    category: shop[0]?.category,
-                    price,
-                    productCount,
-                    productImage: String(imageList),
-                    requestedBy: "shop",
-                  }),
-                })
-                  .then((res) => res.json())
-                  .then((result) => {
-                    console.log(result);
-                    if (result.success) {
-                      toast.success("Product Add Successfully");
-                      setTitle("");
-                      setDescription("");
-                      setPrice("");
-                      setProductCount("");
-                      imageList = [];
-                      setImage([]);
-                      return getData();
-                    }
-                  });
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
+          .catch((err) => {
+            console.log(err);
+          });
       }
+    } else {
+      toast.warn("Please add all the field and upload image ");
     }
   };
 
   const UpdateProduct = (updatePostId: string | number) => {
+    if (!image[0] && !title && !description && !price && !productCount) {
+      toast.warn("Please add all the field and upload image ");
+    }
     if (!image[0] && (title || description || price || productCount)) {
-      fetch(`/api/product/my/products/:${updatePostId}`, {
+      fetch(`/api/product/my/products/${updatePostId}`, {
         method: "put",
         headers: {
           "Content-Type": "application/json",
@@ -236,7 +242,7 @@ export const MyShopPage: FC = () => {
           setImageUrl(data.url);
           toast.success("Image Uploaded");
           if (data.url) {
-            fetch(`/api/product/my/products/:${updatePostId}`, {
+            fetch(`/api/product/my/products/${updatePostId}`, {
               method: "put",
               headers: {
                 "Content-Type": "application/json",
@@ -294,7 +300,7 @@ export const MyShopPage: FC = () => {
             console.log(imageList, "imageList");
             toast.success("Image Uploaded");
             if (imageList.length == image.length) {
-              fetch(`/api/product/my/products/:${updatePostId}`, {
+              fetch(`/api/product/my/products/${updatePostId}`, {
                 method: "put",
                 headers: {
                   "Content-Type": "application/json",
@@ -339,6 +345,7 @@ export const MyShopPage: FC = () => {
         setShowAddProduct(true);
         window.scrollTo({ top: 150, behavior: "smooth" });
       } else {
+        window.scrollTo({ top: 150, behavior: "smooth" });
         setShowPostUpdate(true);
         setUpdateProductId(updatePostId);
         setShowAddProduct(false);
@@ -346,8 +353,8 @@ export const MyShopPage: FC = () => {
     }
   };
 
-  const deleteProduct = (e: any) => {
-    fetch(`/api/product/my/products/:${e}`, {
+  const deleteProduct = (id: any) => {
+    fetch(`/api/product/my/products/${id}`, {
       method: "delete",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -356,7 +363,7 @@ export const MyShopPage: FC = () => {
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
-        toast.success(`Product id ${e} Delete Successfully`);
+        toast.success(`Product id ${id} Delete Successfully`);
         return getData();
       });
   };

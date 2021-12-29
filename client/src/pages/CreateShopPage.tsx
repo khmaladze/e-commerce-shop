@@ -21,49 +21,53 @@ export const CreateShopPage: FC = () => {
   const history = useHistory();
 
   const CreateShop = () => {
-    const data = new FormData();
-    data.append("file", shopImage[0].file);
-    data.append(
-      "upload_preset",
-      "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
-    );
-    data.append("cloud_name", "dtlhyd02w");
-    console.log(data);
-    fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        console.log(data.url);
-        toast.success("Image Uploaded");
-        fetch("/api/shop/add/shop", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-          },
-          body: JSON.stringify({
-            shopName,
-            category,
-            budget,
-            shopImage: data.url,
-          }),
-        })
-          .then((res) => res.json())
-          .then((result) => {
-            console.log(result);
-            if (result.success) {
-              toast.success("shop Add Successfully");
-              localStorage.setItem("shop", result);
-              history.push("/my/shop");
-            }
-          });
+    if (shopName && category && budget && shopImage) {
+      const data = new FormData();
+      data.append("file", shopImage[0].file);
+      data.append(
+        "upload_preset",
+        "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+      );
+      data.append("cloud_name", "dtlhyd02w");
+      console.log(data);
+      fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
+        method: "post",
+        body: data,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          console.log(data.url);
+          toast.success("Image Uploaded");
+          fetch("/api/shop/add/shop", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+              shopName,
+              category,
+              budget,
+              shopImage: data.url,
+            }),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+              console.log(result);
+              if (result.success) {
+                toast.success("shop Add Successfully");
+                localStorage.setItem("shop", "shop created successfully");
+                history.push("/my/shop");
+              }
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast.warn("Please add all the field");
+    }
   };
 
   return (

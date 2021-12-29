@@ -13,9 +13,7 @@ export const requestSchema = Joi.object({
       authorization: Joi.string().required(),
     })
     .options({ allowUnknown: true }),
-  params: Joi.object({
-    id: Joi.number().required(),
-  }),
+  params: Joi.object(),
   query: Joi.object(),
   body: Joi.object({
     title: Joi.string().min(2).max(50).trim().required(),

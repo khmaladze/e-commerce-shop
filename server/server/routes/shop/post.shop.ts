@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
-import { User } from "../../interfaces/custom";
-import { permissionMiddleware } from "../../middleware/permissions";
 
 const userEndpointDesc =
   "This is endpoint for user to create their shop and add products by them";
+
 export const TAGS = ["shop"];
 
 export const requestSchema = Joi.object({

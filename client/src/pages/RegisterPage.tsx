@@ -58,31 +58,19 @@ export const RegisterPage: FC = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.detail) {
+          if (data.detail[0].message) {
+            toast.warn(data.detail[0].message);
+          }
+        }
         if (data.success) {
           history.push("/");
           window.scrollTo({ top: 0, behavior: "smooth" });
           toast.success("USER REGISTER SUCCESSFULLY");
         }
-        if (data.message) {
-          toast.warn(data.message);
-        }
-        if (data.error) {
-          if (data.error.details[0].message) {
-            toast.warn(data.error.details[0].message);
-          }
-        }
       })
       .catch((err) => {
         console.log(err);
-        if (err.message) {
-          toast.warn(err.message);
-        }
-        if (err.error) {
-          if (err.error.details[0].message) {
-            toast.warn(err.error.details[0].message);
-          }
-        }
       });
   };
 

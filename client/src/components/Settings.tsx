@@ -54,7 +54,7 @@ export const Settings: FC = () => {
     if (newUrl) {
       if (userId) {
         // fetch(`/api/user/user?Id=${userId}`, {
-        fetch(`/api/user/profile/update/:${userId}`, {
+        fetch(`/api/user/profile/update/${userId}`, {
           method: "put",
           headers: {
             "Content-Type": "application/json",
@@ -70,24 +70,25 @@ export const Settings: FC = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            if (data.error) {
-              toast.warn(data.error);
-            } else if (data.message) {
-              toast.warn(data.message);
-            } else {
-              console.log(data);
+            console.log(data);
+            if (data.detail) {
+              toast.warn(data.detail[0].message);
+            }
+            if (data.success) {
               dispatch({
                 type: "UPDATE",
                 payload: {
-                  country: data.data.country,
-                  user_address: data.data.user_address,
-                  user_password: data.data.user_password,
-                  user_image: data.data.user_image,
+                  country: data.user.country,
+                  user_address: data.user.user_address,
+                  user_password: data.user.user_password,
+                  user_image: data.user.user_image,
                 },
               });
-              localStorage.setItem("user", JSON.stringify(data.data));
+              localStorage.setItem("user", JSON.stringify(data.user));
+              toast.success("SETTINGS UPDATED SUCCESSFULLY");
               history.push("/profile");
             }
+            console.log(data);
           })
           .catch((err) => {
             console.log(err);
@@ -97,7 +98,7 @@ export const Settings: FC = () => {
   });
 
   const PostUpdate = () => {
-    fetch(`/api/user/profile/update/:${userId}`, {
+    fetch(`/api/user/profile/update/${userId}`, {
       method: "put",
       headers: {
         "Content-Type": "application/json",
@@ -113,25 +114,25 @@ export const Settings: FC = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.error) {
-          toast.warn(data.error);
-        } else if (data.message) {
-          toast.warn(data.message);
-        } else {
-          console.log(data);
+        console.log(data);
+        if (data.detail) {
+          toast.warn(data.detail[0].message);
+        }
+        if (data.success) {
           dispatch({
             type: "UPDATE",
             payload: {
-              country: data.data.country,
-              user_address: data.data.user_address,
-              user_password: data.data.user_password,
-              user_image: data.data.user_image,
+              country: data.user.country,
+              user_address: data.user.user_address,
+              user_password: data.user.user_password,
+              user_image: data.user.user_image,
             },
           });
-          localStorage.setItem("user", JSON.stringify(data.data));
+          localStorage.setItem("user", JSON.stringify(data.user));
           toast.success("SETTINGS UPDATED SUCCESSFULLY");
           history.push("/profile");
         }
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);

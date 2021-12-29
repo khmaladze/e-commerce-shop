@@ -19,34 +19,6 @@ import { Settings } from "./components/Settings";
 import { MyShopPage } from "./pages/MyShopPage";
 import { AddUserProducts } from "./pages/AddUserProducts";
 
-// interface UserInfo {
-//   user_id?: string;
-//   firstName?: string;
-//   lastName?: string;
-//   birthDate?: string;
-//   country?: string;
-//   userAddress?: string;
-//   email?: string;
-//   userCard?: string;
-//   isBlocked?: boolean;
-//   budget?: string;
-//   userImage?: string;
-//   ipAddress?: string;
-//   browserType?: string;
-//   operationSystemCpu?: string;
-//   homeDir?: string;
-//   hostname?: string;
-//   operationSystemUsername?: string;
-//   operationSystemVersion?: string;
-//   operationSystem?: string;
-//   operationSystemRelease?: string;
-//   operationSystemPlatform?: string;
-//   created_at?: string;
-//   updated_at?: string;
-//   user_password?: string;
-//   card_password?: string;
-// }
-
 export const UserContext = createContext<any>(null);
 
 const Routing = () => {

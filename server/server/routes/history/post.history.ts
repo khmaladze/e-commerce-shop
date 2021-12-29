@@ -4,6 +4,7 @@ import db from "../../db/db";
 
 const userEndpointDesc =
   "This is For Product Buy History we get info like product id and person id and we save it data and get info when you buy it";
+
 export const TAGS = ["history"];
 
 export const requestSchema = Joi.object({
@@ -15,7 +16,9 @@ export const requestSchema = Joi.object({
     .options({ allowUnknown: true }),
   params: Joi.object(),
   query: Joi.object(),
-  body: Joi.object(),
+  body: Joi.object({
+    productId: Joi.number().required(),
+  }),
 }).description(userEndpointDesc);
 
 export const responseSchema = Joi.object({

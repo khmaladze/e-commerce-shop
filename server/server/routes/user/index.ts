@@ -8,7 +8,7 @@ let router = express.Router();
 router.put(
   "/profile/update/:id",
   requireAuthentication,
-  permissionMiddleware(["admin"]),
+  permissionMiddleware(["user"]),
   validationMiddleware(user.requestSchema),
   user.businessLogic
 );

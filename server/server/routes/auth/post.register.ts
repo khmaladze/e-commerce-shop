@@ -6,7 +6,9 @@ import { onlyGmail } from "./validators";
 
 const userEndpointDesc =
   "This is how to register user you need to fill all the fields firstName, lastName, email, password, birthDate, country, userAddress, email, userPassword, userCard, cardPassword, budget, confirmPassword . email must be gmail provider and also password must not be longer than 50";
+
 export const TAGS = ["auth"];
+
 export const requestSchema = Joi.object({
   headers: Joi.object()
     .keys({

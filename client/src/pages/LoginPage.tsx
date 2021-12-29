@@ -11,37 +11,48 @@ export const LoginPage: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const PostData = () => {
-    fetch("/api/auth/login", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        userPassword: password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          toast.warn(data.error);
-        } else if (data.message) {
-          toast.warn(data.message);
-        } else {
-          console.log(data);
-          localStorage.setItem("jwt", data.token);
-          localStorage.setItem("user", JSON.stringify(data.userData));
-          if (data.shopList[0]) {
-            localStorage.setItem("shop", JSON.stringify(data.shopList[0]));
-          }
-          dispatch({ type: "USER", payload: data.userData });
-          toast.success("LOG IN SUCCESS");
-          history.push("/");
-        }
+    if (email.length > 1 && password.length > 7) {
+      fetch("/api/auth/login", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          userPassword: password,
+        }),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.detail) {
+            if (data.detail[0].message) {
+              toast.warn(data.detail[0].message);
+            }
+          }
+          if (data.success) {
+            console.log(data.success);
+            if (data.token != undefined) {
+              localStorage.setItem("jwt", data.token);
+            }
+            if (data.user != undefined) {
+              localStorage.setItem("user", JSON.stringify(data.user));
+            }
+
+            if (data.shop) {
+              localStorage.setItem("shop", JSON.stringify(data.shop));
+            }
+            dispatch({ type: "USER", payload: data.user });
+            toast.success("LOG IN SUCCESS");
+            history.push("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast.warn("Please Add All the Fields and use valid credentials");
+    }
   };
   return (
     <div className="auth-card-center">

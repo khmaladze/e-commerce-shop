@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
-import { updateProducts } from "../../utils/response.schema.items";
+import { products, shop } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This is endpoint to update shop product you can update anything you want if you want update all the fields or just one. You can update how many you want. Tt's up to you";
+
 export const TAGS = ["product"];
 
 export const requestSchema = Joi.object({
@@ -18,42 +19,21 @@ export const requestSchema = Joi.object({
     id: Joi.number().required(),
   }),
   query: Joi.object(),
+  // body: Joi.object({
+  //   title: Joi.string().min(2).max(50),
+  //   productDescription: Joi.string().max(1000),
+  //   price: Joi.string(),
+  //   productCount: Joi.string(),
+  //   productImage: Joi.string().max(500),
+  // }),
   body: Joi.object(),
 }).description(userEndpointDesc);
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
   products: Joi.array().required(),
-  shop: Joi.array()
-    .items(
-      Joi.object({
-        shop_id: Joi.string().required(),
-        shop_name: Joi.string().required(),
-        shop_owner: Joi.string().required(),
-        category: Joi.string().required(),
-        is_blocked: false,
-        budget: Joi.string().required(),
-        shop_image: Joi.string().required(),
-      })
-    )
-    .required(),
-  updateProducts: updateProducts.required(),
-  productList: Joi.array()
-    .items(
-      Joi.object({
-        product_id: Joi.string().required(),
-        title: Joi.string().required(),
-        product_description: Joi.string().required(),
-        product_image: Joi.string().required(),
-        category: Joi.string().required(),
-        price: Joi.string().required(),
-        product_count: Joi.string().required(),
-        posted_by_user: Joi.string(),
-        posted_by_shop: Joi.string(),
-        is_blocked: false,
-      })
-    )
-    .required(),
+  shop: shop.required(),
+  productList: products.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -98,7 +78,6 @@ export const businessLogic = async (req: Request, res: Response) => {
       success: true,
       products,
       shop,
-      updateProducts,
       productList,
     });
   } catch (error) {

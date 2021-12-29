@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
+import { shops } from "../../utils/response.schema.items";
 
 const userEndpointDesc = "This is endpoint to get all allowed shop";
 export const TAGS = ["shop"];
@@ -18,19 +19,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  shop: Joi.array()
-    .items(
-      Joi.object({
-        shop_id: Joi.string().required(),
-        shop_name: Joi.string().required(),
-        shop_owner: Joi.string().required(),
-        category: Joi.string().required(),
-        is_blocked: false,
-        budget: Joi.string().required(),
-        shop_image: Joi.string().required(),
-      })
-    )
-    .required(),
+  shop: shops.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

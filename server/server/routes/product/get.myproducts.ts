@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
+import { products, shops } from "../../utils/response.schema.items";
 
 const userEndpointDesc = "This endpoint get shop products created by user";
 export const TAGS = ["product"];
@@ -19,26 +20,8 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array()
-    .items(
-      Joi.object({
-        title: Joi.string().required(),
-      })
-    )
-    .required(),
-  shop: Joi.array()
-    .items(
-      Joi.object({
-        shop_id: Joi.string().required(),
-        shop_name: Joi.string().required(),
-        shop_owner: Joi.string().required(),
-        category: Joi.string().required(),
-        is_blocked: false,
-        budget: Joi.string().required(),
-        shop_image: Joi.string().required(),
-      })
-    )
-    .required(),
+  products: products.required(),
+  shop: shops.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

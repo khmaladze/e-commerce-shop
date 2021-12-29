@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
+import { products, shop } from "../../utils/response.schema.items";
 
 const userEndpointDesc = "This endpoint delete product with product id";
 export const TAGS = ["product"];
@@ -21,20 +22,8 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array().required(),
-  shop: Joi.array()
-    .items(
-      Joi.object({
-        shop_id: Joi.string().required(),
-        shop_name: Joi.string().required(),
-        shop_owner: Joi.string().required(),
-        category: Joi.string().required(),
-        is_blocked: false,
-        budget: Joi.string().required(),
-        shop_image: Joi.string().required(),
-      })
-    )
-    .required(),
+  products: products.required(),
+  shop: shop.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -43,10 +32,9 @@ export const businessLogic = async (req: Request, res: Response) => {
       .where({ shop_owner: req.user.user_id })
       .select("shop_id");
     let productId = req.params.id;
-    let validProductId = productId.substring(1, productId.length);
     let deleteProduct = await db("product")
       .where({
-        product_id: validProductId,
+        product_id: productId,
       })
       .del();
     let shopId = shop[0].shop_id;

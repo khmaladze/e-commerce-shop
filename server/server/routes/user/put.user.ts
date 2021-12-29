@@ -3,9 +3,11 @@ import Joi from "joi";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
 import { User } from "../../interfaces/custom";
+import { user } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This is endpoint for some user details update like country, userImage, userAddress, userPassword";
+
 export const TAGS = ["user"];
 
 export const requestSchema = Joi.object({
@@ -20,9 +22,9 @@ export const requestSchema = Joi.object({
   }),
   query: Joi.object(),
   body: Joi.object({
-    country: Joi.string().lowercase().min(2).max(50).trim().required(),
+    country: Joi.string().lowercase().min(2).max(50).required(),
     userImage: Joi.string().max(500).required(),
-    userAddress: Joi.string().lowercase().min(2).max(50).trim().required(),
+    userAddress: Joi.string().lowercase().min(2).max(50).required(),
     userPassword: Joi.string().lowercase().min(2).max(30).trim().required(),
     confirmPassword: Joi.string().valid(Joi.ref("userPassword")).required(),
   }).options({ convert: false }),
@@ -30,24 +32,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  user: Joi.object({
-    user_id: Joi.string().required(),
-    first_name: Joi.string().required(),
-    birth_date: Joi.date().required(),
-    country: Joi.string().required(),
-    user_address: Joi.string().required(),
-    email: Joi.string().required(),
-    user_password: Joi.string().required(),
-    user_card: Joi.string().required(),
-    card_password: Joi.string().required(),
-    is_blocked: false,
-    budget: Joi.string().required(),
-    user_image: Joi.string(),
-    ip_address: Joi.string().required(),
-    browser_type: Joi.string().required(),
-    created_at: Joi.string().required(),
-    updated_at: Joi.string().required(),
-  }).required(),
+  user: user.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

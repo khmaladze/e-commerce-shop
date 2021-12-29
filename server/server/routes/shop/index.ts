@@ -16,8 +16,7 @@ router.post(
 );
 
 router.get(
-  "/shop",
-  requireAuthentication,
+  "/",
   validationMiddleware(getshop.requestSchema),
   getshop.businessLogic
 );

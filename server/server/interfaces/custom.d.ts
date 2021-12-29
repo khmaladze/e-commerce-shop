@@ -21,7 +21,7 @@ export interface User {
   browser_type: string;
   created_at: string;
   updated_at: string;
-  permision?: string;
+  permission?: string;
 }
 
 export interface Product {

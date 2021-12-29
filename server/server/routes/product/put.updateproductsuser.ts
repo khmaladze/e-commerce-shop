@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
-import { updateProducts } from "../../utils/response.schema.items";
+import { products } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This is endpoint to  update  product from individual user. you can update anything you want if you want update all the fields or just one. you can update how many you want. it's up to you";
@@ -22,24 +22,8 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array().required(),
-  updateProducts: updateProducts.required(),
-  productList: Joi.array()
-    .items(
-      Joi.object({
-        product_id: Joi.string().required(),
-        title: Joi.string().required(),
-        product_description: Joi.string().required(),
-        product_image: Joi.string().required(),
-        category: Joi.string().required(),
-        price: Joi.string().required(),
-        product_count: Joi.string().required(),
-        posted_by_user: Joi.string(),
-        posted_by_shop: Joi.string(),
-        is_blocked: false,
-      })
-    )
-    .required(),
+  products: products.required(),
+  productList: products.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -48,10 +32,9 @@ export const businessLogic = async (req: Request, res: Response) => {
       req.body;
 
     let productId = req.params.id;
-    let validProductId = productId.substring(1, productId.length);
     let products = await db("product")
       .where({
-        product_id: validProductId,
+        product_id: productId,
         posted_by_user: req.user.user_id,
         is_blocked: false,
       })
@@ -59,12 +42,12 @@ export const businessLogic = async (req: Request, res: Response) => {
 
     let updateProducts = await db("product")
       .where({
-        product_id: validProductId,
+        product_id: productId,
         posted_by_user: req.user.user_id,
         is_blocked: false,
       })
       .update({
-        product_id: validProductId,
+        product_id: productId,
         title: title || products[0].title,
         product_description:
           productDescription || products[0].product_description,
@@ -81,7 +64,6 @@ export const businessLogic = async (req: Request, res: Response) => {
     res.send({
       success: true,
       products,
-      updateProducts,
       productList,
     });
   } catch (error) {

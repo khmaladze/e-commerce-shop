@@ -4,8 +4,9 @@ import bcrypt from "bcrypt";
 import db from "../../db/db";
 import jwt from "jsonwebtoken";
 import { onlyGmail } from "./validators";
-import { User } from "../../interfaces/custom";
+import { Shop, User } from "../../interfaces/custom";
 import { appConfig } from "../../app.config";
+import { shop, user } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "this is how to login user you need to fill all the fields email and password. email must be gmail provider and also password must not be longer than 50";
@@ -29,37 +30,8 @@ export const requestSchema = Joi.object({
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
   token: Joi.string().required(),
-  user: Joi.object({
-    user_id: Joi.string().required(),
-    first_name: Joi.string().required(),
-    birth_date: Joi.date().required(),
-    country: Joi.string().required(),
-    user_address: Joi.string().required(),
-    email: Joi.string().required(),
-    user_password: Joi.string().required(),
-    user_card: Joi.string().required(),
-    card_password: Joi.string().required(),
-    is_blocked: false,
-    budget: Joi.string().required(),
-    user_image: Joi.string(),
-    ip_address: Joi.string().required(),
-    browser_type: Joi.string().required(),
-    created_at: Joi.string().required(),
-    updated_at: Joi.string().required(),
-  }).required(),
-  shop: Joi.array()
-    .items(
-      Joi.object({
-        shop_id: Joi.string().required(),
-        shop_name: Joi.string().required(),
-        shop_owner: Joi.string().required(),
-        category: Joi.string().required(),
-        is_blocked: false,
-        budget: Joi.string().required(),
-        shop_image: Joi.string().required(),
-      })
-    )
-    .required(),
+  user: user.required(),
+  shop: shop,
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -76,8 +48,12 @@ export const businessLogic = async (req: Request, res: Response) => {
         success: true,
         token,
         user,
-        shop,
+        shop: shop[0],
       });
+    } else {
+      res
+        .status(400)
+        .send({ success: false, detail: [{ message: "Invalid Credentials" }] });
     }
   } catch (error) {
     res.status(500).send({
@@ -86,9 +62,7 @@ export const businessLogic = async (req: Request, res: Response) => {
     });
   }
 };
-interface Shop {
-  // .....
-}
+
 async function getShopListByOwner(user_id: string) {
   return (await db("shop")
     .where({ shop_owner: user_id, is_blocked: false })
@@ -96,11 +70,11 @@ async function getShopListByOwner(user_id: string) {
 }
 
 async function getUserByEmail(email: string) {
-  let userData = await db("user")
+  let user = await db("user")
     .where({
       email: email,
       is_blocked: false,
     })
     .select("*");
-  return userData[0] as User;
+  return user[0] as User;
 }

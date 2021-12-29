@@ -54,6 +54,16 @@ export const AddUserProducts = () => {
   };
 
   const AddProduct = () => {
+    if (
+      !title ||
+      !category ||
+      !description ||
+      !price ||
+      !productCount ||
+      !image[0]
+    ) {
+      toast.warn("Please add minumum one filed");
+    }
     if (image.length == 1) {
       const data = new FormData();
       data.append("file", image[0].file);
@@ -172,10 +182,20 @@ export const AddUserProducts = () => {
 
   const UpdateProduct = (updatePostId: string | number) => {
     if (
+      !title ||
+      !category ||
+      !description ||
+      !price ||
+      !productCount ||
+      !image[0]
+    ) {
+      toast.warn("Please add minumum one filed");
+    }
+    if (
       !image[0] &&
       (title || description || category || price || productCount)
     ) {
-      fetch(`/api/product/my/user/products/:${updatePostId}`, {
+      fetch(`/api/product/my/user/products/${updatePostId}`, {
         method: "put",
         headers: {
           "Content-Type": "application/json",
@@ -226,7 +246,7 @@ export const AddUserProducts = () => {
           setImageUrl(data.url);
           toast.success("Image Uploaded");
           if (data.url) {
-            fetch(`/api/product/my/user/products/:${updatePostId}`, {
+            fetch(`/api/product/my/user/products/${updatePostId}`, {
               method: "put",
               headers: {
                 "Content-Type": "application/json",
@@ -336,8 +356,8 @@ export const AddUserProducts = () => {
     }
   };
 
-  const deleteProduct = (e: any) => {
-    fetch(`/api/product/my/products/:${e}`, {
+  const deleteProduct = (id: any) => {
+    fetch(`/api/product/my/products/${id}`, {
       method: "delete",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -346,7 +366,7 @@ export const AddUserProducts = () => {
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
-        toast.success(`Product id ${e} Delete Successfully`);
+        toast.success(`Product id ${id} Delete Successfully`);
         return getData();
       });
   };
