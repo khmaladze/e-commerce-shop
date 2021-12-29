@@ -32,23 +32,16 @@ export const businessLogic = async (req: Request, res: Response) => {
   try {
     let { shopName, category, budget, shopImage } = req.body;
 
-    if (shopName && category && budget && shopImage) {
-      await db("shop").insert({
-        shop_name: shopName,
-        shop_owner: req.user.user_id,
-        category: category,
-        is_blocked: false,
-        budget: budget,
-        shop_image: shopImage,
-      });
+    await db("shop").insert({
+      shop_name: shopName,
+      shop_owner: req.user.user_id,
+      category: category,
+      is_blocked: false,
+      budget: budget,
+      shop_image: shopImage,
+    });
 
-      res.status(200).send({ success: true });
-    } else {
-      res.status(400).json({
-        success: false,
-        message: "Can't create",
-      });
-    }
+    res.status(200).send({ success: true });
   } catch (error) {
     res.status(500).json({
       success: false,

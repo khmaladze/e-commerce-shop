@@ -82,7 +82,6 @@ export const businessLogic = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error",
       error: error,
     });
   }

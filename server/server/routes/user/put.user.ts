@@ -30,7 +30,24 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  newUserData: Joi.array().required(),
+  user: Joi.object({
+    user_id: Joi.string().required(),
+    first_name: Joi.string().required(),
+    birth_date: Joi.date().required(),
+    country: Joi.string().required(),
+    user_address: Joi.string().required(),
+    email: Joi.string().required(),
+    user_password: Joi.string().required(),
+    user_card: Joi.string().required(),
+    card_password: Joi.string().required(),
+    is_blocked: false,
+    budget: Joi.string().required(),
+    user_image: Joi.string(),
+    ip_address: Joi.string().required(),
+    browser_type: Joi.string().required(),
+    created_at: Joi.string().required(),
+    updated_at: Joi.string().required(),
+  }).required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -52,10 +69,10 @@ export const businessLogic = async (req: Request, res: Response) => {
         user_image: userImage,
         user_password: bcrypt.hashSync(userPassword, 12),
       });
-    let newUserData = (await db("user")
-      .where({ user_id: userId })
+    let user = (await db("user")
+      .where({ user_id: userId, is_blocked: false })
       .select("*")) as Array<User>;
-    res.send({ success: true, data: newUserData });
+    res.send({ success: true, user: user[0] });
   } catch (error) {
     res.status(500).json({
       success: false,

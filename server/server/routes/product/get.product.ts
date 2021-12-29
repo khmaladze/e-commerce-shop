@@ -19,7 +19,22 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array().required(),
+  products: Joi.array()
+    .items(
+      Joi.object({
+        product_id: Joi.string().required(),
+        title: Joi.string().required(),
+        product_description: Joi.string().required(),
+        product_image: Joi.string().required(),
+        category: Joi.string().required(),
+        price: Joi.string().required(),
+        product_count: Joi.string().required(),
+        posted_by_user: Joi.string(),
+        posted_by_shop: Joi.string(),
+        is_blocked: false,
+      })
+    )
+    .required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -29,7 +44,6 @@ export const businessLogic = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error",
       error: error,
     });
   }

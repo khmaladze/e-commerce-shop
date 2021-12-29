@@ -18,17 +18,28 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  shopList: Joi.array().required(),
+  shop: Joi.array()
+    .items(
+      Joi.object({
+        shop_id: Joi.string().required(),
+        shop_name: Joi.string().required(),
+        shop_owner: Joi.string().required(),
+        category: Joi.string().required(),
+        is_blocked: false,
+        budget: Joi.string().required(),
+        shop_image: Joi.string().required(),
+      })
+    )
+    .required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
   try {
-    let shopList = await db("shop").where({ is_blocked: false }).select("*");
-    res.status(200).send({ success: true, shopList });
+    let shop = await db("shop").where({ is_blocked: false }).select("*");
+    res.status(200).send({ success: true, shop });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error",
       error: error,
     });
   }

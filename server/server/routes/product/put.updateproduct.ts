@@ -23,9 +23,51 @@ export const requestSchema = Joi.object({
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
   products: Joi.array().required(),
-  myShop: Joi.array().required(),
-  updateProducts: Joi.array().required(),
-  productList: Joi.array().required(),
+  shop: Joi.array()
+    .items(
+      Joi.object({
+        shop_id: Joi.string().required(),
+        shop_name: Joi.string().required(),
+        shop_owner: Joi.string().required(),
+        category: Joi.string().required(),
+        is_blocked: false,
+        budget: Joi.string().required(),
+        shop_image: Joi.string().required(),
+      })
+    )
+    .required(),
+  updateProducts: Joi.array()
+    .items(
+      Joi.object({
+        product_id: Joi.string().required(),
+        title: Joi.string().required(),
+        product_description: Joi.string().required(),
+        product_image: Joi.string().required(),
+        category: Joi.string().required(),
+        price: Joi.string().required(),
+        product_count: Joi.string().required(),
+        posted_by_user: Joi.string(),
+        posted_by_shop: Joi.string(),
+        is_blocked: false,
+      })
+    )
+    .required(),
+  productList: Joi.array()
+    .items(
+      Joi.object({
+        product_id: Joi.string().required(),
+        title: Joi.string().required(),
+        product_description: Joi.string().required(),
+        product_image: Joi.string().required(),
+        category: Joi.string().required(),
+        price: Joi.string().required(),
+        product_count: Joi.string().required(),
+        posted_by_user: Joi.string(),
+        posted_by_shop: Joi.string(),
+        is_blocked: false,
+      })
+    )
+    .required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -34,13 +76,14 @@ export const businessLogic = async (req: Request, res: Response) => {
       req.body;
     let productId = req.params.id;
     console.log("productId", productId);
-    let myShop = await db("shop")
+    let user_shop = await db("shop")
       .where({ shop_owner: req.user.user_id })
       .select("shop_id");
+    let shop = user_shop[0];
     let products = (await db("product")
       .where({
         product_id: productId,
-        posted_by_shop: myShop[0].shop_id,
+        posted_by_shop: shop.shop_id,
         is_blocked: false,
       })
       .select("*")) as Array<any>;
@@ -48,7 +91,7 @@ export const businessLogic = async (req: Request, res: Response) => {
     let updateProducts = await db("product")
       .where({
         product_id: productId,
-        posted_by_shop: myShop[0].shop_id,
+        posted_by_shop: shop.shop_id,
         is_blocked: false,
       })
       .update({
@@ -61,14 +104,14 @@ export const businessLogic = async (req: Request, res: Response) => {
       });
     let productList = await db("product")
       .where({
-        posted_by_shop: myShop[0].shop_id,
+        posted_by_shop: shop.shop_id,
         is_blocked: false,
       })
       .select("*");
     res.send({
       success: true,
       products,
-      myShop,
+      shop,
       updateProducts,
       productList,
     });

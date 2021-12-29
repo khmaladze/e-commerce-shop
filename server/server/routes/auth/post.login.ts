@@ -4,10 +4,13 @@ import bcrypt from "bcrypt";
 import db from "../../db/db";
 import jwt from "jsonwebtoken";
 import { onlyGmail } from "./validators";
+import { User } from "../../interfaces/custom";
 
 const userEndpointDesc =
   "this is how to login user you need to fill all the fields email and password. email must be gmail provider and also password must not be longer than 50";
+
 export const TAGS = ["auth"];
+
 export const requestSchema = Joi.object({
   headers: Joi.object()
     .keys({
@@ -25,8 +28,37 @@ export const requestSchema = Joi.object({
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
   token: Joi.string().required(),
-  userData: Joi.object().required(),
-  shopList: Joi.array().required(),
+  user: Joi.object({
+    user_id: Joi.string().required(),
+    first_name: Joi.string().required(),
+    birth_date: Joi.date().required(),
+    country: Joi.string().required(),
+    user_address: Joi.string().required(),
+    email: Joi.string().required(),
+    user_password: Joi.string().required(),
+    user_card: Joi.string().required(),
+    card_password: Joi.string().required(),
+    is_blocked: false,
+    budget: Joi.string().required(),
+    user_image: Joi.string(),
+    ip_address: Joi.string().required(),
+    browser_type: Joi.string().required(),
+    created_at: Joi.string().required(),
+    updated_at: Joi.string().required(),
+  }).required(),
+  shop: Joi.array()
+    .items(
+      Joi.object({
+        shop_id: Joi.string().required(),
+        shop_name: Joi.string().required(),
+        shop_owner: Joi.string().required(),
+        category: Joi.string().required(),
+        is_blocked: false,
+        budget: Joi.string().required(),
+        shop_image: Joi.string().required(),
+      })
+    )
+    .required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -38,12 +70,12 @@ export const businessLogic = async (req: Request, res: Response) => {
     if (user && bcrypt.compareSync(userPassword, user.user_password)) {
       let jwtSecret: any = process.env.JWT_SECRET; // use config initialization for all env!!
       const token = jwt.sign({ user_id: user.user_id }, jwtSecret);
-      let shopList = await getShopListByOwner(user.user_id);
+      let shop = await getShopListByOwner(user.user_id);
       res.send({
         success: true,
         token,
-        userData: user,
-        shopList,
+        user,
+        shop,
       });
     }
   } catch (error) {
@@ -67,5 +99,5 @@ async function getUserByEmail(email: string) {
       is_blocked: false,
     })
     .select("*");
-  return userData[0];
+  return userData[0] as User;
 }
