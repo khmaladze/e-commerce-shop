@@ -5,6 +5,7 @@ import db from "../../db/db";
 import jwt from "jsonwebtoken";
 import { onlyGmail } from "./validators";
 import { User } from "../../interfaces/custom";
+import { appConfig } from "../../app.config";
 
 const userEndpointDesc =
   "this is how to login user you need to fill all the fields email and password. email must be gmail provider and also password must not be longer than 50";
@@ -68,7 +69,7 @@ export const businessLogic = async (req: Request, res: Response) => {
     let user = await getUserByEmail(email);
 
     if (user && bcrypt.compareSync(userPassword, user.user_password)) {
-      let jwtSecret: any = process.env.JWT_SECRET; // use config initialization for all env!!
+      let jwtSecret = appConfig.JWT_SECRET;
       const token = jwt.sign({ user_id: user.user_id }, jwtSecret);
       let shop = await getShopListByOwner(user.user_id);
       res.send({
@@ -85,11 +86,13 @@ export const businessLogic = async (req: Request, res: Response) => {
     });
   }
 };
-
+interface Shop {
+  // .....
+}
 async function getShopListByOwner(user_id: string) {
-  return await db("shop")
+  return (await db("shop")
     .where({ shop_owner: user_id, is_blocked: false })
-    .select("*");
+    .select("*")) as Array<Shop>;
 }
 
 async function getUserByEmail(email: string) {

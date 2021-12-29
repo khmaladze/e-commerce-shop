@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
+import { updateProducts } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This is endpoint to  update  product from individual user. you can update anything you want if you want update all the fields or just one. you can update how many you want. it's up to you";
@@ -22,22 +23,7 @@ export const requestSchema = Joi.object({
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
   products: Joi.array().required(),
-  updateProducts: Joi.array()
-    .items(
-      Joi.object({
-        product_id: Joi.string().required(),
-        title: Joi.string().required(),
-        product_description: Joi.string().required(),
-        product_image: Joi.string().required(),
-        category: Joi.string().required(),
-        price: Joi.string().required(),
-        product_count: Joi.string().required(),
-        posted_by_user: Joi.string(),
-        posted_by_shop: Joi.string(),
-        is_blocked: false,
-      })
-    )
-    .required(),
+  updateProducts: updateProducts.required(),
   productList: Joi.array()
     .items(
       Joi.object({
