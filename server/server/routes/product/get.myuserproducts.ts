@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
-import { products } from "../../utils/response.schema.items";
+import { product } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This endpoint get user products created as only individual by user  ";
@@ -21,7 +21,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: products.required(),
+  products: Joi.array().items(product).required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
