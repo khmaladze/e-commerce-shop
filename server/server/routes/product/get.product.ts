@@ -3,7 +3,7 @@ import Joi from "joi";
 import db from "../../db/db";
 
 const userEndpointDesc =
-  "This enpoints gets all products from database created by shop or individual from user";
+  "This enpoint get all products created by shop or individual user";
 export const TAGS = ["product"];
 
 export const requestSchema = Joi.object({
