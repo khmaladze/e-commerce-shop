@@ -20,7 +20,7 @@ import shopRoutes from "./routes/shop/index";
 import productRoutes from "./routes/product/index";
 import historyRoutes from "./routes/history/index";
 import userRoute from "./routes/user/index";
-import { getOpenApiSchemaRouter } from "./documentation/open-api-documentation";
+import { getSwaggerUiRouter } from "./documentation/open-api-documentation";
 import config from "./swagger.config";
 import { appConfig, isValidEnv } from "./app.config";
 
@@ -32,8 +32,7 @@ app.use("/api/user", userRoute);
 
 // Set security headers
 app.use(helmet());
-app.use("/docs", express.static("server/documentation/swagger-ui-static"));
-app.use(getOpenApiSchemaRouter(app, config));
+app.use(getSwaggerUiRouter(app, config));
 
 if (!isValidEnv()) {
   app.listen(appConfig.PORT, () => {
