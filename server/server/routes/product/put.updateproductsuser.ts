@@ -17,7 +17,14 @@ export const requestSchema = Joi.object({
     id: Joi.number().required(),
   }),
   query: Joi.object(),
-  body: Joi.object(),
+  body: Joi.object({
+    title: Joi.string().min(0).max(50),
+    productDescription: Joi.string().min(0).max(1000),
+    price: Joi.string().min(0),
+    productCount: Joi.string().min(0),
+    productImage: Joi.string().min(0).max(500),
+    requestedBy: Joi.string().valid("shop", "user").required(),
+  }),
 }).description(userEndpointDesc);
 
 export const responseSchema = Joi.object({
@@ -39,7 +46,6 @@ export const businessLogic = async (req: Request, res: Response) => {
         is_blocked: false,
       })
       .select("*");
-
     let updateProducts = await db("product")
       .where({
         product_id: productId,
