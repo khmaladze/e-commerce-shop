@@ -4,7 +4,7 @@ import img1 from "../assets/img1.jpg";
 export const PopularShops: FC = () => {
   const [shop, setShop] = useState<any>([]);
   useEffect(() => {
-    fetch("/api/shop/")
+    fetch("/api/shop")
       .then((res) => res.json())
       .then((data) => {
         setShop(data.shop);

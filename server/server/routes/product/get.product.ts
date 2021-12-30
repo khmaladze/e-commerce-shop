@@ -16,7 +16,6 @@ export const requestSchema = Joi.object({
     .options({ allowUnknown: true }),
   params: Joi.object(),
   query: Joi.object(),
-  body: Joi.object(),
 }).description(userEndpointDesc);
 
 export const responseSchema = Joi.object({
