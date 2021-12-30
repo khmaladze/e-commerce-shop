@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
 import { Shop } from "../../interfaces/custom";
-import { shop } from "../../utils/response.schema.items";
+import { shopSchema } from "../../utils/response.schema.items";
 
 const userEndpointDesc = "This is endpoint to get all allowed shop";
 export const TAGS = ["shop"];
@@ -20,7 +20,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  shop: Joi.array().items(shop).required(),
+  shop: Joi.array().items(shopSchema).required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

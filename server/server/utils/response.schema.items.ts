@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const shop = Joi.object({
+export const shopSchema = Joi.object({
   shop_id: Joi.string().required(),
   shop_name: Joi.string().required(),
   shop_owner: Joi.string().required(),
@@ -10,7 +10,7 @@ export const shop = Joi.object({
   shop_image: Joi.string().required(),
 });
 
-export const user = Joi.object({
+export const userSchema = Joi.object({
   user_id: Joi.string().required(),
   first_name: Joi.string().required(),
   birth_date: Joi.date().required(),
@@ -29,7 +29,7 @@ export const user = Joi.object({
   updated_at: Joi.string().required(),
 });
 
-export const product = Joi.object({
+export const productSchema = Joi.object({
   product_id: Joi.string().required(),
   title: Joi.string().required(),
   product_description: Joi.string().required(),

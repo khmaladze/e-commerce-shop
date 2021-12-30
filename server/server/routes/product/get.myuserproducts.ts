@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
 import { Product, Shop } from "../../interfaces/custom";
-import { product } from "../../utils/response.schema.items";
+import { productSchema } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This endpoint get user products created as only individual by user  ";
@@ -22,7 +22,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array().items(product).required(),
+  products: Joi.array().items(productSchema).required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

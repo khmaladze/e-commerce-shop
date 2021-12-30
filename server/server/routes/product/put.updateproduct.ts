@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import { min } from "lodash";
 import db from "../../db/db";
-import { product, shop } from "../../utils/response.schema.items";
+import { productSchema, shopSchema } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This is endpoint to update shop product you can update anything you want if you want update all the fields or just one. You can update how many you want. Tt's up to you";
@@ -32,8 +32,8 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  product: product.required(),
-  shop: shop.required(),
+  product: productSchema.required(),
+  shop: shopSchema.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

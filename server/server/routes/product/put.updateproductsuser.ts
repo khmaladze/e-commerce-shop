@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
 import { Shop } from "../../interfaces/custom";
-import { product } from "../../utils/response.schema.items";
+import { productSchema } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This is endpoint to  update  product from individual user. you can update anything you want if you want update all the fields or just one. you can update how many you want. it's up to you";
@@ -30,8 +30,8 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array().items(product).required(),
-  productList: Joi.array().items(product).required(),
+  products: Joi.array().items(productSchema).required(),
+  productList: Joi.array().items(productSchema).required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

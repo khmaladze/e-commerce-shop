@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
-import { product, shop } from "../../utils/response.schema.items";
+import { productSchema, shopSchema } from "../../utils/response.schema.items";
 
 const userEndpointDesc = "This endpoint delete product with product id";
 export const TAGS = ["product"];
@@ -22,8 +22,8 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array().items(product).required(),
-  shop: shop.required(),
+  products: Joi.array().items(productSchema).required(),
+  shop: shopSchema.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

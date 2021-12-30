@@ -3,7 +3,7 @@ import Joi from "joi";
 import bcrypt from "bcrypt";
 import db from "../../db/db";
 import { User } from "../../interfaces/custom";
-import { user } from "../../utils/response.schema.items";
+import { userSchema } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This is endpoint for some user details update like country, userImage, userAddress, userPassword";
@@ -32,7 +32,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  user: user.required(),
+  user: userSchema.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {

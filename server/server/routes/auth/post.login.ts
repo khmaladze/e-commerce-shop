@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import { onlyGmail } from "./validators";
 import { Shop, User } from "../../interfaces/custom";
 import { appConfig } from "../../app.config";
-import { shop, user } from "../../utils/response.schema.items";
+import { shopSchema, userSchema } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "this is how to login user you need to fill all the fields email and password. email must be gmail provider and also password must not be longer than 50";
@@ -30,8 +30,8 @@ export const requestSchema = Joi.object({
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
   token: Joi.string().required(),
-  user: user.required(),
-  shop: shop,
+  user: userSchema.required(),
+  shop: shopSchema,
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
