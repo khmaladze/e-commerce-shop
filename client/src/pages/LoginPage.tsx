@@ -51,7 +51,7 @@ export const LoginPage: FC = () => {
           console.log(err);
         });
     } else {
-      toast.warn("Please Add All the Fields and use valid credentials");
+      toast.warn("Please Add All the fields and use valid credentials");
     }
   };
   return (

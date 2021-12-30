@@ -19,33 +19,28 @@ export const RegisterPage: FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const PostData = () => {
-    // convert Date to yyyy/mm/dd format
-    let validDate = `${birthDate.slice(0, 4)}-${birthDate.slice(
-      5,
-      7
-    )}-${birthDate.slice(8, 10)}`;
-    console.log(
-      firstName,
-      lastName,
-      validDate,
-      country,
-      userAddress,
-      email,
-      userPassword,
-      userCard,
-      cardPassword,
-      budget,
+    if (
+      firstName &&
+      lastName &&
+      birthDate &&
+      country &&
+      userAddress &&
+      email &&
+      userPassword &&
+      userCard &&
+      cardPassword &&
+      budget &&
       confirmPassword
-    );
-    fetch("/api/auth/register", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    ) {
+      // convert Date to yyyy/mm/dd format
+      let validDate = `${birthDate.slice(0, 4)}-${birthDate.slice(
+        5,
+        7
+      )}-${birthDate.slice(8, 10)}`;
+      console.log(
         firstName,
         lastName,
-        birthDate: validDate,
+        validDate,
         country,
         userAddress,
         email,
@@ -53,25 +48,46 @@ export const RegisterPage: FC = () => {
         userCard,
         cardPassword,
         budget,
-        confirmPassword,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.detail) {
-          if (data.detail[0].message) {
-            toast.warn(data.detail[0].message);
-          }
-        }
-        if (data.success) {
-          history.push("/");
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          toast.success("USER REGISTER SUCCESSFULLY");
-        }
+        confirmPassword
+      );
+      fetch("/api/auth/register", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          birthDate: validDate,
+          country,
+          userAddress,
+          email,
+          userPassword,
+          userCard,
+          cardPassword,
+          budget,
+          confirmPassword,
+        }),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.detail) {
+            if (data.detail[0].message) {
+              toast.warn(data.detail[0].message);
+            }
+          }
+          if (data.success) {
+            history.push("/");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            toast.success("USER REGISTER SUCCESSFULLY");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast.warn("Please Add All the fields and use valid credentials");
+    }
   };
 
   const handleClick = (e: any) => {
