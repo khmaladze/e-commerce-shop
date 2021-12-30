@@ -379,7 +379,7 @@ export const parseExpressRoute = async (
       .replace(/\/$/, "")
       .replace(/^\//, "")
       .split("/");
-    const resultPath = ["/", ...basePathSegments, ...pathSegments]
+    let resultPath = ["/", ...basePathSegments, ...pathSegments]
       .map((tempPath) => {
         if (startsWith(tempPath, ":")) {
           const temp = trimStart(tempPath, ":");
@@ -389,6 +389,9 @@ export const parseExpressRoute = async (
       })
       .join("/")
       .replace(/\/+/g, "/");
+    if(resultPath.length > 1 && resultPath.substring(resultPath.length - 1) === "/") {
+      resultPath = resultPath.slice(0, -1)
+    }
 
     const endpoint = {
       path: resultPath,

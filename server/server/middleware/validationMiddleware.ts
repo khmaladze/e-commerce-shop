@@ -20,7 +20,12 @@ export default (schema: Schema) =>
       }
     });
     try {
-      let val = await schema.validateAsync({ query, body, params }, options);
+      let val = {} as any;
+      if (req.method === "GET" || req.method === "HEAD") {
+        val = await schema.validateAsync({ query, params }, options);
+      } else {
+        val = await schema.validateAsync({ query, body, params }, options);
+      }
       req.params = val.params;
       req.query = val.query;
       // console.log(JSON.stringify(val, null, 2));
