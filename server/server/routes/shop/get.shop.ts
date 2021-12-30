@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
-import { shops } from "../../utils/response.schema.items";
+import { Shop } from "../../interfaces/custom";
+import { shop } from "../../utils/response.schema.items";
 
 const userEndpointDesc = "This is endpoint to get all allowed shop";
 export const TAGS = ["shop"];
@@ -19,12 +20,14 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  shop: shops.required(),
+  shop: Joi.array().items(shop).required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
   try {
-    let shop = await db("shop").where({ is_blocked: false }).select("*");
+    let shop = (await db("shop")
+      .where({ is_blocked: false })
+      .select("*")) as Array<Shop>;
     res.status(200).send({ success: true, shop });
   } catch (error) {
     res.status(500).json({

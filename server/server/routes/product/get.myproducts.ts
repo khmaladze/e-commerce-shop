@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
-import { products, shops } from "../../utils/response.schema.items";
+import { Shop } from "../../interfaces/custom";
+import { product, shop } from "../../utils/response.schema.items";
 
 const userEndpointDesc = "This endpoint get shop products created by user";
 export const TAGS = ["product"];
@@ -20,8 +21,8 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: products.required(),
-  shop: shops.required(),
+  products: Joi.array().items(product).required(),
+  shop: Joi.array().items(shop).required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -30,9 +31,9 @@ export const businessLogic = async (req: Request, res: Response) => {
       .where({ shop_owner: req.user.user_id })
       .select("shop_id");
     let shopId = shop[0].shop_id;
-    let products = await db("product")
+    let products = (await db("product")
       .where({ posted_by_shop: shopId, is_blocked: false })
-      .select("*");
+      .select("*")) as Array<Shop>;
     res.send({ success: true, products, shop });
   } catch (error) {
     res.status(500).json({

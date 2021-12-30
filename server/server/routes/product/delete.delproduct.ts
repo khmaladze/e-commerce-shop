@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
-import { products, shop } from "../../utils/response.schema.items";
+import { product, shop } from "../../utils/response.schema.items";
 
 const userEndpointDesc = "This endpoint delete product with product id";
 export const TAGS = ["product"];
@@ -22,7 +22,7 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: products.required(),
+  products: Joi.array().items(product).required(),
   shop: shop.required(),
 });
 

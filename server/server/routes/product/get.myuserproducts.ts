@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import db from "../../db/db";
+import { Product, Shop } from "../../interfaces/custom";
 import { product } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
@@ -26,9 +27,9 @@ export const responseSchema = Joi.object({
 
 export const businessLogic = async (req: Request, res: Response) => {
   try {
-    let products = await db("product")
+    let products = (await db("product")
       .where({ posted_by_user: req.user.user_id, is_blocked: false })
-      .select("*");
+      .select("*")) as Array<Product>;
     res.send({ success: true, products });
   } catch (error) {
     res.status(500).json({
