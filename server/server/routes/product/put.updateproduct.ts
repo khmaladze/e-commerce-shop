@@ -26,7 +26,7 @@ export const requestSchema = Joi.object({
     price: Joi.string().min(0),
     productCount: Joi.string().min(0),
     productImage: Joi.string().min(0).max(500),
-    requestedBy: Joi.string().valid("shop", "user").required(),
+    requestedBy: Joi.string().valid("shop").required(),
   }),
 }).description(userEndpointDesc);
 
@@ -46,31 +46,15 @@ export const businessLogic = async (req: Request, res: Response) => {
       .where({ shop_owner: req.user.user_id })
       .select("shop_id");
     let shop = user_shop[0];
-    let productUpdating = {
-      product_id: productId,
-    } as any;
-    if (title) {
-      productUpdating.title = title;
-    }
-    if (productDescription) {
-      productUpdating.product_description = productDescription;
-    }
-    if (price) {
-      productUpdating.price = price;
-    }
-    if (productCount) {
-      productUpdating.product_count = productCount;
-    }
-    if (productImage) {
-      productUpdating.product_image = productImage;
-    }
-    let updateProducts = await db("product")
-      .where({
-        product_id: productId,
-        posted_by_shop: shop.shop_id,
-        is_blocked: false,
-      })
-      .update(productUpdating);
+    updateProduct(
+      productId,
+      title,
+      productDescription,
+      price,
+      productCount,
+      productImage,
+      shop.shop_id
+    );
     let products = await db("product")
       .where({
         product_id: productId,
@@ -90,3 +74,40 @@ export const businessLogic = async (req: Request, res: Response) => {
     });
   }
 };
+
+async function updateProduct(
+  productId: any,
+  title: any,
+  productDescription: any,
+  price: any,
+  productCount: any,
+  productImage: any,
+  userRequest: any
+) {
+  let productUpdating = {
+    product_id: productId,
+  } as any;
+  if (title) {
+    productUpdating.title = title;
+  }
+  if (productDescription) {
+    productUpdating.product_description = productDescription;
+  }
+  if (price) {
+    productUpdating.price = price;
+  }
+  if (productCount) {
+    productUpdating.product_count = productCount;
+  }
+  if (productImage) {
+    productUpdating.product_image = productImage;
+  }
+  let shop = userRequest;
+  let updateProducts = await db("product")
+    .where({
+      product_id: productId,
+      posted_by_shop: shop,
+      is_blocked: false,
+    })
+    .update(productUpdating);
+}
