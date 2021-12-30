@@ -5,7 +5,7 @@ import * as product from "./post.product";
 import * as products from "./get.product";
 import * as myproducts from "./get.myproducts";
 import * as updateproduct from "./put.updateproduct";
-import * as delproduct from "./delete.delproduct";
+import * as delproduct from "./delete.product";
 import * as myuserproduct from "./get.myuserproducts";
 import * as updateuserproduct from "./put.updateproductsuser";
 import { permissionMiddleware } from "../../middleware/permissions";
