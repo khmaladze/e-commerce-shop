@@ -72,7 +72,7 @@ You can find simple examples of all mentioned in the demo folder of this reposit
 ```Typescript
 // imports
 import path from 'path'
-import { getOpenApiSchemaRouter } from '@open-api-documentation'
+import { getSwaggerUiRouter } from '@open-api-documentation'
 import app from './your-path-to-express-app'
 
 // Config example
@@ -119,7 +119,11 @@ const config: OpenApiConfig = {
 	// filter: '.*animals.*'
 }
 
-app.use(getOpenApiSchemaRouter(app, config)); // GET /openapi/schema.json
+/*
+GET /openapi/schema.json
+GET /docs
+*/
+app.use(getSwaggerUiRouter(app, config));
 ```
 
 Middlewares and router implementation.
