@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 import { min } from "lodash";
 import db from "../../db/db";
-import { products, shop } from "../../utils/response.schema.items";
+import { product, shop } from "../../utils/response.schema.items";
 
 const userEndpointDesc =
   "This is endpoint to update shop product you can update anything you want if you want update all the fields or just one. You can update how many you want. Tt's up to you";
@@ -32,9 +32,8 @@ export const requestSchema = Joi.object({
 
 export const responseSchema = Joi.object({
   success: Joi.boolean().required(),
-  products: Joi.array().required(),
+  product: product.required(),
   shop: shop.required(),
-  productList: products.required(),
 });
 
 export const businessLogic = async (req: Request, res: Response) => {
@@ -47,39 +46,42 @@ export const businessLogic = async (req: Request, res: Response) => {
       .where({ shop_owner: req.user.user_id })
       .select("shop_id");
     let shop = user_shop[0];
-    let products = (await db("product")
-      .where({
-        product_id: productId,
-        posted_by_shop: shop.shop_id,
-        is_blocked: false,
-      })
-      .select("*")) as Array<any>;
-    let product = products[0];
+    let productUpdating = {
+      product_id: productId,
+    } as any;
+    if (title) {
+      productUpdating.title = title;
+    }
+    if (productDescription) {
+      productUpdating.product_description = productDescription;
+    }
+    if (price) {
+      productUpdating.price = price;
+    }
+    if (productCount) {
+      productUpdating.product_count = productCount;
+    }
+    if (productImage) {
+      productUpdating.product_image = productImage;
+    }
     let updateProducts = await db("product")
       .where({
         product_id: productId,
         posted_by_shop: shop.shop_id,
         is_blocked: false,
       })
-      .update({
-        product_id: productId,
-        title: title || product.title,
-        product_description: productDescription || product.product_description,
-        price: price || product.price,
-        product_count: productCount || product.product_count,
-        product_image: productImage || product.product_image,
-      });
-    let productList = await db("product")
+      .update(productUpdating);
+    let products = await db("product")
       .where({
+        product_id: productId,
         posted_by_shop: shop.shop_id,
         is_blocked: false,
       })
       .select("*");
     res.send({
       success: true,
-      products,
+      product: products[0],
       shop,
-      productList,
     });
   } catch (error) {
     res.status(500).json({
