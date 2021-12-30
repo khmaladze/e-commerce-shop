@@ -176,7 +176,7 @@ export function getBaseMethod(
   description?: string
 ): OpenApiPathMethods {
   let requestBodyObject: any = null;
-  if (requestBody) {
+  if (requestBody && method !== 'get') {
     requestBodyObject = {
       requestBody: {
         content: {
