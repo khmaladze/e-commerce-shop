@@ -24,7 +24,7 @@ export const requestSchema = Joi.object({
     price: Joi.string().min(0),
     productCount: Joi.string().min(0),
     productImage: Joi.string().min(0).max(500),
-    requestedBy: Joi.string().valid("shop", "user").required(),
+    requestedBy: Joi.string().valid("user").required(),
   }),
 }).description(userEndpointDesc);
 

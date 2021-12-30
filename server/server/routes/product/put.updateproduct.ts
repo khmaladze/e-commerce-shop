@@ -26,7 +26,7 @@ export const requestSchema = Joi.object({
     price: Joi.string().min(0),
     productCount: Joi.string().min(0),
     productImage: Joi.string().min(0).max(500),
-    requestedBy: Joi.string().valid("shop", "user").required(),
+    requestedBy: Joi.string().valid("shop").required(),
   }),
 }).description(userEndpointDesc);
 
@@ -53,7 +53,7 @@ export const businessLogic = async (req: Request, res: Response) => {
       price,
       productCount,
       productImage,
-      req.user.user_id
+      shop.shop_id
     );
     let products = await db("product")
       .where({
@@ -102,11 +102,11 @@ async function updateProduct(
   if (productImage) {
     productUpdating.product_image = productImage;
   }
-  let user = userRequest;
+  let shop = userRequest;
   let updateProducts = await db("product")
     .where({
       product_id: productId,
-      posted_by_user: user,
+      posted_by_shop: shop,
       is_blocked: false,
     })
     .update(productUpdating);
