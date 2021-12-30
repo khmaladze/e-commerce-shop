@@ -182,11 +182,11 @@ export const AddUserProducts = () => {
 
   const UpdateProduct = (updatePostId: string | number) => {
     if (
-      !title ||
-      !category ||
-      !description ||
-      !price ||
-      !productCount ||
+      !title &&
+      !category &&
+      !description &&
+      !price &&
+      !productCount &&
       !image[0]
     ) {
       toast.warn("Please add minumum one filed");
@@ -204,7 +204,6 @@ export const AddUserProducts = () => {
         body: JSON.stringify({
           title,
           productDescription: description,
-          category,
           price,
           productCount,
           productImage: imageUrl,
@@ -255,7 +254,6 @@ export const AddUserProducts = () => {
               body: JSON.stringify({
                 title,
                 productDescription: description,
-                category,
                 price,
                 productCount,
                 productImage: data.url,

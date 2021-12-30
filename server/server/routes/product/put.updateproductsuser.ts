@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import Joi from "joi";
+import Joi, { string } from "joi";
 import db from "../../db/db";
 import { Shop } from "../../interfaces/custom";
 import { productSchema } from "../../utils/response.schema.items";
@@ -47,31 +47,16 @@ export const businessLogic = async (req: Request, res: Response) => {
         is_blocked: false,
       })
       .select("*");
-    let productUpdating = {
-      product_id: productId,
-    } as any;
-    if (title) {
-      productUpdating.title = title;
-    }
-    if (productDescription) {
-      productUpdating.product_description = productDescription;
-    }
-    if (price) {
-      productUpdating.price = price;
-    }
-    if (productCount) {
-      productUpdating.product_count = productCount;
-    }
-    if (productImage) {
-      productUpdating.product_image = productImage;
-    }
-    let updateProducts = await db("product")
-      .where({
-        product_id: productId,
-        posted_by_user: req.user.user_id,
-        is_blocked: false,
-      })
-      .update(productUpdating);
+    updateProduct(
+      productId,
+      title,
+      productDescription,
+      price,
+      productCount,
+      productImage,
+      req.user.user_id
+    );
+
     let productList = (await db("product")
       .where({
         posted_by_user: req.user.user_id,
@@ -90,12 +75,39 @@ export const businessLogic = async (req: Request, res: Response) => {
   }
 };
 
-// {
-//         product_id: productId,
-//         title: title || products[0].title,
-//         product_description:
-//           productDescription || products[0].product_description,
-//         price: price || products[0].price,
-//         product_count: productCount || products[0].product_count,
-//         product_image: productImage || products[0].product_image,
-//       }
+async function updateProduct(
+  productId: any,
+  title: any,
+  productDescription: any,
+  price: any,
+  productCount: any,
+  productImage: any,
+  userRequest: any
+) {
+  let productUpdating = {
+    product_id: productId,
+  } as any;
+  if (title) {
+    productUpdating.title = title;
+  }
+  if (productDescription) {
+    productUpdating.product_description = productDescription;
+  }
+  if (price) {
+    productUpdating.price = price;
+  }
+  if (productCount) {
+    productUpdating.product_count = productCount;
+  }
+  if (productImage) {
+    productUpdating.product_image = productImage;
+  }
+  let user = userRequest;
+  let updateProducts = await db("product")
+    .where({
+      product_id: productId,
+      posted_by_user: user,
+      is_blocked: false,
+    })
+    .update(productUpdating);
+}
