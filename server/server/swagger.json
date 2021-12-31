@@ -1,0 +1,1667 @@
+{
+  "openapi": "3.0.3",
+  "servers": [{ "url": "http://localhost:5000" }],
+  "info": { "description": "Generated Store", "title": "Test app" },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "security": [],
+        "summary": "PERMISSION: NO",
+        "description": "this is how to login user you need to fill all the fields email and password. email must be gmail provider and also password must not be longer than 50",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "token": { "type": "string" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": { "type": "string" },
+                        "first_name": { "type": "string" },
+                        "birth_date": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "country": { "type": "string" },
+                        "user_address": { "type": "string" },
+                        "email": { "type": "string" },
+                        "user_password": { "type": "string" },
+                        "user_card": { "type": "string" },
+                        "card_password": { "type": "string" },
+                        "is_blocked": { "type": "boolean" },
+                        "budget": { "type": "string" },
+                        "user_image": { "type": "string" },
+                        "ip_address": { "type": "string" },
+                        "browser_type": { "type": "string" },
+                        "created_at": { "type": "string" },
+                        "updated_at": { "type": "string" }
+                      },
+                      "required": [
+                        "user_id",
+                        "first_name",
+                        "birth_date",
+                        "country",
+                        "user_address",
+                        "email",
+                        "user_password",
+                        "user_card",
+                        "card_password",
+                        "is_blocked",
+                        "budget",
+                        "ip_address",
+                        "browser_type",
+                        "created_at",
+                        "updated_at"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "shop": {
+                      "type": "object",
+                      "properties": {
+                        "shop_id": { "type": "string" },
+                        "shop_name": { "type": "string" },
+                        "shop_owner": { "type": "string" },
+                        "category": { "type": "string" },
+                        "is_blocked": { "type": "boolean" },
+                        "budget": { "type": "string" },
+                        "shop_image": { "type": "string" }
+                      },
+                      "required": [
+                        "shop_id",
+                        "shop_name",
+                        "shop_owner",
+                        "category",
+                        "is_blocked",
+                        "budget",
+                        "shop_image"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["success", "token", "user"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "format": "email" },
+                  "userPassword": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 30
+                  }
+                },
+                "required": ["email", "userPassword"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shop": {
+      "get": {
+        "tags": ["shop"],
+        "security": [],
+        "summary": "PERMISSION: NO",
+        "description": "This is endpoint to get all allowed shop",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "shop": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "shop_id": { "type": "string" },
+                          "shop_name": { "type": "string" },
+                          "shop_owner": { "type": "string" },
+                          "category": { "type": "string" },
+                          "is_blocked": { "type": "boolean" },
+                          "budget": { "type": "string" },
+                          "shop_image": { "type": "string" }
+                        },
+                        "required": [
+                          "shop_id",
+                          "shop_name",
+                          "shop_owner",
+                          "category",
+                          "is_blocked",
+                          "budget",
+                          "shop_image"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success", "shop"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/products": {
+      "get": {
+        "tags": ["product"],
+        "security": [],
+        "summary": "PERMISSION: NO",
+        "description": "This enpoint get all products created by shop or individual user",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": { "type": "string" },
+                          "title": { "type": "string" },
+                          "product_description": { "type": "string" },
+                          "product_image": { "type": "string" },
+                          "category": { "type": "string" },
+                          "price": { "type": "string" },
+                          "product_count": { "type": "string" },
+                          "posted_by_user": { "type": "string" },
+                          "posted_by_shop": { "type": "string" },
+                          "is_blocked": { "type": "boolean" }
+                        },
+                        "required": [
+                          "product_id",
+                          "title",
+                          "product_description",
+                          "product_image",
+                          "category",
+                          "price",
+                          "product_count",
+                          "is_blocked"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success", "products"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "security": [],
+        "summary": "PERMISSION: NO",
+        "description": "This is how to register user you need to fill all the fields firstName, lastName, email, password, birthDate, country, userAddress, email, userPassword, userCard, cardPassword, budget, confirmPassword . email must be gmail provider and also password must not be longer than 50",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "success": { "type": "boolean" } },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "pattern": "^[a-z]+$",
+                    "minLength": 2,
+                    "maxLength": 50
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "pattern": "^[a-z]+$",
+                    "minLength": 2,
+                    "maxLength": 100
+                  },
+                  "birthDate": { "type": "string", "format": "date-time" },
+                  "country": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50
+                  },
+                  "userAddress": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100
+                  },
+                  "email": { "type": "string", "format": "email" },
+                  "permission": { "type": "string", "enum": ["admin", "user"] },
+                  "userPassword": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 30
+                  },
+                  "userCard": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 10
+                  },
+                  "cardPassword": {
+                    "type": "string",
+                    "minLength": 4,
+                    "maxLength": 4
+                  },
+                  "budget": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50
+                  },
+                  "confirmPassword": { "type": "string" }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "birthDate",
+                  "country",
+                  "userAddress",
+                  "email",
+                  "userPassword",
+                  "userCard",
+                  "cardPassword",
+                  "budget",
+                  "confirmPassword"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shop/add/shop": {
+      "post": {
+        "tags": ["shop"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This is endpoint for user to create their shop and add products by them",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "success": { "type": "boolean" } },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shopName": { "type": "string", "maxLength": 50 },
+                  "category": { "type": "string" },
+                  "budget": { "type": "string" },
+                  "shopImage": { "type": "string" }
+                },
+                "required": ["shopName", "category", "budget", "shopImage"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shop/my/shop": {
+      "get": {
+        "tags": ["shop"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This is endpoint to get user shop data",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "shop": {
+                      "type": "object",
+                      "properties": {
+                        "shop_id": { "type": "string" },
+                        "shop_name": { "type": "string" },
+                        "shop_owner": { "type": "string" },
+                        "category": { "type": "string" },
+                        "is_blocked": { "type": "boolean" },
+                        "budget": { "type": "string" },
+                        "shop_image": { "type": "string" }
+                      },
+                      "required": [
+                        "shop_id",
+                        "shop_name",
+                        "shop_owner",
+                        "category",
+                        "is_blocked",
+                        "budget",
+                        "shop_image"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["success", "shop"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/add/product": {
+      "post": {
+        "tags": ["product"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This is endpoint to add product you need to add all the fields like title, product_description, category, price, product_count, product_image (NOTE: for product image you can use images from min 1 to max 3 )",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "success": { "type": "boolean" } },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50
+                  },
+                  "productDescription": { "type": "string", "maxLength": 1000 },
+                  "category": { "type": "number", "format": "float" },
+                  "price": { "type": "number", "format": "float" },
+                  "productCount": { "type": "number", "format": "float" },
+                  "productImage": { "type": "string", "maxLength": 500 },
+                  "requestedBy": { "type": "string", "enum": ["user", "shop"] }
+                },
+                "required": [
+                  "title",
+                  "category",
+                  "price",
+                  "productCount",
+                  "productImage",
+                  "requestedBy"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/my/products": {
+      "get": {
+        "tags": ["product"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This endpoint get shop products created by user",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": { "type": "string" },
+                          "title": { "type": "string" },
+                          "product_description": { "type": "string" },
+                          "product_image": { "type": "string" },
+                          "category": { "type": "string" },
+                          "price": { "type": "string" },
+                          "product_count": { "type": "string" },
+                          "posted_by_user": { "type": "string" },
+                          "posted_by_shop": { "type": "string" },
+                          "is_blocked": { "type": "boolean" }
+                        },
+                        "required": [
+                          "product_id",
+                          "title",
+                          "product_description",
+                          "product_image",
+                          "category",
+                          "price",
+                          "product_count",
+                          "is_blocked"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "shop": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "shop_id": { "type": "string" },
+                          "shop_name": { "type": "string" },
+                          "shop_owner": { "type": "string" },
+                          "category": { "type": "string" },
+                          "is_blocked": { "type": "boolean" },
+                          "budget": { "type": "string" },
+                          "shop_image": { "type": "string" }
+                        },
+                        "required": [
+                          "shop_id",
+                          "shop_name",
+                          "shop_owner",
+                          "category",
+                          "is_blocked",
+                          "budget",
+                          "shop_image"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success", "products", "shop"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/my/user/products/{id}": {
+      "put": {
+        "tags": ["product"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This is endpoint to  update  product from individual user. you can update anything you want if you want update all the fields or just one. you can update how many you want. it's up to you",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "number", "format": "float" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": { "type": "string" },
+                          "title": { "type": "string" },
+                          "product_description": { "type": "string" },
+                          "product_image": { "type": "string" },
+                          "category": { "type": "string" },
+                          "price": { "type": "string" },
+                          "product_count": { "type": "string" },
+                          "posted_by_user": { "type": "string" },
+                          "posted_by_shop": { "type": "string" },
+                          "is_blocked": { "type": "boolean" }
+                        },
+                        "required": [
+                          "product_id",
+                          "title",
+                          "product_description",
+                          "product_image",
+                          "category",
+                          "price",
+                          "product_count",
+                          "is_blocked"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "productList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": { "type": "string" },
+                          "title": { "type": "string" },
+                          "product_description": { "type": "string" },
+                          "product_image": { "type": "string" },
+                          "category": { "type": "string" },
+                          "price": { "type": "string" },
+                          "product_count": { "type": "string" },
+                          "posted_by_user": { "type": "string" },
+                          "posted_by_shop": { "type": "string" },
+                          "is_blocked": { "type": "boolean" }
+                        },
+                        "required": [
+                          "product_id",
+                          "title",
+                          "product_description",
+                          "product_image",
+                          "category",
+                          "price",
+                          "product_count",
+                          "is_blocked"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success", "products", "productList"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 50
+                  },
+                  "productDescription": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 1000
+                  },
+                  "price": { "type": "string", "minLength": 0 },
+                  "productCount": { "type": "string", "minLength": 0 },
+                  "productImage": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 500
+                  },
+                  "requestedBy": { "type": "string", "enum": ["user"] }
+                },
+                "required": ["requestedBy"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/my/products/user": {
+      "get": {
+        "tags": ["product"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This endpoint get user products created as only individual by user  ",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": { "type": "string" },
+                          "title": { "type": "string" },
+                          "product_description": { "type": "string" },
+                          "product_image": { "type": "string" },
+                          "category": { "type": "string" },
+                          "price": { "type": "string" },
+                          "product_count": { "type": "string" },
+                          "posted_by_user": { "type": "string" },
+                          "posted_by_shop": { "type": "string" },
+                          "is_blocked": { "type": "boolean" }
+                        },
+                        "required": [
+                          "product_id",
+                          "title",
+                          "product_description",
+                          "product_image",
+                          "category",
+                          "price",
+                          "product_count",
+                          "is_blocked"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success", "products"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/my/products/{id}": {
+      "put": {
+        "tags": ["product"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This is endpoint to update shop product you can update anything you want if you want update all the fields or just one. You can update how many you want. Tt's up to you",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "number", "format": "float" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "product": {
+                      "type": "object",
+                      "properties": {
+                        "product_id": { "type": "string" },
+                        "title": { "type": "string" },
+                        "product_description": { "type": "string" },
+                        "product_image": { "type": "string" },
+                        "category": { "type": "string" },
+                        "price": { "type": "string" },
+                        "product_count": { "type": "string" },
+                        "posted_by_user": { "type": "string" },
+                        "posted_by_shop": { "type": "string" },
+                        "is_blocked": { "type": "boolean" }
+                      },
+                      "required": [
+                        "product_id",
+                        "title",
+                        "product_description",
+                        "product_image",
+                        "category",
+                        "price",
+                        "product_count",
+                        "is_blocked"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "shop": {
+                      "type": "object",
+                      "properties": {
+                        "shop_id": { "type": "string" },
+                        "shop_name": { "type": "string" },
+                        "shop_owner": { "type": "string" },
+                        "category": { "type": "string" },
+                        "is_blocked": { "type": "boolean" },
+                        "budget": { "type": "string" },
+                        "shop_image": { "type": "string" }
+                      },
+                      "required": [
+                        "shop_id",
+                        "shop_name",
+                        "shop_owner",
+                        "category",
+                        "is_blocked",
+                        "budget",
+                        "shop_image"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["success", "product", "shop"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 50
+                  },
+                  "productDescription": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 1000
+                  },
+                  "price": { "type": "string", "minLength": 0 },
+                  "productCount": { "type": "string", "minLength": 0 },
+                  "productImage": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 500
+                  },
+                  "requestedBy": { "type": "string", "enum": ["shop"] }
+                },
+                "required": ["requestedBy"]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["product"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This endpoint delete product with product id",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "number", "format": "float" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": { "type": "string" },
+                          "title": { "type": "string" },
+                          "product_description": { "type": "string" },
+                          "product_image": { "type": "string" },
+                          "category": { "type": "string" },
+                          "price": { "type": "string" },
+                          "product_count": { "type": "string" },
+                          "posted_by_user": { "type": "string" },
+                          "posted_by_shop": { "type": "string" },
+                          "is_blocked": { "type": "boolean" }
+                        },
+                        "required": [
+                          "product_id",
+                          "title",
+                          "product_description",
+                          "product_image",
+                          "category",
+                          "price",
+                          "product_count",
+                          "is_blocked"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "shop": {
+                      "type": "object",
+                      "properties": {
+                        "shop_id": { "type": "string" },
+                        "shop_name": { "type": "string" },
+                        "shop_owner": { "type": "string" },
+                        "category": { "type": "string" },
+                        "is_blocked": { "type": "boolean" },
+                        "budget": { "type": "string" },
+                        "shop_image": { "type": "string" }
+                      },
+                      "required": [
+                        "shop_id",
+                        "shop_name",
+                        "shop_owner",
+                        "category",
+                        "is_blocked",
+                        "budget",
+                        "shop_image"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["success", "products", "shop"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "type": "", "properties": {}, "required": false }
+            }
+          }
+        }
+      }
+    },
+    "/api/history/history": {
+      "post": {
+        "tags": ["history"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This is For Product Buy History we get info like product id and person id and we save it data and get info when you buy it",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "success": { "type": "boolean" } },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": { "type": "number", "format": "float" }
+                },
+                "required": ["productId"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/profile/update/{id}": {
+      "put": {
+        "tags": ["user"],
+        "security": [],
+        "summary": "PERMISSION: [user]",
+        "description": "This is endpoint for some user details update like country, userImage, userAddress, userPassword",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": { "type": "string" },
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "number", "format": "float" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": { "type": "string" },
+                        "first_name": { "type": "string" },
+                        "birth_date": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "country": { "type": "string" },
+                        "user_address": { "type": "string" },
+                        "email": { "type": "string" },
+                        "user_password": { "type": "string" },
+                        "user_card": { "type": "string" },
+                        "card_password": { "type": "string" },
+                        "is_blocked": { "type": "boolean" },
+                        "budget": { "type": "string" },
+                        "user_image": { "type": "string" },
+                        "ip_address": { "type": "string" },
+                        "browser_type": { "type": "string" },
+                        "created_at": { "type": "string" },
+                        "updated_at": { "type": "string" }
+                      },
+                      "required": [
+                        "user_id",
+                        "first_name",
+                        "birth_date",
+                        "country",
+                        "user_address",
+                        "email",
+                        "user_password",
+                        "user_card",
+                        "card_password",
+                        "is_blocked",
+                        "budget",
+                        "ip_address",
+                        "browser_type",
+                        "created_at",
+                        "updated_at"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["success", "user"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "detail": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": { "type": "string" },
+                          "message": { "type": "string" },
+                          "path": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                          },
+                          "type": { "type": "string" }
+                        },
+                        "required": ["label", "message", "path", "type"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["success"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "country": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50
+                  },
+                  "userImage": { "type": "string", "maxLength": 500 },
+                  "userAddress": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 50
+                  },
+                  "userPassword": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 30
+                  },
+                  "confirmPassword": { "type": "string" }
+                },
+                "required": [
+                  "country",
+                  "userImage",
+                  "userAddress",
+                  "userPassword",
+                  "confirmPassword"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": []
+}
