@@ -1,8 +1,9 @@
 import React, { FC, useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { UserContext } from "../App";
+import { serverUrl, UserContext } from "../App";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 toast.configure();
 
 export const LoginPage: FC = () => {
@@ -10,50 +11,57 @@ export const LoginPage: FC = () => {
   const history = useHistory();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  interface UserLogin {
+    email: string;
+    userPassword: string;
+  }
+
   const PostData = () => {
     if (email.length > 1 && password.length > 7) {
-      fetch("/api/auth/login", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          userPassword: password,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          if (data.detail) {
-            if (data.detail[0].message) {
-              toast.warn(data.detail[0].message);
+      const postUserLogin = async () => {
+        try {
+          const userLogin: UserLogin = {
+            email,
+            userPassword: password,
+          };
+          const res = await axios.post(
+            `${serverUrl}/api/auth/login`,
+            userLogin
+          );
+          console.log(res);
+          if (res.status == 200) {
+            history.push("/");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            toast.success("User LOG IN Successfully");
+            if (res.data.token != undefined) {
+              localStorage.setItem("jwt", res.data.token);
             }
-          }
-          if (data.success) {
-            console.log(data.success);
-            if (data.token != undefined) {
-              localStorage.setItem("jwt", data.token);
-            }
-            if (data.user != undefined) {
-              localStorage.setItem("user", JSON.stringify(data.user));
+            if (res.data.user != undefined) {
+              localStorage.setItem("user", JSON.stringify(res.data.user));
             }
 
-            if (data.shop) {
-              localStorage.setItem("shop", JSON.stringify(data.shop));
+            if (res.data.shop) {
+              localStorage.setItem("shop", JSON.stringify(res.data.shop));
             }
-            dispatch({ type: "USER", payload: data.user });
-            toast.success("LOG IN SUCCESS");
-            history.push("/");
+            dispatch({ type: "USER", payload: res.data.user });
           }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        } catch (error: any) {
+          console.log(error);
+          console.log(error.response);
+          if (error.response.data) {
+            toast.warn(error.response.data.detail[0].message);
+          } else {
+            toast.warn("Please Use Valid Credentials");
+          }
+        }
+      };
+      postUserLogin();
     } else {
       toast.warn("Please Add All the fields and use valid credentials");
     }
   };
+
   return (
     <div className="auth-card-center">
       <div className="auth-card">
