@@ -8,6 +8,8 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "../App";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -20,6 +22,52 @@ export const CreateShopPage: FC = () => {
 
   const history = useHistory();
 
+  interface Shop {
+    shopName: string;
+    category: string;
+    budget: string;
+    shopImage: string;
+  }
+
+  const postCreateShop = async (image: string) => {
+    try {
+      if (image && shopName && category && budget && shopImage) {
+        const createShop: Shop = {
+          shopName,
+          category,
+          budget,
+          shopImage: image,
+        };
+        const res = await axios.post(
+          `${serverUrl}/api/shop/add/shop`,
+          createShop,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+          }
+        );
+        if (res.status == 200) {
+          toast.success("shop Add Successfully");
+          localStorage.setItem("shop", "shop created successfully");
+          history.push("/my/shop");
+        }
+      } else {
+        toast.warn("please upload image");
+      }
+    } catch (error: any) {
+      if (error.response.data.detail[0].message) {
+        toast.warn(error.response.data.detail[0].message);
+      }
+      if (error.response.data.message) {
+        toast.warn(error.response.data.message);
+      } else {
+        toast.warn("Please Use Valid Credentials");
+      }
+    }
+  };
+
   const CreateShop = () => {
     if (shopName && category && budget && shopImage) {
       const data = new FormData();
@@ -29,38 +77,14 @@ export const CreateShopPage: FC = () => {
         "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
       );
       data.append("cloud_name", "dtlhyd02w");
-      console.log(data);
       fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
         method: "post",
         body: data,
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          console.log(data.url);
           toast.success("Image Uploaded");
-          fetch("/api/shop/add/shop", {
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("jwt"),
-            },
-            body: JSON.stringify({
-              shopName,
-              category,
-              budget,
-              shopImage: data.url,
-            }),
-          })
-            .then((res) => res.json())
-            .then((result) => {
-              console.log(result);
-              if (result.success) {
-                toast.success("shop Add Successfully");
-                localStorage.setItem("shop", "shop created successfully");
-                history.push("/my/shop");
-              }
-            });
+          postCreateShop(data.url);
         })
         .catch((err) => {
           console.log(err);
