@@ -72,14 +72,12 @@ export const RegisterPage: FC = () => {
             `${serverUrl}/api/auth/register`,
             userRegister
           );
-          console.log(res);
           if (res.status == 200) {
             history.push("/");
             window.scrollTo({ top: 0, behavior: "smooth" });
-            toast.success("User Register Successfully");
+            toast.success("user register successfully");
           }
         } catch (error: any) {
-          console.log(error);
           if (error.response) {
             toast.warn(error.response.data.detail[0].message);
           } else {

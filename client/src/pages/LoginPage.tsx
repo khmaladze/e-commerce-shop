@@ -29,11 +29,10 @@ export const LoginPage: FC = () => {
             `${serverUrl}/api/auth/login`,
             userLogin
           );
-          console.log(res);
           if (res.status == 200) {
             history.push("/");
             window.scrollTo({ top: 0, behavior: "smooth" });
-            toast.success("User LOG IN Successfully");
+            toast.success("user log in successfully");
             if (res.data.token != undefined) {
               localStorage.setItem("jwt", res.data.token);
             }
@@ -47,8 +46,6 @@ export const LoginPage: FC = () => {
             dispatch({ type: "USER", payload: res.data.user });
           }
         } catch (error: any) {
-          console.log(error);
-          console.log(error.response);
           if (error.response.data) {
             toast.warn(error.response.data.detail[0].message);
           } else {
