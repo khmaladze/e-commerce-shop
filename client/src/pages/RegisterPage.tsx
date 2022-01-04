@@ -1,7 +1,9 @@
+import axios from "axios";
 import React, { FC, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { serverUrl } from "../App";
 toast.configure();
 
 export const RegisterPage: FC = () => {
@@ -17,6 +19,20 @@ export const RegisterPage: FC = () => {
   const [cardPassword, setCardPassword] = useState<string>("");
   const [budget, setBudget] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+  interface UserRegister {
+    firstName: string;
+    lastName: string;
+    birthDate: string;
+    country: string;
+    userAddress: string;
+    email: string;
+    userPassword: string;
+    userCard: string;
+    cardPassword: string;
+    budget: string;
+    confirmPassword: string;
+  }
 
   const PostData = () => {
     if (
@@ -37,54 +53,41 @@ export const RegisterPage: FC = () => {
         5,
         7
       )}-${birthDate.slice(8, 10)}`;
-      console.log(
-        firstName,
-        lastName,
-        validDate,
-        country,
-        userAddress,
-        email,
-        userPassword,
-        userCard,
-        cardPassword,
-        budget,
-        confirmPassword
-      );
-      fetch("/api/auth/register", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          birthDate: validDate,
-          country,
-          userAddress,
-          email,
-          userPassword,
-          userCard,
-          cardPassword,
-          budget,
-          confirmPassword,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.detail) {
-            if (data.detail[0].message) {
-              toast.warn(data.detail[0].message);
-            }
-          }
-          if (data.success) {
+      const postUserRegister = async () => {
+        try {
+          const userRegister: UserRegister = {
+            firstName,
+            lastName,
+            birthDate: validDate,
+            country,
+            userAddress,
+            email,
+            userPassword,
+            userCard,
+            cardPassword,
+            budget,
+            confirmPassword,
+          };
+          const res = await axios.post(
+            `${serverUrl}/api/auth/register`,
+            userRegister
+          );
+          console.log(res);
+          if (res.status == 200) {
             history.push("/");
             window.scrollTo({ top: 0, behavior: "smooth" });
-            toast.success("USER REGISTER SUCCESSFULLY");
+            toast.success("User Register Successfully");
           }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        } catch (error: any) {
+          console.log(error);
+          if (error.response) {
+            toast.warn(error.response.data.detail[0].message);
+          } else {
+            toast.warn("Please Use Valid Credentials");
+          }
+        }
+      };
+      postUserRegister();
     } else {
       toast.warn("Please Add All the fields and use valid credentials");
     }

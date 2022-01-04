@@ -20,7 +20,7 @@ import { MyShopPage } from "./pages/MyShopPage";
 import { AddUserProducts } from "./pages/AddUserProducts";
 
 export const UserContext = createContext<any>(null);
-
+export const serverUrl = "http://localhost:5000";
 const Routing = () => {
   const history = useHistory();
   const { dispatch } = useContext(UserContext);

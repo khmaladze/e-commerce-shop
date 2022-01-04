@@ -77,8 +77,6 @@ CREATE TABLE public.shop(
 	ON DELETE NO ACTION
 );
 
-
-
 CREATE TABLE public.product(
 	product_id BIGSERIAL PRIMARY KEY,
 	title CHARACTER VARYING(30) NOT NULL,
