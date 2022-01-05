@@ -5,7 +5,6 @@ import React, {
   useReducer,
   useContext,
 } from "react";
-import "./App.css";
 import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 import { reducer, initialState } from "./reducers/userReducer";
 import { Navbar } from "./components/Navbar";
@@ -18,6 +17,8 @@ import { CreateShopPage } from "./pages/CreateShopPage";
 import { Settings } from "./components/Settings";
 import { MyShopPage } from "./pages/MyShopPage";
 import { AddUserProducts } from "./pages/AddUserProducts";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
 
 export const UserContext = createContext<any>(null);
 export const serverUrl = "http://localhost:5000";
