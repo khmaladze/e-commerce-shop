@@ -20,15 +20,15 @@ open your terminal
 
 📑 IT'S IMPORTANT YOU NEED TO CREATE FILE .env and into file change following values (EXAMPLE IN .env.example)
 
-1. JWT_SECRET = type_your_jwt_secret
-2. PORT = type_your_port
+1. JWT_SECRET=type_your_jwt_secret
+2. PORT=type_your_port
 
 you also need to connect postgresql database to this project
 so make sure you have created database and now connect:
 
-1. DATABASE = your_postgresql_database
-2. DB_USER = your_postgresql_database_user
-3. DB_PASSWORD = your_postgresql_database_password
+1. DATABASE=your_postgresql_database
+2. DB_USER=your_postgresql_database_user
+3. DB_PASSWORD=your_postgresql_database_password
 
 
 FOR DATABASE POSTGRESQL I'M USING pgAdmin 5.7 of pgAdmin4
