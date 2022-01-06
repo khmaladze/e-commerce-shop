@@ -44,20 +44,6 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-interface UserRegister {
-  firstName: string;
-  lastName: string;
-  birthDate: string;
-  country: string;
-  userAddress: string;
-  email: string;
-  userPassword: string;
-  userCard: string;
-  cardPassword: string;
-  budget: string;
-  confirmPassword: string;
-}
-
 export const RegisterPage: FC = () => {
   const history = useHistory();
   const [firstName, setFirstName] = useState<string>("");
@@ -71,6 +57,20 @@ export const RegisterPage: FC = () => {
   const [cardPassword, setCardPassword] = useState<string>("");
   const [budget, setBudget] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+  interface UserRegister {
+    firstName: string;
+    lastName: string;
+    birthDate: string;
+    country: string;
+    userAddress: string;
+    email: string;
+    userPassword: string;
+    userCard: string;
+    cardPassword: string;
+    budget: string;
+    confirmPassword: string;
+  }
 
   const PostData = () => {
     if (
@@ -304,7 +304,6 @@ export const RegisterPage: FC = () => {
                 </Grid>
               </Grid>
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
