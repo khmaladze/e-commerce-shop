@@ -3,7 +3,7 @@ import logo from "../assets/logo1.png";
 
 export const Footer: FC = () => {
   return (
-    <div>
+    <div style={{ marginTop: "100px" }}>
       <footer>
         <div className="footer">
           <div className="footer__content__left">

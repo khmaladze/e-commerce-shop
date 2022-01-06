@@ -27,6 +27,12 @@ const Routing = () => {
   const { dispatch } = useContext(UserContext);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (history.location.pathname.startsWith("/login")) {
+      history.push("/login");
+    }
+    if (history.location.pathname.startsWith("/register")) {
+      history.push("/register");
+    }
     if (user) {
       if (history.location.pathname.startsWith("/login")) {
         history.push("/");
