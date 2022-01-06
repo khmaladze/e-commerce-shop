@@ -42,30 +42,31 @@ You can find simple examples of all mentioned in the demo folder of this reposit
 
 ## Config parameters
 
-| Name                                    | Type            | Required | Description                                                                  |
-| --------------------------------------- | --------------- | :------: | ---------------------------------------------------------------------------- |
-| **responseValidationSchema**            | Joi.Schema      |    ✅    | Responce schema for validation errors (422 Unprocessable Entity)             |
-| **permissions**                         | object          |    ❌    | Configuration parameters for parsing permissions.                            |
-| **permissions**.middlewareName          | string          |    ✅    | Name of the middleware responsible for handling API permissions.             |
-| **permissions**.closure                 | string          |    ✅    | Name of the permission middleware closure.                                   |
-| **permissions**.paramName               | string          |    ✅    | Name of the parameter containing permissions passed to middleware.           |
-| **requestSchemaName**                   | string          |    ❌    | Name of the Joi schema object defining request structure.                    |
-| **responseSchemaName**                  | string          |    ❌    | Name of the Joi schema object defining response structure.                   |
-| **tagsName**                            | string          |    ❌    | Name of the export variable for tags of endpoint.                            |
-| **businessLogicName**                   | string          |    ✅    | Name of the function responsible for handling business logic of the request. |
-| **swaggerInitInfo**                     | OpenApiInit     |    ✅    | Swagger initial information.                                                 |
-| **swaggerInitInfo**.servers             | OpenApiServer[] |    ✅    | List of API servers                                                          |
-| **swaggerInitInfo**.servers.url         | string          |    ✅    | API server URL                                                               |
-| **swaggerInitInfo**.info                | OpenApiInfo     |    ✅    | Basic API information.                                                       |
-| **swaggerInitInfo**.info.description    | string          |    ❌    | API description.                                                             |
-| **swaggerInitInfo**.info.version        | string          |    ❌    | API version.                                                                 |
-| **swaggerInitInfo**.info.title          | string          |    ❌    | API title.                                                                   |
-| **swaggerInitInfo**.info.termsOfService | string          |    ❌    | Link to terms of service.                                                    |
-| **swaggerInitInfo**.info.contact        | Contact         |    ❌    | Swagger initial information.                                                 |
-| **swaggerInitInfo**.info.contact.email  | string          |    ✅    | Contact email.                                                               |
-| **swaggerInitInfo**.info.license        | License         |    ❌    | Swagger initial information.                                                 |
-| **swaggerInitInfo**.info.license.name   | string          |    ✅    | License name.                                                                |
-| **swaggerInitInfo**.info.license.url    | string          |    ✅    | License url.                                                                 |
+| Name                                          | Type            | Required | Description                                                                                    |
+| --------------------------------------------- | --------------- | :------: | ---------------------------------------------------------------------------------------------- |
+| **responses**                                 | object          |    ✅    | Responces config for all http status codes.                                                    |
+| **responses**[http status code].schemaName    | string          |    ❌    | Name of the Joi schema object defining response structure for http status code.                |
+| **responses**[http status code].defaultSchema | string          |    ❌    | Default Joi schema object defining response structure for http status code. For all endpoints. |
+| **permissions**                               | object          |    ❌    | Configuration parameters for parsing permissions.                                              |
+| **permissions**.middlewareName                | string          |    ✅    | Name of the middleware responsible for handling API permissions.                               |
+| **permissions**.closure                       | string          |    ✅    | Name of the permission middleware closure.                                                     |
+| **permissions**.paramName                     | string          |    ✅    | Name of the parameter containing permissions passed to middleware.                             |
+| **requestSchemaName**                         | string          |    ❌    | Name of the Joi schema object defining request structure.                                      |
+| **tagsName**                                  | string          |    ❌    | Name of the export variable for tags of endpoint.                                              |
+| **businessLogicName**                         | string          |    ✅    | Name of the function responsible for handling business logic of the request.                   |
+| **swaggerInitInfo**                           | OpenApiInit     |    ✅    | Swagger initial information.                                                                   |
+| **swaggerInitInfo**.servers                   | OpenApiServer[] |    ✅    | List of API servers                                                                            |
+| **swaggerInitInfo**.servers.url               | string          |    ✅    | API server URL                                                                                 |
+| **swaggerInitInfo**.info                      | OpenApiInfo     |    ✅    | Basic API information.                                                                         |
+| **swaggerInitInfo**.info.description          | string          |    ❌    | API description.                                                                               |
+| **swaggerInitInfo**.info.version              | string          |    ❌    | API version.                                                                                   |
+| **swaggerInitInfo**.info.title                | string          |    ❌    | API title.                                                                                     |
+| **swaggerInitInfo**.info.termsOfService       | string          |    ❌    | Link to terms of service.                                                                      |
+| **swaggerInitInfo**.info.contact              | Contact         |    ❌    | Swagger initial information.                                                                   |
+| **swaggerInitInfo**.info.contact.email        | string          |    ✅    | Contact email.                                                                                 |
+| **swaggerInitInfo**.info.license              | License         |    ❌    | Swagger initial information.                                                                   |
+| **swaggerInitInfo**.info.license.name         | string          |    ✅    | License name.                                                                                  |
+| **swaggerInitInfo**.info.license.url          | string          |    ✅    | License url.                                                                                   |
 
 ## Usage example
 
@@ -87,36 +88,43 @@ const responseValidationSchema: Schema = Joi.object({
 	),
 })
 const config: OpenApiConfig = {
-	responseValidationSchema,
-	permissions: {
-		middlewareName: 'permission',
-		closure: 'permissionMiddleware',
-		paramName: 'allowPermissions',
-	},
-	requestSchemaName: 'requestSchema',
-	responseSchemaName: 'responseSchema',
-	businessLogicName: 'businessLogic',
-	tagsName: 'TAGS',
-	swaggerInitInfo: {
-		servers: [
-			{
-				url: 'http://localhost:8080',
-			},
-		],
-		info: {
-			description: 'Generated Store',
-			title: 'Test app',
-		},
-		security: {
-			method: AUTH_METHOD.BEARER,
-			config: {
-				bearerFormat: 'JWT',
-			},
-			scope: AUTH_SCOPE.ENDPOINT,
-			authMiddlewareName: 'authenticate',
-		},
-	},
-	// filter: '.*animals.*'
+  requestSchemaName: 'requestSchema',
+  responses: {
+    200: {
+      schemaName: 'responseSchema',
+    },
+    422: {
+      defaultSchemaInstance: responseValidationSchema,
+    },
+		// any codes
+  },
+  businessLogicName: 'businessLogic',
+  tagsName: 'TAGS',
+  permissions: {
+    middlewareName: 'permission',
+    closure: 'permissionMiddleware',
+    paramName: 'allowPermissions',
+  },
+  swaggerInitInfo: {
+    servers: [
+      {
+        url: 'http://localhost:8080',
+      },
+    ],
+    info: {
+      description: 'Generated Store',
+      title: 'Test app',
+    },
+    security: {
+      method: AUTH_METHOD.BEARER,
+      config: {
+        bearerFormat: 'JWT',
+      },
+      scope: AUTH_SCOPE.ENDPOINT,
+      authMiddlewareName: 'authenticate',
+    },
+  },
+  // filter: '.*animals.*'
 }
 
 /*
@@ -280,6 +288,6 @@ Feel free to check following #TODO ideas we have:
 
 ## Credits
 
--   [Express endpoint parser](https://github.com/AlbertoFdzM/express-list-endpoints) to retrieve a list of the passed router with the set verbs.
--   [Conversion library](https://github.com/Twipped/joi-to-swagger#readme) for transforming [Joi](https://www.npmjs.com/package/joi) schema objects into [Swagger](https://swagger.io/) schema definitions.
--   A simple [tool](https://github.com/midrissi/func-loc) that help you to retrieve the function location from its reference.
+- [Express endpoint parser](https://github.com/AlbertoFdzM/express-list-endpoints) to retrieve a list of the passed router with the set verbs.
+- [Conversion library](https://github.com/Twipped/joi-to-swagger#readme) for transforming [Joi](https://www.npmjs.com/package/joi) schema objects into [Swagger](https://swagger.io/) schema definitions.
+- A simple [tool](https://github.com/midrissi/func-loc) that help you to retrieve the function location from its reference.

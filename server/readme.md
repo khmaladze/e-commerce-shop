@@ -30,5 +30,4 @@ so make sure you have created database and now connect:
 2. DB_USER=your_postgresql_database_user
 3. DB_PASSWORD=your_postgresql_database_password
 
-
 FOR DATABASE POSTGRESQL I'M USING pgAdmin 5.7 of pgAdmin4

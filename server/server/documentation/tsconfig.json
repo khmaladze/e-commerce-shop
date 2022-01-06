@@ -1,19 +1,19 @@
 {
-	"compilerOptions": {
-		"strict": true,
-		"esModuleInterop": true,
-		"target": "es6",
-		"module": "commonjs",
-		"outDir": "./dist",
-		"sourceMap": true,
-		"noImplicitAny": true,
-		"typeRoots": ["./open-api-documentation/types", "node_modules/@types"]
-	},
-	"include": [
-		"./demo/**/*",
-		"./open-api-documentation/**/*",
-		"./tests/**/*",
-		"./swagger-ui-template"
-	],
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "typeRoots": ["./open-api-documentation/types", "node_modules/@types"]
+  },
+  "include": [
+    "./demo/**/*",
+    "./open-api-documentation/**/*",
+    "./tests/**/*",
+    "./swagger-ui-template"
+  ],
+  "exclude": ["node_modules"]
 }

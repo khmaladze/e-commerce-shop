@@ -16,7 +16,7 @@ import {
   trimStart,
   uniq,
 } from "lodash";
-import Joi, { Schema } from "joi";
+import Joi, { Schema, SchemaInternals } from "joi";
 // @ts-ignore
 import Values from "joi/lib/values";
 import { locate } from "./func-loc";
@@ -29,17 +29,20 @@ const expressRootRegexp = "/^\\/?(?=\\/|$)/i";
 const regexpExpressParam = /\(\?:\(\[\^\\\/]\+\?\)\)/g;
 const stackItemValidNames = ["router", "bound dispatch", "mounted_app"];
 
+export interface OpenApiConfigResponse {
+  schemaName?: string;
+  defaultSchema?: Schema;
+}
 export interface OpenApiConfig {
-  responseValidationSchema: Schema;
+  requestSchemaName: string;
+  responses: Record<number, OpenApiConfigResponse>;
+  tagsName: string;
+  businessLogicName: string;
   permissions?: {
     middlewareName: string;
     closure: string;
     paramName: string;
   };
-  requestSchemaName: string;
-  responseSchemaName: string;
-  tagsName: string;
-  businessLogicName: string;
   swaggerInitInfo: OpenApiInit;
   filter?: string;
 }
@@ -279,7 +282,6 @@ export const parseExpressRoute = async (
   let security: any = [];
 
   const pathArray = Array.isArray(route.path) ? route.path : [route.path];
-
   const filterRegex = config.filter ? new RegExp(config.filter) : null;
 
   if (filterRegex && !filterRegex.test(`${basePath}/${route.path}`)) {
@@ -345,18 +347,21 @@ export const parseExpressRoute = async (
         } else {
           tags = ["default"];
         }
-        if (has(workflow, config.responseSchemaName)) {
-          let outputJoiSchema = get(workflow, config.responseSchemaName);
-          if (typeof outputJoiSchema === "function") {
-            outputJoiSchema = outputJoiSchema();
+        for (const key of Object.keys(config.responses)) {
+          const responseConfig = config.responses[Number(key)];
+          let outputJoiSchema: any = responseConfig.defaultSchema;
+          if (
+            responseConfig.schemaName &&
+            has(workflow, responseConfig.schemaName)
+          ) {
+            outputJoiSchema = get(workflow, responseConfig.schemaName);
+            if (typeof outputJoiSchema === "function") {
+              outputJoiSchema = outputJoiSchema();
+            }
           }
           responses.push({
             outputJoiSchema,
-            code: 200,
-          });
-          responses.push({
-            outputJoiSchema: config.responseValidationSchema,
-            code: 422,
+            code: Number(key),
           });
         }
       }
@@ -371,10 +376,16 @@ export const parseExpressRoute = async (
       };
     });
     const methods = await Promise.all(methodsPromises);
-    const pathSegments = (basePath && path === "/" ? "" : path)
-      .replace(/\/$/, "")
-      .replace(/^\//, "")
-      .split("/");
+    let pathSegments = basePath && path === "/" ? "" : path;
+    if (typeof path === "string") {
+      pathSegments = pathSegments
+        .replace(/\/$/, "")
+        .replace(/^\//, "")
+        .split("/");
+    } else {
+      // console.log('pathSegments', pathSegments.toString())
+      pathSegments = [`reg_exp`]; // todo fix pathSegments if RegExp
+    }
     const basePathSegments = basePath
       .replace(/\/$/, "")
       .replace(/^\//, "")
@@ -389,10 +400,14 @@ export const parseExpressRoute = async (
       })
       .join("/")
       .replace(/\/+/g, "/");
-    if(resultPath.length > 1 && resultPath.substring(resultPath.length - 1) === "/") {
-      resultPath = resultPath.slice(0, -1)
+    if (
+      resultPath.length > 1 &&
+      resultPath.substring(resultPath.length - 1) === "/"
+    ) {
+      resultPath = resultPath.slice(0, -1);
     }
-
+    // console.log(resultPath)
+    // console.log(methods) // todo fix pathSegments if RegExp
     const endpoint = {
       path: resultPath,
       methods,

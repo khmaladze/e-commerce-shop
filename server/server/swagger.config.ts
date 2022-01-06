@@ -17,14 +17,15 @@ const responseValidationSchema: Schema = Joi.object({
   ),
 });
 const config: OpenApiConfig = {
-  responseValidationSchema,
-  permissions: {
-    middlewareName: "permission",
-    closure: "permissionMiddleware",
-    paramName: "allowPermissions",
-  },
   requestSchemaName: "requestSchema",
-  responseSchemaName: "responseSchema",
+  responses: {
+    200: {
+      schemaName: "responseSchema",
+    },
+    422: {
+      defaultSchema: responseValidationSchema,
+    },
+  },
   businessLogicName: "businessLogic",
   tagsName: "TAGS",
   swaggerInitInfo: {

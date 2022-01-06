@@ -43,9 +43,7 @@ export const getSwaggerUiRouter = (app: Express, config: OpenApiConfig) => {
   const router = express.Router();
 
   router.use("/docs", swaggerUi.serve, async (req: Request, res: Response) => {
-    return res.send(
-      swaggerUi.generateHTML(respSwagger)
-    );
+    return res.send(swaggerUi.generateHTML(respSwagger));
   });
 
   router.get("/openapi/schema.json", (req: Request, res: Response) => {
