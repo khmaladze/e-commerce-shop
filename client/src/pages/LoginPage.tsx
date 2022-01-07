@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { postUserLogin } from "./ApiClient";
 
 toast.configure();
 
@@ -23,49 +24,34 @@ export const LoginPage: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  interface UserLogin {
-    email: string;
-    userPassword: string;
-  }
-
-  const PostData = () => {
+  const PostData = async () => {
     if (email.length > 1 && password.length > 7) {
-      const postUserLogin = async () => {
-        try {
-          const userLogin: UserLogin = {
-            email,
-            userPassword: password,
-          };
-          const res = await axios.post(
-            `${serverUrl}/api/auth/login`,
-            userLogin
-          );
-          if (res.status == 200) {
-            navigate("/");
-            localStorage.clear();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            toast.success("user log in successfully");
-            if (res.data.token != undefined) {
-              localStorage.setItem("jwt", res.data.token);
-            }
-            if (res.data.user != undefined) {
-              localStorage.setItem("user", JSON.stringify(res.data.user));
-            }
-
-            if (res.data.shop) {
-              localStorage.setItem("shop", JSON.stringify(res.data.shop));
-            }
-            dispatch({ type: "USER", payload: res.data.user });
-          }
-        } catch (error: any) {
-          if (error.response.data) {
-            toast.warn(error.response.data.detail[0].message);
-          } else {
-            toast.warn("Please Use Valid Credentials");
-          }
+      try {
+        const res = await postUserLogin(email, password);
+        console.log("postUserLogin res.status ", res.status);
+        navigate("/");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        toast.success("user log in successfully");
+        if (res.data.token) {
+          localStorage.setItem("jwt", res.data.token);
         }
-      };
-      postUserLogin();
+        if (res.data.user) {
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+        }
+
+        if (res.data.shop) {
+          localStorage.setItem("shop", JSON.stringify(res.data.shop));
+        }
+        dispatch({ type: "USER", payload: res.data.user });
+      } catch (error: any) {
+        if (error.response.data) {
+          for (let errDetail of error.response.data.detail) {
+            toast.warn(errDetail.message);
+          }
+        } else {
+          toast.warn("Please Use Valid Credentials");
+        }
+      }
     } else {
       toast.warn("Please Add All the fields and use valid credentials");
     }

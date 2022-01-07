@@ -1,5 +1,5 @@
 /* eslint-disable no-loop-func */
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FilePond, registerPlugin } from "react-filepond";
