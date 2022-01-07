@@ -31,3 +31,4 @@ so make sure you have created database and now connect:
 3. DB_PASSWORD=your_postgresql_database_password
 
 FOR DATABASE POSTGRESQL I'M USING pgAdmin 5.7 of pgAdmin4
+I'M USEING PostgreSQL VERSION 12.6
