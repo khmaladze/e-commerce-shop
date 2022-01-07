@@ -1,6 +1,6 @@
 import React, { FC, useState, useContext, useEffect } from "react";
 import { serverUrl, UserContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FilePond, registerPlugin } from "react-filepond";
@@ -9,6 +9,14 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import axios from "axios";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -58,7 +66,14 @@ export const Settings: FC = () => {
   };
 
   useEffect(() => {
-    if (newUrl && country && userAddress && userPassword && confirmPassword) {
+    if (
+      newUrl &&
+      country &&
+      userAddress &&
+      userPassword.length >= 8 &&
+      confirmPassword == userPassword &&
+      userId
+    ) {
       if (userId) {
         const putUserUpdate = async () => {
           try {
@@ -108,8 +123,6 @@ export const Settings: FC = () => {
         };
         putUserUpdate();
       }
-    } else {
-      toast.warn("Please Add All The fields. only image could be empty");
     }
   }, [newUrl]);
 
@@ -165,56 +178,173 @@ export const Settings: FC = () => {
   };
 
   return (
-    <div className="settings__page">
-      <div className="auth-card">
-        <h3>Update User Data</h3>
-        <input
-          type="text"
-          placeholder="country"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="address"
-          value={userAddress}
-          onChange={(e) => setUserAddress(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="confirm password or enter new password"
-          value={userPassword}
-          onChange={(e) => setUserPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="confirm password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <div>
-          <FilePond
-            files={newUserImage}
-            allowMultiple={false}
-            maxFiles={1}
-            onupdatefiles={setNewUserImage}
-            name="files"
-            labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
-          />
-        </div>
-        {newUserImage.length == 0 ? (
-          <button className="signinbutton" onClick={() => PostUpdate()}>
-            Update
-          </button>
-        ) : (
-          <button
-            className="signinbutton"
-            onClick={() => PostUpdateWithImage()}
-          >
-            Update with image
-          </button>
-        )}
-      </div>
+    // <div className="settings__page">
+    //   <div className="auth-card">
+    //     <h3>Update User Data</h3>
+    //     <input
+    //       type="text"
+    //       placeholder="country"
+    //       value={country}
+    //       onChange={(e) => setCountry(e.target.value)}
+    //     />
+    //     <input
+    //       type="text"
+    //       placeholder="address"
+    //       value={userAddress}
+    //       onChange={(e) => setUserAddress(e.target.value)}
+    //     />
+    //     <input
+    //       type="password"
+    //       placeholder="confirm password or enter new password"
+    //       value={userPassword}
+    //       onChange={(e) => setUserPassword(e.target.value)}
+    //     />
+    //     <input
+    //       type="password"
+    //       placeholder="confirm password"
+    //       value={confirmPassword}
+    //       onChange={(e) => setConfirmPassword(e.target.value)}
+    //     />
+    //     <div>
+    //       <FilePond
+    //         files={newUserImage}
+    //         allowMultiple={false}
+    //         maxFiles={1}
+    //         onupdatefiles={setNewUserImage}
+    //         name="files"
+    //         labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+    //       />
+    //     </div>
+    //     {newUserImage.length == 0 ? (
+    //       <button className="signinbutton" onClick={() => PostUpdate()}>
+    //         Update
+    //       </button>
+    //     ) : (
+    //       <button
+    //         className="signinbutton"
+    //         onClick={() => PostUpdateWithImage()}
+    //       >
+    //         Update with image
+    //       </button>
+    //     )}
+    //   </div>
+    // </div>
+    <div>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            UPDATE USER DATA
+          </Typography>
+          <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="country"
+                  label="Country"
+                  name="country"
+                  autoComplete="country"
+                  margin="normal"
+                  type="text"
+                  placeholder="country"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  name="address"
+                  autoComplete="address"
+                  margin="normal"
+                  type="text"
+                  placeholder="address"
+                  value={userAddress}
+                  onChange={(e) => setUserAddress(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="password"
+                  label="password"
+                  name="password"
+                  autoComplete="password"
+                  margin="normal"
+                  type="text"
+                  placeholder="Password"
+                  value={userPassword}
+                  onChange={(e) => setUserPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="password"
+                  label="Confirm Password"
+                  name="passwordConfirm"
+                  autoComplete="password"
+                  margin="normal"
+                  type="text"
+                  placeholder="Password Confirm"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <div>
+                  <FilePond
+                    files={newUserImage}
+                    allowMultiple={false}
+                    maxFiles={1}
+                    onupdatefiles={setNewUserImage}
+                    name="files"
+                    labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                  />
+                </div>
+              </Grid>
+            </Grid>
+          </Box>
+          {newUserImage.length == 0 ? (
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={() => PostUpdate()}
+            >
+              Update
+            </Button>
+          ) : (
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={() => PostUpdateWithImage()}
+            >
+              Update with image
+            </Button>
+          )}
+          <Grid container>
+            <Grid item>
+              <Link to={"/register"}>{"Don't have an account? Sign Up"}</Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
     </div>
   );
 };
