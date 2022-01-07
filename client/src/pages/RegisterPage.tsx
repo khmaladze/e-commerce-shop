@@ -283,6 +283,7 @@ export const RegisterPage: FC = () => {
                     fullWidth
                     id="confirmPassword"
                     label="Confirm Password"
+                    type="password"
                     name="confirmPassword"
                     autoComplete="confirmPassword"
                     value={confirmPassword}

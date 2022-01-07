@@ -13,10 +13,10 @@ import { MainPage } from "./pages/MainPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { ProfilePage } from "./pages/ProfilePage";
-// import { CreateShopPage } from "./pages/CreateShopPage";
-// import { Settings } from "./components/Settings";
-// import { MyShopPage } from "./pages/MyShopPage";
-// import { AddUserProducts } from "./pages/AddUserProducts";
+import { CreateShopPage } from "./pages/CreateShopPage";
+import { Settings } from "./components/Settings";
+import { MyShopPage } from "./pages/MyShopPage";
+import { AddUserProducts } from "./pages/AddUserProducts";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -32,10 +32,23 @@ const Routing = () => {
       localStorage.clear();
       guest = localStorage.setItem("guest", `true`);
       if (JSON.parse(localStorage.getItem("guest") || "nothing") == true) {
-        if (window.location.pathname.startsWith("/profile")) {
+        if (
+          window.location.pathname.startsWith("/profile") ||
+          window.location.pathname.startsWith("/add") ||
+          window.location.pathname.startsWith("/my")
+        ) {
           navigate("/");
         }
       }
+    } else {
+      if (
+        window.location.pathname.startsWith("/login") ||
+        window.location.pathname.startsWith("/register") ||
+        window.location.pathname.startsWith("/admin")
+      ) {
+        navigate("/");
+      }
+      dispatch({ type: "USER", payload: user });
     }
 
     // if (navigate.location.pathname.startsWith("/register")) {
@@ -53,7 +66,6 @@ const Routing = () => {
     //   }
     //   dispatch({ type: "USER", payload: user });
     // }
-    dispatch({ type: "USER", payload: user });
   }, []);
   return (
     <Routes>
@@ -61,19 +73,10 @@ const Routing = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/profile" element={<ProfilePage />} />
-
-      {/*  <Route exact path="/add/shop">
-        <CreateShopPage />
-      </Route>
-      <Route exact path="/my/shop">
-        <MyShopPage />
-      </Route>
-      <Route exact path="/settings">
-        <Settings />
-      </Route>
-      <Route exact path="/add/products">
-        <AddUserProducts />
-      </Route> */}
+      <Route path="/add/shop" element={<CreateShopPage />} />
+      <Route path="/my/shop" element={<MyShopPage />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/add/products" element={<AddUserProducts />} />
     </Routes>
   );
 };
