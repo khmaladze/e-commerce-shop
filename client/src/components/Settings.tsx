@@ -338,11 +338,6 @@ export const Settings: FC = () => {
               Update with image
             </Button>
           )}
-          <Grid container>
-            <Grid item>
-              <Link to={"/register"}>{"Don't have an account? Sign Up"}</Link>
-            </Grid>
-          </Grid>
         </Box>
       </Container>
     </div>

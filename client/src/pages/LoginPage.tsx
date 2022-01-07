@@ -42,6 +42,7 @@ export const LoginPage: FC = () => {
           );
           if (res.status == 200) {
             navigate("/");
+            localStorage.clear();
             window.scrollTo({ top: 0, behavior: "smooth" });
             toast.success("user log in successfully");
             if (res.data.token != undefined) {
