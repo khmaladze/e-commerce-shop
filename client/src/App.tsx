@@ -10,9 +10,9 @@ import { reducer, initialState } from "./reducers/userReducer";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { MainPage } from "./pages/MainPage";
-// import { LoginPage } from "./pages/LoginPage";
-// import { RegisterPage } from "./pages/RegisterPage";
-// import { ProfilePage } from "./pages/ProfilePage";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { ProfilePage } from "./pages/ProfilePage";
 // import { CreateShopPage } from "./pages/CreateShopPage";
 // import { Settings } from "./components/Settings";
 // import { MyShopPage } from "./pages/MyShopPage";
@@ -58,6 +58,22 @@ const Routing = () => {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+
+      {/*  <Route exact path="/add/shop">
+        <CreateShopPage />
+      </Route>
+      <Route exact path="/my/shop">
+        <MyShopPage />
+      </Route>
+      <Route exact path="/settings">
+        <Settings />
+      </Route>
+      <Route exact path="/add/products">
+        <AddUserProducts />
+      </Route> */}
     </Routes>
   );
 };
