@@ -136,7 +136,7 @@ export const RegisterPage: FC = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        paddingTop: "20px",
+        paddingTop: "0px",
         paddingBottom: "20px",
       }}
     >
@@ -152,7 +152,7 @@ export const RegisterPage: FC = () => {
             }}
           >
             <Typography component="h1" variant="h5">
-              Register
+              REGISTER
             </Typography>
             <Box component="form" noValidate sx={{ mt: 3 }}>
               <Grid container spacing={2}>
@@ -192,7 +192,7 @@ export const RegisterPage: FC = () => {
                     onChange={(e) => setBirthDate(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     required
                     fullWidth
@@ -204,7 +204,7 @@ export const RegisterPage: FC = () => {
                     onChange={(e) => setCountry(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     required
                     fullWidth
@@ -226,19 +226,6 @@ export const RegisterPage: FC = () => {
                     autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    value={userPassword}
-                    onChange={(e) => setUserPassword(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -277,7 +264,20 @@ export const RegisterPage: FC = () => {
                     onChange={(e) => setBudget(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    value={userPassword}
+                    onChange={(e) => setUserPassword(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     required
                     fullWidth
