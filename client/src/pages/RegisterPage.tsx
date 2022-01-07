@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -45,7 +45,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export const RegisterPage: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [birthDate, setBirthDate] = useState<string>("2022-01-01");
@@ -111,7 +111,7 @@ export const RegisterPage: FC = () => {
             userRegister
           );
           if (res.status == 200) {
-            history.push("/");
+            navigate("/");
             window.scrollTo({ top: 0, behavior: "smooth" });
             toast.success("user register successfully");
           }

@@ -1,6 +1,6 @@
 import React, { FC, useState, useContext, useEffect } from "react";
 import { serverUrl, UserContext } from "../App";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FilePond, registerPlugin } from "react-filepond";
@@ -13,7 +13,7 @@ toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 export const Settings: FC = () => {
-  const history = useHistory();
+  const history = useNavigate();
 
   const { state, dispatch } = useContext(UserContext);
   const [country, setCountry] = useState<string>(state?.country);
@@ -91,7 +91,7 @@ export const Settings: FC = () => {
               });
               localStorage.setItem("user", JSON.stringify(res.data.user));
               toast.success("SETTINGS UPDATED SUCCESSFULLY");
-              history.push("/profile");
+              history("/profile");
             }
           } catch (error: any) {
             console.log(error);
@@ -146,7 +146,7 @@ export const Settings: FC = () => {
           console.log(res.data.user);
           localStorage.setItem("user", JSON.stringify(res.data.user));
           toast.success("SETTINGS UPDATED SUCCESSFULLY");
-          history.push("/profile");
+          history("/profile");
         }
       } catch (error: any) {
         console.log(error);

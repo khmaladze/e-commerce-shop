@@ -1,13 +1,13 @@
 import React, { FC, useState, useContext } from "react";
 import logo from "../assets/logo1.png";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
 import { toast } from "react-toastify";
 
 export const Navbar: FC = () => {
   const { state, dispatch } = useContext<any>(UserContext);
-  const history = useHistory();
+  const history = useNavigate();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleClick = (e: any) => {
@@ -97,7 +97,7 @@ export const Navbar: FC = () => {
                         onClick={() => {
                           localStorage.clear();
                           dispatch({ type: "CLEAR" });
-                          history.push("/");
+                          history("/");
                           toast.success("LOG OUT SUCCESS");
                         }}
                       >
@@ -145,7 +145,7 @@ export const Navbar: FC = () => {
                   onClick={(e) => {
                     localStorage.clear();
                     dispatch({ type: "CLEAR" });
-                    history.push("/");
+                    history("/");
                     closeNav(e);
                     toast.success("LOG OUT SUCCESS");
                   }}

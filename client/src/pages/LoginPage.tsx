@@ -1,5 +1,5 @@
 import React, { FC, useState, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { serverUrl, UserContext } from "../App";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,7 +21,7 @@ const theme = createTheme();
 
 export const LoginPage: FC = () => {
   const { dispatch } = useContext(UserContext);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -43,7 +43,7 @@ export const LoginPage: FC = () => {
             userLogin
           );
           if (res.status == 200) {
-            history.push("/");
+            navigate("/");
             window.scrollTo({ top: 0, behavior: "smooth" });
             toast.success("user log in successfully");
             if (res.data.token != undefined) {

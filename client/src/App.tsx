@@ -5,74 +5,60 @@ import React, {
   useReducer,
   useContext,
 } from "react";
-import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { reducer, initialState } from "./reducers/userReducer";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { MainPage } from "./pages/MainPage";
-import { LoginPage } from "./pages/LoginPage";
-import { RegisterPage } from "./pages/RegisterPage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { CreateShopPage } from "./pages/CreateShopPage";
-import { Settings } from "./components/Settings";
-import { MyShopPage } from "./pages/MyShopPage";
-import { AddUserProducts } from "./pages/AddUserProducts";
+// import { LoginPage } from "./pages/LoginPage";
+// import { RegisterPage } from "./pages/RegisterPage";
+// import { ProfilePage } from "./pages/ProfilePage";
+// import { CreateShopPage } from "./pages/CreateShopPage";
+// import { Settings } from "./components/Settings";
+// import { MyShopPage } from "./pages/MyShopPage";
+// import { AddUserProducts } from "./pages/AddUserProducts";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 export const UserContext = createContext<any>(null);
 export const serverUrl = "http://localhost:5000";
+const user = JSON.parse(localStorage.getItem("user") || "{}");
+let guest: any = false;
 const Routing = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { dispatch } = useContext(UserContext);
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (history.location.pathname.startsWith("/login")) {
-      history.push("/login");
-    }
-    if (history.location.pathname.startsWith("/register")) {
-      history.push("/register");
-    }
-    if (user) {
-      if (history.location.pathname.startsWith("/login")) {
-        history.push("/");
+    if (JSON.stringify(user) === "{}") {
+      localStorage.clear();
+      guest = localStorage.setItem("guest", `true`);
+      if (JSON.parse(localStorage.getItem("guest") || "nothing") == true) {
+        if (window.location.pathname.startsWith("/profile")) {
+          navigate("/");
+        }
       }
-      if (history.location.pathname.startsWith("/register")) {
-        history.push("/");
-      }
-      if (history.location.pathname.startsWith("/admin")) {
-        history.push("/");
-      }
-      dispatch({ type: "USER", payload: user });
     }
+
+    // if (navigate.location.pathname.startsWith("/register")) {
+    //   navigate.push("/register");
+    // }
+    // if (user) {
+    //   if (navigate.location.pathname.startsWith("/login")) {
+    //     navigate.push("/");
+    //   }
+    //   if (navigate.location.pathname.startsWith("/register")) {
+    //     navigate.push("/");
+    //   }
+    //   if (navigate.location.pathname.startsWith("/admin")) {
+    //     navigate.push("/");
+    //   }
+    //   dispatch({ type: "USER", payload: user });
+    // }
+    dispatch({ type: "USER", payload: user });
   }, []);
   return (
-    <Switch>
-      <Route exact path="/">
-        <MainPage />
-      </Route>
-      <Route exact path="/login">
-        <LoginPage />
-      </Route>
-      <Route exact path="/register">
-        <RegisterPage />
-      </Route>
-      <Route exact path="/profile">
-        <ProfilePage />
-      </Route>
-      <Route exact path="/add/shop">
-        <CreateShopPage />
-      </Route>
-      <Route exact path="/my/shop">
-        <MyShopPage />
-      </Route>
-      <Route exact path="/settings">
-        <Settings />
-      </Route>
-      <Route exact path="/add/products">
-        <AddUserProducts />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+    </Routes>
   );
 };
 

@@ -11,10 +11,10 @@ export const MainPage: FC = () => {
     <div>
       <Carusel />
       <PopularShops />
-      <PopularCategories />
+      {/* <PopularCategories />
       <LatestUploads />
       <LowestPrice />
-      <Sale />
+      <Sale /> */}
     </div>
   );
 };

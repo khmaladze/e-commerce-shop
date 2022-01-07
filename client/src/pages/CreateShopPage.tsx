@@ -7,7 +7,7 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
 
@@ -20,7 +20,7 @@ export const CreateShopPage: FC = () => {
   const [budget, setBudget] = useState<string>("");
   const [shopImage, setShopImage] = useState<any>([]);
 
-  const history = useHistory();
+  const history = useNavigate();
 
   interface Shop {
     shopName: string;
@@ -51,7 +51,7 @@ export const CreateShopPage: FC = () => {
         if (res.status == 200) {
           toast.success("shop Add Successfully");
           localStorage.setItem("shop", "shop created successfully");
-          history.push("/my/shop");
+          history("/my/shop");
         }
       } else {
         toast.warn("please upload image");
