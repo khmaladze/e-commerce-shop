@@ -10,6 +10,13 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -95,45 +102,91 @@ export const CreateShopPage: FC = () => {
   };
 
   return (
-    <div className="myshop__page">
-      <div className="myshop__page__shop__add_product">
-        <div className="settings__page">
-          <div className="auth-card">
-            <h3>Create Shop</h3>
-            <input
-              type="text"
-              placeholder="shop name"
-              value={shopName}
-              onChange={(e) => setShopName(e.target.value)}
-            />
-            <input
-              type="number"
-              placeholder="shop category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-            <input
-              type="number"
-              placeholder="budget"
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-            />
-            <div>
-              <FilePond
-                files={shopImage}
-                allowMultiple={true}
-                maxFiles={3}
-                onupdatefiles={setShopImage}
-                name="files"
-                labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
-              />
-            </div>
-            <button className="signinbutton" onClick={() => CreateShop()}>
-              Create Shop
-            </button>
-          </div>
-        </div>
-      </div>
+    <div>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            CREATE YOUR SHOP
+          </Typography>
+          <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="shop"
+                  label="Shop Name"
+                  name="Shop Name"
+                  autoComplete="Shop Name"
+                  margin="normal"
+                  type="text"
+                  placeholder="Shop Name"
+                  value={shopName}
+                  onChange={(e) => setShopName(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="Category"
+                  label="Category"
+                  name="Category"
+                  autoComplete="Category"
+                  margin="normal"
+                  type="text"
+                  placeholder="Category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="budget"
+                  label="budget"
+                  name="budget"
+                  autoComplete="budget"
+                  margin="normal"
+                  type="number"
+                  placeholder="Budget"
+                  value={budget}
+                  onChange={(e) => setBudget(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <div>
+                  <FilePond
+                    files={shopImage}
+                    allowMultiple={true}
+                    maxFiles={3}
+                    onupdatefiles={setShopImage}
+                    name="files"
+                    labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                  />
+                </div>
+              </Grid>
+            </Grid>
+          </Box>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={() => CreateShop()}
+          >
+            Create Shop
+          </Button>
+        </Box>
+      </Container>
     </div>
   );
 };
