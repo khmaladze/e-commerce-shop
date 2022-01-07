@@ -284,7 +284,7 @@ export const Settings: FC = () => {
                   name="password"
                   autoComplete="password"
                   margin="normal"
-                  type="text"
+                  type="password"
                   placeholder="Password"
                   value={userPassword}
                   onChange={(e) => setUserPassword(e.target.value)}
@@ -299,7 +299,7 @@ export const Settings: FC = () => {
                   name="passwordConfirm"
                   autoComplete="password"
                   margin="normal"
-                  type="text"
+                  type="password"
                   placeholder="Password Confirm"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
