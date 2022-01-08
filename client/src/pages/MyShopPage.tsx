@@ -48,19 +48,6 @@ export const MyShopPage: FC = () => {
       }
     };
     getMyUserShop();
-  }, []);
-
-  useEffect(() => {
-    // fetch("/api/product/my/products", {
-    //   headers: {
-    //     Authorization: "Bearer " + localStorage.getItem("jwt"),
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     console.log(result.products);
-    //     setProductData(result.products);
-    //   });
     const getMyShopProducts = async () => {
       try {
         const res = await axios.get("/api/product/my/products", {
@@ -69,24 +56,28 @@ export const MyShopPage: FC = () => {
             Authorization: "Bearer " + localStorage.getItem("jwt"),
           },
         });
-        console.log(res);
+        setProductData(res.data.products);
       } catch (error) {
         console.log(error);
       }
     };
     getMyShopProducts();
   }, []);
+
   const getData = () => {
-    fetch("/api/product/my/products", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log("now update", result.products);
-        setProductData(result.products);
-      });
+    const getProductsData = async () => {
+      try {
+        const res = await axios.get("/api/product/my/products", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        });
+        setProductData(res.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProductsData();
   };
 
   const AddProduct = () => {
@@ -375,18 +366,20 @@ export const MyShopPage: FC = () => {
   };
 
   const deleteProduct = (id: any) => {
-    fetch(`/api/product/my/products/${id}`, {
-      method: "delete",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
+    const deleteThisProduct = async () => {
+      try {
+        const res = await axios.delete(`/api/product/my/products/${id}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        });
         toast.success(`Product id ${id} Delete Successfully`);
         return getData();
-      });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    deleteThisProduct();
   };
 
   return (
