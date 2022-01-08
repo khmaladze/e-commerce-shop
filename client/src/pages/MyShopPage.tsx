@@ -9,6 +9,10 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { imageFormat, UserShop } from "../components/MyShop";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
+import { serverUrl } from "../App";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -26,32 +30,51 @@ export const MyShopPage: FC = () => {
   const [productData, setProductData] = useState<any>([]);
   const [updateProductId, setUpdateProductId] = useState<any>("");
   const [showAddProduct, setShowAddProduct] = useState<boolean>(true);
-
   let imageList: any = [];
+
   useEffect(() => {
-    fetch("/api/shop/my/shop", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setShop(result.shop);
+    const getMyUserShop = async () => {
+      try {
+        const res = await axios.get(`/api/shop/my/shop`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        });
+        setShop(res.data.shop);
         setShow(true);
-      });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getMyUserShop();
   }, []);
 
   useEffect(() => {
-    fetch("/api/product/my/products", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result.products);
-        setProductData(result.products);
-      });
+    // fetch("/api/product/my/products", {
+    //   headers: {
+    //     Authorization: "Bearer " + localStorage.getItem("jwt"),
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((result) => {
+    //     console.log(result.products);
+    //     setProductData(result.products);
+    //   });
+    const getMyShopProducts = async () => {
+      try {
+        const res = await axios.get("/api/product/my/products", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        });
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getMyShopProducts();
   }, []);
   const getData = () => {
     fetch("/api/product/my/products", {
@@ -368,20 +391,33 @@ export const MyShopPage: FC = () => {
 
   return (
     <div className="myshop__page">
-      {show
-        ? shop.map((data: any) => {
-            return (
-              <UserShop
-                shop_id={data.shop_id}
-                shop_image={data.shop_image}
-                shop_name={data.shop_name}
-                budget={data.budget}
-                category={data.category}
-                key={data.shop_id}
-              />
-            );
-          })
-        : "loading"}
+      {show ? (
+        shop.map((data: any) => {
+          return (
+            <UserShop
+              shop_id={data.shop_id}
+              shop_image={data.shop_image}
+              shop_name={data.shop_name}
+              budget={data.budget}
+              category={data.category}
+              key={data.shop_id}
+            />
+          );
+        })
+      ) : (
+        <div
+          style={{
+            height: "100px",
+            maxWidth: "1200px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "0 auto",
+          }}
+        >
+          <CircularProgress />
+        </div>
+      )}
       {showAddProduct ? (
         <div className="myshop__page__shop__add_product">
           <div className="settings__page">
