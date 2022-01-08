@@ -178,57 +178,6 @@ export const Settings: FC = () => {
   };
 
   return (
-    // <div className="settings__page">
-    //   <div className="auth-card">
-    //     <h3>Update User Data</h3>
-    //     <input
-    //       type="text"
-    //       placeholder="country"
-    //       value={country}
-    //       onChange={(e) => setCountry(e.target.value)}
-    //     />
-    //     <input
-    //       type="text"
-    //       placeholder="address"
-    //       value={userAddress}
-    //       onChange={(e) => setUserAddress(e.target.value)}
-    //     />
-    //     <input
-    //       type="password"
-    //       placeholder="confirm password or enter new password"
-    //       value={userPassword}
-    //       onChange={(e) => setUserPassword(e.target.value)}
-    //     />
-    //     <input
-    //       type="password"
-    //       placeholder="confirm password"
-    //       value={confirmPassword}
-    //       onChange={(e) => setConfirmPassword(e.target.value)}
-    //     />
-    //     <div>
-    //       <FilePond
-    //         files={newUserImage}
-    //         allowMultiple={false}
-    //         maxFiles={1}
-    //         onupdatefiles={setNewUserImage}
-    //         name="files"
-    //         labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
-    //       />
-    //     </div>
-    //     {newUserImage.length == 0 ? (
-    //       <button className="signinbutton" onClick={() => PostUpdate()}>
-    //         Update
-    //       </button>
-    //     ) : (
-    //       <button
-    //         className="signinbutton"
-    //         onClick={() => PostUpdateWithImage()}
-    //       >
-    //         Update with image
-    //       </button>
-    //     )}
-    //   </div>
-    // </div>
     <div>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
