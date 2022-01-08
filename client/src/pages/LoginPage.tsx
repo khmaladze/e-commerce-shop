@@ -32,6 +32,7 @@ export const LoginPage: FC = () => {
         navigate("/");
         window.scrollTo({ top: 0, behavior: "smooth" });
         toast.success("user log in successfully");
+        localStorage.clear();
         if (res.data.token) {
           localStorage.setItem("jwt", res.data.token);
         }
