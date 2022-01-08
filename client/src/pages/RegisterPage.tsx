@@ -260,6 +260,7 @@ export const RegisterPage: FC = () => {
                     label="Budget"
                     name="budget"
                     autoComplete="budget"
+                    type="number"
                     value={budget}
                     onChange={(e) => setBudget(e.target.value)}
                   />
