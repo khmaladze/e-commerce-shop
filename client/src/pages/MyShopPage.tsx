@@ -103,36 +103,40 @@ export const MyShopPage: FC = () => {
           toast.success("Image Uploaded");
           if (data.url) {
             console.log("it works good", imageUrl);
-            fetch("/api/product/add/product", {
-              method: "post",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("jwt"),
-              },
-              body: JSON.stringify({
-                title,
-                productDescription: description,
-                category: shop[0]?.category,
-                price,
-                productCount,
-                productImage: data.url,
-                requestedBy: "shop",
-              }),
-            })
-              .then((res) => res.json())
-              .then((result) => {
-                console.log(result);
-                if (result.success) {
-                  toast.success("Product Add Successfully");
-                  setTitle("");
-                  setDescription("");
-                  setPrice("");
-                  setProductCount("");
-                  imageList = [];
-                  setImage([]);
-                  return getData();
-                }
-              });
+            const addShopProduct = async () => {
+              try {
+                const postData = {
+                  title,
+                  productDescription: description,
+                  category: shop[0]?.category,
+                  price,
+                  productCount,
+                  productImage: data.url,
+                  requestedBy: "shop",
+                };
+                const res = await axios.post(
+                  "/api/product/add/product",
+                  postData,
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Bearer " + localStorage.getItem("jwt"),
+                    },
+                  }
+                );
+                toast.success("Product Add Successfully");
+                setTitle("");
+                setDescription("");
+                setPrice("");
+                setProductCount("");
+                imageList = [];
+                setImage([]);
+                return getData();
+              } catch (error) {
+                console.log(error);
+              }
+            };
+            addShopProduct();
           }
         })
         .catch((err) => {
@@ -159,36 +163,40 @@ export const MyShopPage: FC = () => {
             console.log(imageList, "imageList");
             toast.success("Image Uploaded");
             if (imageList.length == image.length) {
-              fetch("/api/product/add/product", {
-                method: "post",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer " + localStorage.getItem("jwt"),
-                },
-                body: JSON.stringify({
-                  title,
-                  productDescription: description,
-                  category: shop[0]?.category,
-                  price,
-                  productCount,
-                  productImage: String(imageList),
-                  requestedBy: "shop",
-                }),
-              })
-                .then((res) => res.json())
-                .then((result) => {
-                  console.log(result);
-                  if (result.success) {
-                    toast.success("Product Add Successfully");
-                    setTitle("");
-                    setDescription("");
-                    setPrice("");
-                    setProductCount("");
-                    imageList = [];
-                    setImage([]);
-                    return getData();
-                  }
-                });
+              const addShopProduct = async () => {
+                try {
+                  const postData = {
+                    title,
+                    productDescription: description,
+                    category: shop[0]?.category,
+                    price,
+                    productCount,
+                    productImage: String(imageList),
+                    requestedBy: "shop",
+                  };
+                  const res = await axios.post(
+                    "/api/product/add/product",
+                    postData,
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer " + localStorage.getItem("jwt"),
+                      },
+                    }
+                  );
+                  toast.success("Product Add Successfully");
+                  setTitle("");
+                  setDescription("");
+                  setPrice("");
+                  setProductCount("");
+                  imageList = [];
+                  setImage([]);
+                  return getData();
+                } catch (error) {
+                  console.log(error);
+                }
+              };
+              addShopProduct();
             }
           })
           .catch((err) => {
