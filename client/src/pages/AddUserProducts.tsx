@@ -8,6 +8,13 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { imageFormat } from "../components/MyShop";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -372,63 +379,122 @@ export const AddUserProducts = () => {
     <div>
       <div className="myshop__page">
         {showAddProduct ? (
-          <div className="myshop__page__shop__add_product">
-            <div className="settings__page">
-              <div className="auth-card">
-                <h3>Add Product</h3>
-                <input
-                  type="text"
-                  placeholder="title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder=" Enter Your Text Here..."
-                  style={{
-                    marginTop: "10px",
-                    height: "200px",
-                    maxHeight: "250px",
-                    maxWidth: "755px",
-                    width: "90%",
-                    padding: "10px",
-                  }}
-                ></textarea>
-                <input
-                  type="text"
-                  placeholder="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                />
-                <input
-                  type="number"
-                  placeholder="price $"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-                <input
-                  type="number"
-                  placeholder="product Count"
-                  value={productCount}
-                  onChange={(e) => setProductCount(e.target.value)}
-                />
-                <div>
-                  <FilePond
-                    files={image}
-                    allowMultiple={true}
-                    maxFiles={3}
-                    onupdatefiles={setImage}
-                    name="files"
-                    labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
-                  />
-                </div>
-                <button className="signinbutton" onClick={() => AddProduct()}>
-                  Add Product
-                </button>
-              </div>
-            </div>
-          </div>
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography component="h1" variant="h5">
+                ADD PRODUCT
+              </Typography>
+              <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="Title"
+                      label="Title"
+                      name="Title"
+                      autoComplete="Title"
+                      margin="normal"
+                      type="text"
+                      placeholder="Title"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder=" Enter Your Text Here..."
+                      style={{
+                        marginTop: "10px",
+                        height: "200px",
+                        maxHeight: "250px",
+                        maxWidth: "755px",
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: "5px",
+                      }}
+                    ></textarea>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="Category"
+                      label="Category"
+                      name="Category"
+                      autoComplete="Category"
+                      margin="normal"
+                      type="text"
+                      placeholder="Category"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="Price"
+                      label="Price"
+                      name="Price"
+                      autoComplete="Price"
+                      margin="normal"
+                      type="number"
+                      placeholder="price $"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="count"
+                      label="count"
+                      name="count"
+                      autoComplete="count"
+                      margin="normal"
+                      type="number"
+                      placeholder="count $"
+                      value={productCount}
+                      onChange={(e) => setProductCount(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <div>
+                      <FilePond
+                        files={image}
+                        allowMultiple={true}
+                        maxFiles={3}
+                        onupdatefiles={setImage}
+                        name="files"
+                        labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                      />
+                    </div>
+                  </Grid>
+                </Grid>
+              </Box>
+
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() => AddProduct()}
+              >
+                Add Product
+              </Button>
+            </Box>
+          </Container>
         ) : (
           <div></div>
         )}
@@ -539,7 +605,6 @@ export const AddUserProducts = () => {
             : "loading"}
         </div>
       </div>
-      );
     </div>
   );
 };
