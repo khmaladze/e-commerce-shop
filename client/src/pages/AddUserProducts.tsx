@@ -15,6 +15,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import axios from "axios";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -36,28 +37,35 @@ export const AddUserProducts = () => {
   let imageList: any = [];
 
   useEffect(() => {
-    fetch("/api/product/my/products/user", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result.products);
-        setProductData(result.products);
-      });
+    const getUserPost = async () => {
+      try {
+        const res = await axios.get("/api/product/my/products/user", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        });
+        setProductData(res.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserPost();
   }, []);
+
   const getData = () => {
-    fetch("/api/product/my/products/user", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log("now update", result.products);
-        setProductData(result.products);
-      });
+    const getMyProducts = async () => {
+      try {
+        const res = await axios.get("/api/product/my/products/user", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        });
+        setProductData(res.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getMyProducts();
   };
 
   const AddProduct = () => {
