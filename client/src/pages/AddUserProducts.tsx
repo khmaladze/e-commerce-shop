@@ -370,19 +370,22 @@ export const AddUserProducts = () => {
   };
 
   const deleteProduct = (id: any) => {
-    fetch(`/api/product/my/products/${id}`, {
-      method: "delete",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
+    const deleteThisProduct = async () => {
+      try {
+        const res = await axios.delete(`/api/product/my/products/${id}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        });
         toast.success(`Product id ${id} Delete Successfully`);
         return getData();
-      });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    deleteThisProduct();
   };
+
   return (
     <div>
       <div className="myshop__page">
