@@ -641,7 +641,7 @@ export const AddUserProducts = () => {
                         <Typography variant="body2" color="text.secondary">
                           {item.product_description.substring(0, 30)}...
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body1" color="text">
                           Price: {item.price}$
                         </Typography>
                       </CardContent>
