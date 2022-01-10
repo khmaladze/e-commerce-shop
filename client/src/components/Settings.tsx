@@ -243,7 +243,7 @@ export const Settings: FC = () => {
                 <TextField
                   required
                   fullWidth
-                  id="password"
+                  id="confirmPassword"
                   label="Confirm Password"
                   name="passwordConfirm"
                   autoComplete="password"
