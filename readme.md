@@ -8,6 +8,9 @@ one of the popular e-commerce website. we connect people who love shop all aroun
 2. `npm install`
 3. `npm run dev`
 
+## MORE DETAIL ABOUT PROJECT BACK-END PLEASE SEE THIS URL
+https://github.com/khmaladze/e-commerce-shop/tree/main/server#readme
+
 ## TO BUILD THIS PROJECT YOU NEED TO
 
 1. `npm build`
