@@ -77,7 +77,7 @@ export const AddUserProducts = () => {
       !productCount ||
       !image[0]
     ) {
-      toast.warn("Please add minumum one filed");
+      toast.warn("Please add All The filed");
     }
     if (image.length == 1) {
       const data = new FormData();
@@ -98,36 +98,41 @@ export const AddUserProducts = () => {
           toast.success("Image Uploaded");
           if (data.url) {
             console.log("it works good", imageUrl);
-            fetch("/api/product/add/product", {
-              method: "post",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("jwt"),
-              },
-              body: JSON.stringify({
-                title,
-                productDescription: description,
-                category,
-                price,
-                productCount,
-                productImage: data.url,
-                requestedBy: "user",
-              }),
-            })
-              .then((res) => res.json())
-              .then((result) => {
-                console.log(result);
-                if (result.success) {
-                  toast.success("Product Add Successfully");
-                  setTitle("");
-                  setDescription("");
-                  setPrice("");
-                  setProductCount("");
-                  imageList = [];
-                  setImage([]);
-                  return getData();
-                }
-              });
+            const postData = {
+              title,
+              productDescription: description,
+              category,
+              price,
+              productCount,
+              productImage: data.url,
+              requestedBy: "user",
+            };
+            const postProductData = async () => {
+              try {
+                const res = await axios.post(
+                  "/api/product/add/product",
+                  postData,
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Bearer " + localStorage.getItem("jwt"),
+                    },
+                  }
+                );
+                toast.success("it working good");
+                toast.success("Product Add Successfully");
+                setTitle("");
+                setDescription("");
+                setPrice("");
+                setProductCount("");
+                imageList = [];
+                setImage([]);
+                return getData();
+              } catch (error) {
+                console.log(error);
+              }
+            };
+            postProductData();
           }
         })
         .catch((err) => {
@@ -155,36 +160,42 @@ export const AddUserProducts = () => {
               console.log(imageList, "imageList");
               toast.success("Image Uploaded");
               if (imageList.length == image.length) {
-                fetch("/api/product/add/product", {
-                  method: "post",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + localStorage.getItem("jwt"),
-                  },
-                  body: JSON.stringify({
-                    title,
-                    productDescription: description,
-                    category,
-                    price,
-                    productCount,
-                    productImage: String(imageList),
-                    requestedBy: "user",
-                  }),
-                })
-                  .then((res) => res.json())
-                  .then((result) => {
-                    console.log(result);
-                    if (result.success) {
-                      toast.success("Product Add Successfully");
-                      setTitle("");
-                      setDescription("");
-                      setPrice("");
-                      setProductCount("");
-                      imageList = [];
-                      setImage([]);
-                      return getData();
-                    }
-                  });
+                const postData = {
+                  title,
+                  productDescription: description,
+                  category,
+                  price,
+                  productCount,
+                  productImage: String(imageList),
+                  requestedBy: "user",
+                };
+                const postProductData = async () => {
+                  try {
+                    const res = await axios.post(
+                      "/api/product/add/product",
+                      postData,
+                      {
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization:
+                            "Bearer " + localStorage.getItem("jwt"),
+                        },
+                      }
+                    );
+                    toast.success("it working good");
+                    toast.success("Product Add Successfully");
+                    setTitle("");
+                    setDescription("");
+                    setPrice("");
+                    setProductCount("");
+                    imageList = [];
+                    setImage([]);
+                    return getData();
+                  } catch (error) {
+                    console.log(error);
+                  }
+                };
+                postProductData();
               }
             })
             .catch((err) => {
