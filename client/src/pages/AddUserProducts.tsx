@@ -16,6 +16,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -611,42 +615,59 @@ export const AddUserProducts = () => {
           {productData
             ? productData.map((item: string | any) => {
                 return (
-                  <div>
-                    <div
+                  <div
+                    style={{
+                      margin: "0 auto",
+                      maxWidth: "345px",
+                      marginTop: "10px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <Card
+                      sx={{ maxWidth: 345 }}
                       id={item.product_id}
-                      className="myshop__products__card"
                       key={item.product_id}
                     >
-                      <div
-                        className="myshop__produts__card__image"
-                        style={{
-                          backgroundImage: `url(${imageFormat(
-                            item.product_image
-                          )})`,
-                        }}
-                      ></div>
-                      <div className="myshop__products__card__content">
-                        <h3>{item.title}</h3>
-                        <h4>{item.product_description.substring(0, 30)}...</h4>
-                        <h5>Price: {item.price}$</h5>
-                      </div>
-                      <AiOutlineDelete
-                        onClick={() => deleteProduct(item.product_id)}
-                        style={{
-                          cursor: "pointer",
-                          fontSize: "20px",
-                          marginRight: "5px",
-                        }}
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={`${imageFormat(item.product_image)}`}
+                        alt="product image"
                       />
-                      <AiOutlineEdit
-                        style={{
-                          cursor: "pointer",
-                          fontSize: "20px",
-                          marginLeft: "5px",
-                        }}
-                        onClick={() => UpdateProduct(item.product_id)}
-                      />
-                    </div>
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {item.title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {item.product_description.substring(0, 30)}...
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Price: {item.price}$
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button size="small">
+                          <AiOutlineDelete
+                            onClick={() => deleteProduct(item.product_id)}
+                            style={{
+                              cursor: "pointer",
+                              fontSize: "20px",
+                              marginRight: "5px",
+                            }}
+                          />
+                        </Button>
+                        <Button size="small">
+                          <AiOutlineEdit
+                            style={{
+                              cursor: "pointer",
+                              fontSize: "20px",
+                              marginLeft: "5px",
+                            }}
+                            onClick={() => UpdateProduct(item.product_id)}
+                          />
+                        </Button>
+                      </CardActions>
+                    </Card>
                   </div>
                 );
               })
