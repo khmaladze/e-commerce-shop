@@ -10,7 +10,7 @@ export const Sale: FC = () => {
   return (
     <div>
       <h1 className="container__shop__text">Sale</h1>
-      <div className="container__shop" style={{ paddingTop: "100px" }}>
+      <div className="container__shop" style={{ paddingTop: "25px" }}>
         <div className="card__container">
           <Card sx={{ maxWidth: 345 }}>
             <CardMedia

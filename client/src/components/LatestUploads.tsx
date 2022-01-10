@@ -26,7 +26,7 @@ export const LatestUploads: FC = () => {
   return (
     <div>
       <h1 className="container__shop__text">Latest Uploads</h1>
-      <div className="container__shop" style={{ paddingTop: "100px" }}>
+      <div className="container__shop" style={{ paddingTop: "25px" }}>
         {data.slice(0, 5).map((item: any) => {
           console.log(imageFormat(item.product_image));
           return (
