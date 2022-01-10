@@ -11,7 +11,7 @@ export const LatestUploads: FC = () => {
     <div>
       <h1 className="container__shop__text">Latest Uploads</h1>
       <div className="container__shop" style={{ paddingTop: "100px" }}>
-        <div className="card__container">
+        <div style={{ margin: "15px" }}>
           <Card sx={{ maxWidth: 345 }}>
             <CardMedia
               component="img"
@@ -34,7 +34,7 @@ export const LatestUploads: FC = () => {
             </CardActions>
           </Card>
         </div>
-        <div className="card__container">
+        <div style={{ margin: "15px" }}>
           <Card sx={{ maxWidth: 345 }}>
             <CardMedia
               component="img"
@@ -57,7 +57,7 @@ export const LatestUploads: FC = () => {
             </CardActions>
           </Card>
         </div>
-        <div className="card__container">
+        <div style={{ margin: "15px" }}>
           <Card sx={{ maxWidth: 345 }}>
             <CardMedia
               component="img"
