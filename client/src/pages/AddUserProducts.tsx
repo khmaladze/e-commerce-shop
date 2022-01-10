@@ -629,6 +629,7 @@ export const AddUserProducts = () => {
                       key={item.product_id}
                     >
                       <CardMedia
+                        style={{ objectFit: "contain", padding: "5px" }}
                         component="img"
                         height="140"
                         image={`${imageFormat(item.product_image)}`}
