@@ -46,6 +46,9 @@ export const LatestUploads: FC = () => {
                   <Typography variant="body2" color="text.secondary">
                     {item.product_description.substring(0, 50)}...
                   </Typography>
+                  <Typography variant="body1" color="text">
+                    Price: {item.price}$
+                  </Typography>
                 </CardContent>
                 <CardActions>
                   <Button size="small">
