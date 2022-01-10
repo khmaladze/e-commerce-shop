@@ -28,7 +28,6 @@ export const LoginPage: FC = () => {
     if (email.length > 1 && password.length > 7) {
       try {
         const res = await postUserLogin(email, password);
-        console.log("postUserLogin res.status ", res.status);
         navigate("/");
         window.scrollTo({ top: 0, behavior: "smooth" });
         toast.success("user log in successfully");

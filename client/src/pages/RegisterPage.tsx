@@ -14,6 +14,7 @@ import { serverUrl } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { postUserRegisterFunction } from "./ApiClient";
 
 toast.configure();
 
@@ -91,10 +92,10 @@ export const RegisterPage: FC = () => {
       )}-${birthDate.slice(8, 10)}`;
       const postUserRegister = async () => {
         try {
-          const userRegister: UserRegister = {
+          const res = await postUserRegisterFunction(
             firstName,
             lastName,
-            birthDate: validDate,
+            validDate,
             country,
             userAddress,
             email,
@@ -102,17 +103,11 @@ export const RegisterPage: FC = () => {
             userCard,
             cardPassword,
             budget,
-            confirmPassword,
-          };
-          const res = await axios.post(
-            `${serverUrl}/api/auth/register`,
-            userRegister
+            confirmPassword
           );
-          if (res.status == 200) {
-            navigate("/");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            toast.success("user register successfully");
-          }
+          navigate("/");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          toast.success("user register successfully");
         } catch (error: any) {
           if (error.response) {
             toast.warn(error.response.data.detail[0].message);

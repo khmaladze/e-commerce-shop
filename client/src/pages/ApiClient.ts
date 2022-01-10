@@ -28,7 +28,7 @@ export const postUserLogin = async (email: string, password: string) => {
   return await axios.post(`${serverUrl}/api/auth/login`, userLogin);
 };
 
-export const postUserRegister = async (
+export const postUserRegisterFunction = async (
   firstName: string,
   lastName: string,
   validDate: string,
