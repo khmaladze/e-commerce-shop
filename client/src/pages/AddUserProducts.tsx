@@ -87,57 +87,48 @@ export const AddUserProducts = () => {
         "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
       );
       data.append("cloud_name", "dtlhyd02w");
-      console.log(data);
-      fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setImageUrl(data.url);
-          toast.success("Image Uploaded");
-          if (data.url) {
-            console.log("it works good", imageUrl);
-            const postData = {
-              title,
-              productDescription: description,
-              category,
-              price,
-              productCount,
-              productImage: data.url,
-              requestedBy: "user",
-            };
-            const postProductData = async () => {
-              try {
-                const res = await axios.post(
-                  "/api/product/add/product",
-                  postData,
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization: "Bearer " + localStorage.getItem("jwt"),
-                    },
-                  }
-                );
-                toast.success("it working good");
-                toast.success("Product Add Successfully");
-                setTitle("");
-                setDescription("");
-                setPrice("");
-                setProductCount("");
-                imageList = [];
-                setImage([]);
-                return getData();
-              } catch (error) {
-                console.log(error);
-              }
-            };
-            postProductData();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const createPost = async () => {
+        try {
+          const res = await axios.post(
+            "https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload",
+            data
+          );
+          setImageUrl(res.data.url);
+          const postData = {
+            title,
+            productDescription: description,
+            category,
+            price,
+            productCount,
+            productImage: String(res.data.url),
+            requestedBy: "user",
+          };
+          const response = await axios.post(
+            "/api/product/add/product",
+            postData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+              },
+            }
+          );
+          toast.success("it working good");
+          toast.success("Product Add Successfully");
+          setTitle("");
+          setDescription("");
+          setCategory("");
+          setPrice("");
+          setProductCount("");
+          imageList = [];
+          setImage([]);
+          setImageUrl("");
+          return getData();
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      createPost();
     } else {
       if (image.length > 1) {
         for (let i = 0; i < image.length; i++) {
