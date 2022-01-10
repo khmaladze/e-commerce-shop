@@ -139,17 +139,13 @@ export const AddUserProducts = () => {
             "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
           );
           data.append("cloud_name", "dtlhyd02w");
-          console.log(data);
-          fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
-            method: "post",
-            body: data,
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              setImageUrl(data.url);
-              imageList.push(data.url);
-              console.log(imageList, "imageList");
-              toast.success("Image Uploaded");
+          const createPost = async () => {
+            try {
+              const res = await axios.post(
+                "https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload",
+                data
+              );
+              imageList.push(res.data.url);
               if (imageList.length == image.length) {
                 const postData = {
                   title,
@@ -160,38 +156,33 @@ export const AddUserProducts = () => {
                   productImage: String(imageList),
                   requestedBy: "user",
                 };
-                const postProductData = async () => {
-                  try {
-                    const res = await axios.post(
-                      "/api/product/add/product",
-                      postData,
-                      {
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization:
-                            "Bearer " + localStorage.getItem("jwt"),
-                        },
-                      }
-                    );
-                    toast.success("it working good");
-                    toast.success("Product Add Successfully");
-                    setTitle("");
-                    setDescription("");
-                    setPrice("");
-                    setProductCount("");
-                    imageList = [];
-                    setImage([]);
-                    return getData();
-                  } catch (error) {
-                    console.log(error);
+                const response = await axios.post(
+                  "/api/product/add/product",
+                  postData,
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Bearer " + localStorage.getItem("jwt"),
+                    },
                   }
-                };
-                postProductData();
+                );
+                toast.success("it working good");
+                toast.success("Product Add Successfully");
+                setTitle("");
+                setDescription("");
+                setCategory("");
+                setPrice("");
+                setProductCount("");
+                imageList = [];
+                setImage([]);
+                setImageUrl("");
+                return getData();
               }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+            } catch (error) {
+              console.log(error);
+            }
+          };
+          createPost();
         }
       }
     }
@@ -212,37 +203,41 @@ export const AddUserProducts = () => {
       !image[0] &&
       (title || description || category || price || productCount)
     ) {
-      fetch(`/api/product/my/user/products/${updatePostId}`, {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-        },
-        body: JSON.stringify({
-          title,
-          productDescription: description,
-          price,
-          productCount,
-          productImage: imageUrl,
-          requestedBy: "user",
-        }),
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          console.log(result);
-          if (result.success) {
-            toast.success("Product Updated  Successfully");
-            setTitle("");
-            setDescription("");
-            setPrice("");
-            setProductCount("");
-            imageList = [];
-            setImage([]);
-            setShowPostUpdate(false);
-            setShowAddProduct(true);
-            return getData();
-          }
-        });
+      const updateUserProduct = async () => {
+        try {
+          const uploadData = {
+            title,
+            productDescription: description,
+            price,
+            productCount,
+            productImage: imageUrl,
+            requestedBy: "user",
+          };
+          const res = await axios.put(
+            `/api/product/my/user/products/${updatePostId}`,
+            uploadData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("jwt"),
+              },
+            }
+          );
+          toast.success("Product Updated  Successfully");
+          setTitle("");
+          setDescription("");
+          setPrice("");
+          setProductCount("");
+          imageList = [];
+          setImage([]);
+          setShowPostUpdate(false);
+          setShowAddProduct(true);
+          return getData();
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      updateUserProduct();
     }
     if (image.length == 1 && showPostUpdate) {
       const data = new FormData();
@@ -253,51 +248,45 @@ export const AddUserProducts = () => {
       );
       data.append("cloud_name", "dtlhyd02w");
       console.log(data);
-      fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setImageUrl(data.url);
-          toast.success("Image Uploaded");
-          if (data.url) {
-            fetch(`/api/product/my/user/products/${updatePostId}`, {
-              method: "put",
+      const updateUserProduct = async () => {
+        try {
+          const res = await axios.post(
+            "https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload",
+            data
+          );
+          const uploadData = {
+            title,
+            productDescription: description,
+            price,
+            productCount,
+            productImage: res.data.url,
+            requestedBy: "user",
+          };
+          const response = await axios.put(
+            `/api/product/my/user/products/${updatePostId}`,
+            uploadData,
+            {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("jwt"),
               },
-              body: JSON.stringify({
-                title,
-                productDescription: description,
-                price,
-                productCount,
-                productImage: data.url,
-                requestedBy: "user",
-              }),
-            })
-              .then((res) => res.json())
-              .then((result) => {
-                console.log(result);
-                if (result.success) {
-                  toast.success("Product Add Successfully");
-                  setTitle("");
-                  setDescription("");
-                  setPrice("");
-                  setProductCount("");
-                  imageList = [];
-                  setImage([]);
-                  setShowPostUpdate(false);
-                  setShowAddProduct(true);
-                  return getData();
-                }
-              });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+            }
+          );
+          toast.success("Product Updated Successfully");
+          setTitle("");
+          setDescription("");
+          setPrice("");
+          setProductCount("");
+          imageList = [];
+          setImage([]);
+          setShowPostUpdate(false);
+          setShowAddProduct(true);
+          return getData();
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      updateUserProduct();
     } else if (image.length > 1 && showPostUpdate) {
       for (let i = 0; i < image.length; i++) {
         const data = new FormData();
@@ -523,7 +512,7 @@ export const AddUserProducts = () => {
               }}
             >
               <Typography component="h1" variant="h5">
-                ADD PRODUCT
+                UPDATE PRODUCT
               </Typography>
               <Box component="form" noValidate sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
