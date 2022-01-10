@@ -1,85 +1,61 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { imageFormat } from "./MyShop";
+import { Link } from "react-router-dom";
 
 export const LatestUploads: FC = () => {
+  const [data, setData] = useState<[]>([]);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await axios.get("/api/product/products");
+        console.log(res);
+        setData(res.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getData();
+  }, []);
   return (
     <div>
       <h1 className="container__shop__text">Latest Uploads</h1>
       <div className="container__shop" style={{ paddingTop: "100px" }}>
-        <div style={{ margin: "15px" }}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-              component="img"
-              height="140"
-              image="/assets/category1.jpg"
-              alt="justimage"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Product
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Share</Button>
-              <Button size="small">Learn More</Button>
-            </CardActions>
-          </Card>
-        </div>
-        <div style={{ margin: "15px" }}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-              component="img"
-              height="140"
-              image="/assets/category2.jpg"
-              alt="justimage"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Product
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Share</Button>
-              <Button size="small">Learn More</Button>
-            </CardActions>
-          </Card>
-        </div>
-        <div style={{ margin: "15px" }}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-              component="img"
-              height="140"
-              image="/assets/category3.jpg"
-              alt="justimage"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Product
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Share</Button>
-              <Button size="small">Learn More</Button>
-            </CardActions>
-          </Card>
-        </div>
+        {data.slice(0, 5).map((item: any) => {
+          console.log(imageFormat(item.product_image));
+          return (
+            <div style={{ margin: "15px" }} key={item.product_id}>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardMedia
+                  style={{ objectFit: "contain", padding: "5px" }}
+                  component="img"
+                  height="140"
+                  image={`${imageFormat(item.product_image)}`}
+                  alt="justimage"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {item.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.product_description.substring(0, 50)}...
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small">
+                    <Link to={`/product/${item.product_id}`}>Learn More</Link>
+                  </Button>
+                </CardActions>
+              </Card>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
