@@ -30,7 +30,10 @@ export const LatestUploads: FC = () => {
         {data.slice(0, 5).map((item: any) => {
           console.log(imageFormat(item.product_image));
           return (
-            <div style={{ margin: "15px" }} key={item.product_id}>
+            <div
+              style={{ maxWidth: "345px", margin: "0 auto", padding: "15px" }}
+              key={item.product_id}
+            >
               <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                   style={{ objectFit: "contain", padding: "5px" }}
