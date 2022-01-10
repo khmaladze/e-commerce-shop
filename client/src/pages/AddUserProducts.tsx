@@ -619,8 +619,8 @@ export const AddUserProducts = () => {
                     style={{
                       margin: "0 auto",
                       maxWidth: "345px",
-                      marginTop: "10px",
-                      marginBottom: "10px",
+                      marginTop: "50px",
+                      marginBottom: "50px",
                     }}
                   >
                     <Card
