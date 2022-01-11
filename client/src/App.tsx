@@ -19,6 +19,7 @@ import { MyShopPage } from "./pages/MyShopPage";
 import { AddUserProducts } from "./pages/AddUserProducts";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import { ProductDetailPage } from "./pages/ProductDetailPage";
 
 export const UserContext = createContext<any>(null);
 export const serverUrl = "http://localhost:5000";
@@ -77,6 +78,7 @@ const Routing = () => {
       <Route path="/my/shop" element={<MyShopPage />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/add/products" element={<AddUserProducts />} />
+      <Route path="/product/:productId" element={<ProductDetailPage />} />
     </Routes>
   );
 };

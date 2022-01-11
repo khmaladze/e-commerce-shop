@@ -202,12 +202,15 @@ export const AddUserProducts = () => {
 
   const getProductById = async (productId: string | number) => {
     try {
-      const res = await axios.get(`/api/product/get/product/${productId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-        },
-      });
+      const res = await axios.get(
+        `/api/product/get/product/${Number(productId)}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        }
+      );
       console.log(res);
       setTitle(res.data.product[0].title);
       setDescription(res.data.product[0].product_description);
@@ -348,7 +351,6 @@ export const AddUserProducts = () => {
                 body: JSON.stringify({
                   title,
                   productDescription: description,
-                  category,
                   price,
                   productCount,
                   productImage: String(imageList),
