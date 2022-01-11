@@ -98,7 +98,7 @@ export const Navbar: FC = () => {
                           localStorage.clear();
                           dispatch({ type: "CLEAR" });
                           history("/");
-                          toast.success("LOG OUT SUCCESS");
+                          toast.success("log out success");
                           localStorage.setItem("guest", `true`);
                         }}
                       >
@@ -148,7 +148,7 @@ export const Navbar: FC = () => {
                     dispatch({ type: "CLEAR" });
                     history("/");
                     closeNav(e);
-                    toast.success("LOG OUT SUCCESS");
+                    toast.success("log out success");
                     localStorage.setItem("guest", `true`);
                   }}
                 >

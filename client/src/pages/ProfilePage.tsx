@@ -4,7 +4,7 @@ import { ProfileHeader } from "../components/ProfileHeader";
 
 export const ProfilePage: FC = () => {
   return (
-    <div>
+    <div style={{ minHeight: "calc(100vh - 360px)" }}>
       <ProfileHeader />
       <ProfileContainer />
     </div>

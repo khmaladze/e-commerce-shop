@@ -68,6 +68,7 @@ export const LoginPage: FC = () => {
         alignItems: "center",
         paddingTop: "20px",
         paddingBottom: "20px",
+        minHeight: "calc(100vh - 360px)",
       }}
     >
       <ThemeProvider theme={theme}>

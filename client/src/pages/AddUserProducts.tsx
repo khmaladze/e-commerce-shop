@@ -384,7 +384,7 @@ export const AddUserProducts = () => {
   return (
     <div>
       <div className="myshop__page">
-        {showAddProduct ? (
+        {showAddProduct && (
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
@@ -428,6 +428,7 @@ export const AddUserProducts = () => {
                         width: "100%",
                         padding: "10px",
                         borderRadius: "5px",
+                        background: "transparent",
                       }}
                     ></textarea>
                   </Grid>
@@ -501,8 +502,6 @@ export const AddUserProducts = () => {
               </Button>
             </Box>
           </Container>
-        ) : (
-          <div></div>
         )}
         {showPostUpdate ? (
           <Container component="main" maxWidth="xs">
@@ -548,6 +547,7 @@ export const AddUserProducts = () => {
                         width: "100%",
                         padding: "10px",
                         borderRadius: "5px",
+                        background: "transparent",
                       }}
                     ></textarea>
                   </Grid>

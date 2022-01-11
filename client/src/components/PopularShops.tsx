@@ -1,14 +1,12 @@
 import axios from "axios";
 import React, { FC, useState, useEffect } from "react";
-import { serverUrl } from "../App";
 
 export const PopularShops: FC = () => {
   const [shop, setShop] = useState<any>([]);
   useEffect(() => {
     const getShops = async () => {
       try {
-        const res = await axios.get(`${serverUrl}/api/shop`);
-        console.log(res);
+        const res = await axios.get(`/api/shop`);
       } catch (error) {
         console.log(error);
       }
