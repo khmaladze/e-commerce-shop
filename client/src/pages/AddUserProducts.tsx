@@ -20,6 +20,10 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -70,6 +74,10 @@ export const AddUserProducts = () => {
       }
     };
     getMyProducts();
+  };
+
+  const handleChange = (event: any) => {
+    setCategory(event.target.value);
   };
 
   const AddProduct = () => {
@@ -360,6 +368,7 @@ export const AddUserProducts = () => {
         setShowPostUpdate(true);
         setUpdateProductId(updatePostId);
         setShowAddProduct(false);
+        window.scrollTo({ top: 150, behavior: "smooth" });
       }
     }
   };
@@ -432,8 +441,8 @@ export const AddUserProducts = () => {
                       }}
                     ></textarea>
                   </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <TextField
+                  <Grid item xs={12}>
+                    {/* <TextField
                       required
                       fullWidth
                       id="Category"
@@ -445,9 +454,27 @@ export const AddUserProducts = () => {
                       placeholder="Category"
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                    />
+                    /> */}
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Category
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={category}
+                        label="Age"
+                        onChange={handleChange}
+                      >
+                        <MenuItem value={1}>ELECTRONICS</MenuItem>
+                        <MenuItem value={2}>HOME</MenuItem>
+                        <MenuItem value={3}>FASHION</MenuItem>
+                        <MenuItem value={4}>SPORT</MenuItem>
+                        <MenuItem value={5}>ITEM</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       required
                       fullWidth
@@ -462,7 +489,7 @@ export const AddUserProducts = () => {
                       onChange={(e) => setPrice(e.target.value)}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       required
                       fullWidth
@@ -622,12 +649,9 @@ export const AddUserProducts = () => {
                       marginTop: "50px",
                       marginBottom: "50px",
                     }}
+                    key={item.product_id}
                   >
-                    <Card
-                      sx={{ maxWidth: 345 }}
-                      id={item.product_id}
-                      key={item.product_id}
-                    >
+                    <Card sx={{ maxWidth: 345 }} id={item.product_id}>
                       <CardMedia
                         style={{ objectFit: "contain", padding: "5px" }}
                         component="img"
