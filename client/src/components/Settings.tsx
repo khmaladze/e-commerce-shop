@@ -31,9 +31,6 @@ export const Settings: FC = () => {
   const [newUserImage, setNewUserImage] = useState<any | []>([]);
   const userId = state?.user_id;
   const [newUrl, setNewUrl] = useState("");
-  console.log(newUserImage);
-  console.log(newUserImage[0]);
-  console.log(newUserImage.length);
 
   interface UserUpdate {
     country: string;
@@ -178,7 +175,7 @@ export const Settings: FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ minHeight: "calc(100vh - 425px)" }}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

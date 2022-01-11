@@ -16,7 +16,6 @@ export const LatestUploads: FC = () => {
     const getData = async () => {
       try {
         const res = await axios.get("/api/product/products");
-        console.log(res);
         setData(res.data.products);
       } catch (error) {
         console.log(error);
