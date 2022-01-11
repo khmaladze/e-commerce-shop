@@ -37,5 +37,8 @@ app.use(getSwaggerUiRouter(app, config));
 if (!isValidEnv()) {
   app.listen(appConfig.PORT, () => {
     console.log(`Server is running on port ${appConfig.PORT}`);
+    console.log(
+      `Swagger documentation http://localhost:${appConfig.PORT}/docs`
+    );
   });
 }
