@@ -200,6 +200,25 @@ export const AddUserProducts = () => {
     }
   };
 
+  const getProductById = async (productId: string | number) => {
+    try {
+      const res = await axios.get(`/api/product/get/product/${productId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+      });
+      console.log(res);
+      setTitle(res.data.product[0].title);
+      setDescription(res.data.product[0].product_description);
+      setPrice(res.data.product[0].price);
+      setProductCount(res.data.product[0].product_count);
+      setImage(imageFormat(res.data.product[0].product_image));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const UpdateProduct = (updatePostId: string | number) => {
     if (
       !title &&
@@ -364,11 +383,17 @@ export const AddUserProducts = () => {
         setUpdateProductId("");
         setShowAddProduct(true);
         window.scrollTo({ top: 150, behavior: "smooth" });
+        setTitle("");
+        setDescription("");
+        setPrice("");
+        setProductCount("");
+        setImage([]);
       } else {
         setShowPostUpdate(true);
         setUpdateProductId(updatePostId);
         setShowAddProduct(false);
         window.scrollTo({ top: 150, behavior: "smooth" });
+        getProductById(updatePostId);
       }
     }
   };

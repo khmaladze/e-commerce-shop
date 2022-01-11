@@ -30,7 +30,12 @@ export const Sale: FC = () => {
         {data.slice(0, 3).map((item: any) => {
           return (
             <div
-              style={{ maxWidth: "345px", margin: "0 auto", padding: "15px" }}
+              style={{
+                maxWidth: "345px",
+                width: "345px",
+                margin: "0 auto",
+                padding: "15px",
+              }}
               key={item.product_id}
             >
               <Fade>

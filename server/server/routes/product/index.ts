@@ -8,8 +8,17 @@ import * as updateproduct from "./put.updateproduct";
 import * as delproduct from "./delete.product";
 import * as myuserproduct from "./get.myuserproducts";
 import * as updateuserproduct from "./put.updateproductsuser";
+import * as getProductByIdFromUser from "./get.productById";
 import { permissionMiddleware } from "../../middleware/permissions";
 let router = express.Router();
+
+router.get(
+  "/get/product/:productId",
+  requireAuthentication,
+  permissionMiddleware(["user"]),
+  validationMiddleware(product.requestSchema),
+  getProductByIdFromUser.businessLogic
+);
 
 router.post(
   "/add/product",
@@ -64,4 +73,5 @@ router.delete(
   validationMiddleware(delproduct.requestSchema),
   delproduct.businessLogic
 );
+
 export default router;

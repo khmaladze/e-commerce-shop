@@ -9,3 +9,8 @@ ORDER BY "shop id"
 SELECT product_id, title, product_description, category, price, product_count,  posted_by_shop, is_blocked, product_image as "product"
 FROM public.product as "products"
 WHERE products.posted_by_shop = 1 -- `shop id`
+
+-- Get Product bu Product id
+SELECT product_id, title, product_description, product_image, category, price, product_count, posted_by_user, posted_by_shop, is_blocked
+FROM public.product
+where product_id = 55;
