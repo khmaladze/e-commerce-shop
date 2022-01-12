@@ -5,32 +5,28 @@ DROP TABLE IF EXISTS public.user CASCADE;
 DROP TABLE IF EXISTS public.category CASCADE;
 DROP TABLE IF EXISTS public.shop CASCADE;
 DROP TABLE IF EXISTS public.product CASCADE;
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE
-  OR REPLACE FUNCTION next_id(IN seq_name varchar, OUT result bigint) AS $ $ DECLARE our_epoch bigint: = 1314220021721;
-seq_id bigint;
-now_millis bigint;
-shard_id int: = 0;
+CREATE OR REPLACE FUNCTION next_id(IN seq_name varchar, OUT result bigint) AS $$
+DECLARE
+    our_epoch bigint := 1314220021721;
+    seq_id bigint;
+    now_millis bigint;
+    shard_id int := 0;
 BEGIN
-SELECT
-  nextval(seq_name) % 1024 INTO seq_id;
-SELECT
-  FLOOR(
-    EXTRACT(
-      EPOCH
-      FROM
-        clock_timestamp()
-    ) * 1000
-  ) INTO now_millis;
-result: = (now_millis - our_epoch) < < 23;
-result: = result | (shard_id < < 10);
-result: = result | (seq_id);
+    SELECT nextval(seq_name) % 1024 INTO seq_id;
+    SELECT FLOOR(EXTRACT(EPOCH FROM clock_timestamp()) * 1000) INTO now_millis;
+    result := (now_millis - our_epoch) << 23;
+    result := result | (shard_id <<10);
+    result := result | (seq_id);
 END;
-$ $ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
+
 -- DROP SEQUENCE IF EXISTS content_id_seq;
 CREATE SEQUENCE org_id_seq;
 CREATE TABLE public.user(
-  user_id BIGSERIAL PRIMARY KEY,
+  user_id BIGINT NOT NULL DEFAULT next_id('org_id_seq') PRIMARY KEY,
   first_name CHARACTER VARYING(50) NOT NULL,
   last_name CHARACTER VARYING(100) NOT NULL,
   birth_date DATE NOT NULL,
@@ -83,7 +79,7 @@ CREATE TABLE public.product(
     posted_by_user BIGINT,
     posted_by_shop BIGINT,
     is_blocked BOOLEAN NOT NULL,
-    CONSTRAINT fkey_product_posted_by_user FOREIGN KEY (posted_by_shop) REFERENCES public.user(user_id) MATCH SIMPLE,
+    CONSTRAINT fkey_product_posted_by_user FOREIGN KEY (posted_by_user) REFERENCES public.user(user_id) MATCH SIMPLE,
     CONSTRAINT fkey_product_posted_by_shop FOREIGN KEY(posted_by_shop) REFERENCES public.shop(shop_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
   );
 CREATE TABLE public.history(
