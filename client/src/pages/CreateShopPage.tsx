@@ -17,6 +17,10 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -134,19 +138,24 @@ export const CreateShopPage: FC = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="Category"
-                  label="Category"
-                  name="Category"
-                  autoComplete="Category"
-                  margin="normal"
-                  type="text"
-                  placeholder="Category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                />
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Category
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={category}
+                    label="Age"
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    <MenuItem value={1}>ELECTRONICS</MenuItem>
+                    <MenuItem value={2}>HOME</MenuItem>
+                    <MenuItem value={3}>FASHION</MenuItem>
+                    <MenuItem value={4}>SPORT</MenuItem>
+                    <MenuItem value={5}>ITEM</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <TextField

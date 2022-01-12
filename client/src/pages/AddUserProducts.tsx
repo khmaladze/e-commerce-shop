@@ -469,19 +469,6 @@ export const AddUserProducts = () => {
                     ></textarea>
                   </Grid>
                   <Grid item xs={12}>
-                    {/* <TextField
-                      required
-                      fullWidth
-                      id="Category"
-                      label="Category"
-                      name="Category"
-                      autoComplete="Category"
-                      margin="normal"
-                      type="text"
-                      placeholder="Category"
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)}
-                    /> */}
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         Category

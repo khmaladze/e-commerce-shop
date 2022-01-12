@@ -45,10 +45,14 @@ CREATE TABLE public.user(
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create category table 
 CREATE TABLE public.category(
   category_id BIGSERIAL PRIMARY KEY,
   category CHARACTER VARYING(100) NOT NULL
 );
+
+-- Insert values into category
 INSERT INTO
   public.category(category)
 VALUES
@@ -57,8 +61,10 @@ VALUES
   ('FASHION'),
   ('SPORT'),
   ('ITEM');
+
+-- Create table shop
 CREATE TABLE public.shop(
-    shop_id BIGSERIAL PRIMARY KEY,
+    shop_id BIGINT NOT NULL DEFAULT next_id('org_id_seq') PRIMARY KEY,
     shop_name CHARACTER VARYING(50) NOT NULL,
     shop_owner BIGINT NOT NULL UNIQUE,
     category BIGINT NOT NULL,
@@ -68,8 +74,10 @@ CREATE TABLE public.shop(
     CONSTRAINT fkey_shop_shop_owner FOREIGN KEY(shop_owner) REFERENCES public.user(user_id) MATCH SIMPLE,
     CONSTRAINT fkey_shop_category FOREIGN KEY (category) REFERENCES public.category(category_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
   );
+
+-- Create table product
 CREATE TABLE public.product(
-    product_id BIGSERIAL PRIMARY KEY,
+    product_id BIGINT NOT NULL DEFAULT next_id('org_id_seq') PRIMARY KEY,
     title CHARACTER VARYING(30) NOT NULL,
     product_description CHARACTER VARYING(1000),
     product_image CHARACTER VARYING(5000) NOT NULL,
@@ -82,8 +90,10 @@ CREATE TABLE public.product(
     CONSTRAINT fkey_product_posted_by_user FOREIGN KEY (posted_by_user) REFERENCES public.user(user_id) MATCH SIMPLE,
     CONSTRAINT fkey_product_posted_by_shop FOREIGN KEY(posted_by_shop) REFERENCES public.shop(shop_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
   );
+
+-- Create table history
 CREATE TABLE public.history(
-    history_id BIGSERIAL PRIMARY KEY,
+    history_id BIGINT NOT NULL DEFAULT next_id('org_id_seq') PRIMARY KEY,
     product_id BIGINT NOT NULL,
     person_id BIGINT NOT NULL,
     CONSTRAINT fkey_history_product_id FOREIGN KEY(product_id) REFERENCES public.product(product_id) MATCH SIMPLE,

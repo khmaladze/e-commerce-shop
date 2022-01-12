@@ -17,7 +17,7 @@ export const requestSchema = Joi.object({
   query: Joi.object(),
   body: Joi.object({
     shopName: Joi.string().max(50).required(),
-    category: Joi.string().required(),
+    category: Joi.number().required(),
     budget: Joi.string().required(),
     shopImage: Joi.string().required(),
   }).options({ convert: false }),
