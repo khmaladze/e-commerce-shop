@@ -10,7 +10,7 @@ swagger ui docs --> [/docs](http://localhost:5000/docs)
 
 Examples in ./server/documentation directory.
 
-## TO RUN THIS SERVER YOU NEED TO
+## To run this server you need to
 
 open your terminal
 
@@ -18,7 +18,7 @@ open your terminal
 2. `npm install`
 3. `npm start`
 
-📑 YOU NEED TO CREATE FILE .env and into file change following values (EXAMPLE IN .env.example)
+📑 You need to create file .env and into file change following values (EXAMPLE IN .env.example)
 
 1. JWT_SECRET=type_your_jwt_secret
 2. PORT=type_your_port
