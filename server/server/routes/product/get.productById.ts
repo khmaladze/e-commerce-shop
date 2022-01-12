@@ -14,7 +14,7 @@ export const requestSchema = Joi.object({
       authorization: Joi.string().required(),
     })
     .options({ allowUnknown: true }),
-  params: Joi.object({ productId: Joi.number() }),
+  params: Joi.object({ productId: Joi.string() }),
   query: Joi.object(),
 }).description(userEndpointDesc);
 
@@ -25,9 +25,10 @@ export const responseSchema = Joi.object({
 
 export const businessLogic = async (req: Request, res: Response) => {
   try {
+    let stringId = String(req.params.productId);
     let product = (await db("product")
       .where({
-        product_id: req.params.productId,
+        product_id: stringId,
         posted_by_user: req.user.user_id,
         is_blocked: false,
       })

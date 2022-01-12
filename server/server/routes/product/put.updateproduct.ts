@@ -17,7 +17,7 @@ export const requestSchema = Joi.object({
     })
     .options({ allowUnknown: true }),
   params: Joi.object({
-    id: Joi.number().required(),
+    id: Joi.string().required(),
   }),
   query: Joi.object(),
   body: Joi.object({

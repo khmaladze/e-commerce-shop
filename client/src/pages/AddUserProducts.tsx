@@ -203,7 +203,7 @@ export const AddUserProducts = () => {
   const getProductById = async (productId: string | number) => {
     try {
       const res = await axios.get(
-        `/api/product/get/product/${Number(productId)}`,
+        `/api/product/get/product/${String(productId)}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -211,7 +211,6 @@ export const AddUserProducts = () => {
           },
         }
       );
-      console.log(res);
       setTitle(res.data.product[0].title);
       setDescription(res.data.product[0].product_description);
       setPrice(res.data.product[0].price);

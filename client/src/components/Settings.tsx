@@ -21,7 +21,7 @@ toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 export const Settings: FC = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const { state, dispatch } = useContext(UserContext);
   const [country, setCountry] = useState<string>(state?.country);
@@ -103,7 +103,7 @@ export const Settings: FC = () => {
               });
               localStorage.setItem("user", JSON.stringify(res.data.user));
               toast.success("SETTINGS UPDATED SUCCESSFULLY");
-              history("/profile");
+              navigate("/profile");
             }
           } catch (error: any) {
             console.log(error);
@@ -123,55 +123,52 @@ export const Settings: FC = () => {
     }
   }, [newUrl]);
 
-  const PostUpdate = () => {
-    const putUserUpdate = async () => {
-      try {
-        const userUpdate: UserUpdate = {
-          country,
-          userAddress,
-          userImage: "same",
-          userPassword,
-          confirmPassword,
-        };
-        const res = await axios.put(
-          `${serverUrl}/api/user/profile/update/${userId}`,
-          userUpdate,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("jwt"),
-            },
-          }
-        );
-        if (res.status == 200) {
-          dispatch({
-            type: "UPDATE",
-            payload: {
-              country: res.data.user.country,
-              user_address: res.data.user.user_address,
-              user_password: res.data.user.user_password,
-              user_image: res.data.user.user_image,
-            },
-          });
-          console.log(res.data.user);
-          localStorage.setItem("user", JSON.stringify(res.data.user));
-          toast.success("SETTINGS UPDATED SUCCESSFULLY");
-          history("/profile");
+  const PostUpdate = async () => {
+    try {
+      const userUpdate: UserUpdate = {
+        country,
+        userAddress,
+        userImage: "same",
+        userPassword,
+        confirmPassword,
+      };
+      const res = await axios.put(
+        `/api/user/profile/update/${userId}`,
+        userUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
         }
-      } catch (error: any) {
-        console.log(error);
-        console.log(error.response);
-        if (error.response.data.detail[0].message) {
-          toast.warn(error.response.data.detail[0].message);
-        }
-        if (error.response.data.message) {
-          toast.warn(error.response.data.message);
-        } else {
-          toast.warn("Please Use Valid Credentials");
-        }
+      );
+      if (res.status == 200) {
+        dispatch({
+          type: "UPDATE",
+          payload: {
+            country: res.data.user.country,
+            user_address: res.data.user.user_address,
+            user_password: res.data.user.user_password,
+            user_image: res.data.user.user_image,
+          },
+        });
+        console.log(res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        toast.success("SETTINGS UPDATED SUCCESSFULLY");
+        navigate("/profile");
       }
-    };
-    putUserUpdate();
+    } catch (error: any) {
+      console.log(error);
+      console.log(error.response);
+      if (error.response.data.detail[0].message) {
+        toast.warn(error.response.data.detail[0].message);
+      }
+      if (error.response.data.message) {
+        toast.warn(error.response.data.message);
+      } else {
+        toast.warn("Please Use Valid Credentials");
+      }
+    }
   };
 
   return (
