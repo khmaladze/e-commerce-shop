@@ -6,8 +6,7 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import { imageFormat } from "../components/MyShop";
-import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { imageFormat, UserProductComponent } from "../components/MyShop";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -44,36 +43,34 @@ export const AddUserProducts = () => {
 
   let imageList: any = [];
 
+  const getUserPost = async () => {
+    try {
+      const res = await axios.get("/api/product/my/products/user", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+      });
+      setProductData(res.data.products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const getUserPost = async () => {
-      try {
-        const res = await axios.get("/api/product/my/products/user", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-          },
-        });
-        setProductData(res.data.products);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getUserPost();
   }, []);
 
-  const getData = () => {
-    const getMyProducts = async () => {
-      try {
-        const res = await axios.get("/api/product/my/products/user", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-          },
-        });
-        setProductData(res.data.products);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getMyProducts();
+  const getData = async () => {
+    try {
+      const res = await axios.get("/api/product/my/products/user", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+      });
+      setProductData(res.data.products);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleChange = (event: any) => {
@@ -399,21 +396,18 @@ export const AddUserProducts = () => {
     }
   };
 
-  const deleteProduct = (id: any) => {
-    const deleteThisProduct = async () => {
-      try {
-        const res = await axios.delete(`/api/product/my/products/${id}`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-          },
-        });
-        toast.success(`Product id ${id} Delete Successfully`);
-        return getData();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    deleteThisProduct();
+  const deleteProduct = async (id: string | number) => {
+    try {
+      const res = await axios.delete(`/api/product/my/products/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+      });
+      toast.success(`Product id ${id} Delete Successfully`);
+      return getData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -652,64 +646,25 @@ export const AddUserProducts = () => {
           <h1 style={{ paddingTop: "20px", textAlign: "center" }}>
             My Products
           </h1>
-          {productData
-            ? productData.map((item: string | any) => {
-                return (
-                  <div
-                    style={{
-                      margin: "0 auto",
-                      maxWidth: "345px",
-                      marginTop: "50px",
-                      marginBottom: "50px",
-                    }}
-                    key={item.product_id}
-                  >
-                    <Card sx={{ maxWidth: 345 }} id={item.product_id}>
-                      <CardMedia
-                        style={{ objectFit: "contain", padding: "5px" }}
-                        component="img"
-                        height="140"
-                        image={`${imageFormat(item.product_image)}`}
-                        alt="product image"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {item.title}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.product_description.substring(0, 30)}...
-                        </Typography>
-                        <Typography variant="body1" color="text">
-                          Price: {item.price}$
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button size="small">
-                          <AiOutlineDelete
-                            onClick={() => deleteProduct(item.product_id)}
-                            style={{
-                              cursor: "pointer",
-                              fontSize: "20px",
-                              marginRight: "5px",
-                            }}
-                          />
-                        </Button>
-                        <Button size="small">
-                          <AiOutlineEdit
-                            style={{
-                              cursor: "pointer",
-                              fontSize: "20px",
-                              marginLeft: "5px",
-                            }}
-                            onClick={() => UpdateProduct(item.product_id)}
-                          />
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </div>
-                );
-              })
-            : "loading"}
+          {productData ? (
+            productData.map((item: string | any) => {
+              return (
+                <>
+                  <UserProductComponent
+                    product_id={item.product_id}
+                    product_image={item.product_image}
+                    title={item.title}
+                    price={item.price}
+                    product_description={item.product_description}
+                    onDelete={deleteProduct}
+                    onUpdate={UpdateProduct}
+                  />
+                </>
+              );
+            })
+          ) : (
+            <h1>No Product Created Yet..</h1>
+          )}
         </div>
       </div>
     </div>
