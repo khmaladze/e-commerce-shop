@@ -141,7 +141,6 @@ const WrapperImage = styled.section`
     height: auto;
     max-height: 500px;
     width: 100%;
-    max-width: 500px;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -175,9 +174,10 @@ const WrapperImage = styled.section`
       }
     }
   }
-  @media (min-width: 992px) {
+  @media (min-width: 576px) {
     .main {
       height: 500px;
+      width: 100%;
     }
     .gallery {
       img {

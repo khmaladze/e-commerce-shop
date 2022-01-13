@@ -25,7 +25,7 @@ export const Sale: FC = () => {
   }, []);
   return (
     <div>
-      <h1 className="container__shop__text">Latest Uploads</h1>
+      <h1 className="container__shop__text">Sale</h1>
       <div className="container__shop" style={{ paddingTop: "25px" }}>
         {data.slice(0, 3).map((item: any) => {
           return (
