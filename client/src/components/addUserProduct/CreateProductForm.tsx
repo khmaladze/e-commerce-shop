@@ -160,6 +160,7 @@ export const CreateProductComponent: FC<ProductUser> = ({ onAdd }) => {
       }
     }
   };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
