@@ -71,6 +71,8 @@ CREATE TABLE public.shop(
     is_blocked BOOLEAN NOT NULL,
     budget CHARACTER VARYING(50) NOT NULL,
     shop_image CHARACTER VARYING(500) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fkey_shop_shop_owner FOREIGN KEY(shop_owner) REFERENCES public.user(user_id) MATCH SIMPLE,
     CONSTRAINT fkey_shop_category FOREIGN KEY (category) REFERENCES public.category(category_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
   );
@@ -87,6 +89,8 @@ CREATE TABLE public.product(
     posted_by_user BIGINT,
     posted_by_shop BIGINT,
     is_blocked BOOLEAN NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fkey_product_posted_by_user FOREIGN KEY (posted_by_user) REFERENCES public.user(user_id) MATCH SIMPLE,
     CONSTRAINT fkey_product_posted_by_shop FOREIGN KEY(posted_by_shop) REFERENCES public.shop(shop_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
   );
@@ -96,6 +100,8 @@ CREATE TABLE public.history(
     history_id BIGINT NOT NULL DEFAULT next_id('org_id_seq') PRIMARY KEY,
     product_id BIGINT NOT NULL,
     person_id BIGINT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fkey_history_product_id FOREIGN KEY(product_id) REFERENCES public.product(product_id) MATCH SIMPLE,
     CONSTRAINT fkey_history_person_id FOREIGN KEY(person_id) REFERENCES public.user(user_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
   );
