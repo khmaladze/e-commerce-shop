@@ -44,6 +44,7 @@ export const businessLogic = async (req: Request, res: Response) => {
     if (userImage == "same") {
       userImage = req.user.user_image;
     }
+    const time = new Date().toISOString();
     userUpdate = await db("user")
       .where({
         user_id: userId,
@@ -53,6 +54,7 @@ export const businessLogic = async (req: Request, res: Response) => {
         user_address: userAddress,
         user_image: userImage,
         user_password: bcrypt.hashSync(userPassword, 12),
+        updated_at: time,
       });
     let user = (await db("user")
       .where({ user_id: userId, is_blocked: false })
