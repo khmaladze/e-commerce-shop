@@ -1,6 +1,6 @@
 import React, { FC, useState, useContext, useEffect } from "react";
 import { serverUrl, UserContext } from "../App";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FilePond, registerPlugin } from "react-filepond";
@@ -62,6 +62,51 @@ export const Settings: FC = () => {
       });
   };
 
+  const putUserUpdate = async () => {
+    try {
+      const userUpdate: UserUpdate = {
+        country,
+        userAddress,
+        userImage: newUrl,
+        userPassword,
+        confirmPassword,
+      };
+      const res = await axios.put(
+        `${serverUrl}/api/user/profile/update/${userId}`,
+        userUpdate,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        }
+      );
+      dispatch({
+        type: "UPDATE",
+        payload: {
+          country: res.data.user.country,
+          user_address: res.data.user.user_address,
+          user_password: res.data.user.user_password,
+          user_image: res.data.user.user_image,
+        },
+      });
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      toast.success("SETTINGS UPDATED SUCCESSFULLY");
+      navigate("/profile");
+    } catch (error: any) {
+      console.log(error);
+      console.log(error.response);
+      if (error.response.data.detail[0].message) {
+        toast.warn(error.response.data.detail[0].message);
+      }
+      if (error.response.data.message) {
+        toast.warn(error.response.data.message);
+      } else {
+        toast.warn("Please Use Valid Credentials");
+      }
+    }
+  };
+
   useEffect(() => {
     if (
       newUrl &&
@@ -72,52 +117,6 @@ export const Settings: FC = () => {
       userId
     ) {
       if (userId) {
-        const putUserUpdate = async () => {
-          try {
-            const userUpdate: UserUpdate = {
-              country,
-              userAddress,
-              userImage: newUrl,
-              userPassword,
-              confirmPassword,
-            };
-            const res = await axios.put(
-              `${serverUrl}/api/user/profile/update/${userId}`,
-              userUpdate,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer " + localStorage.getItem("jwt"),
-                },
-              }
-            );
-            if (res.status == 200) {
-              dispatch({
-                type: "UPDATE",
-                payload: {
-                  country: res.data.user.country,
-                  user_address: res.data.user.user_address,
-                  user_password: res.data.user.user_password,
-                  user_image: res.data.user.user_image,
-                },
-              });
-              localStorage.setItem("user", JSON.stringify(res.data.user));
-              toast.success("SETTINGS UPDATED SUCCESSFULLY");
-              navigate("/profile");
-            }
-          } catch (error: any) {
-            console.log(error);
-            console.log(error.response);
-            if (error.response.data.detail[0].message) {
-              toast.warn(error.response.data.detail[0].message);
-            }
-            if (error.response.data.message) {
-              toast.warn(error.response.data.message);
-            } else {
-              toast.warn("Please Use Valid Credentials");
-            }
-          }
-        };
         putUserUpdate();
       }
     }
@@ -142,21 +141,19 @@ export const Settings: FC = () => {
           },
         }
       );
-      if (res.status == 200) {
-        dispatch({
-          type: "UPDATE",
-          payload: {
-            country: res.data.user.country,
-            user_address: res.data.user.user_address,
-            user_password: res.data.user.user_password,
-            user_image: res.data.user.user_image,
-          },
-        });
-        console.log(res.data.user);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        toast.success("SETTINGS UPDATED SUCCESSFULLY");
-        navigate("/profile");
-      }
+      dispatch({
+        type: "UPDATE",
+        payload: {
+          country: res.data.user.country,
+          user_address: res.data.user.user_address,
+          user_password: res.data.user.user_password,
+          user_image: res.data.user.user_image,
+        },
+      });
+      console.log(res.data.user);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      toast.success("SETTINGS UPDATED SUCCESSFULLY");
+      navigate("/profile");
     } catch (error: any) {
       console.log(error);
       console.log(error.response);
