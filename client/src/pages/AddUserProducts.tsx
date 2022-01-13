@@ -1,12 +1,10 @@
 import React, { FC, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FilePond, registerPlugin } from "react-filepond";
-import "filepond/dist/filepond.min.css";
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { imageFormat } from "../components/MyShop";
+import axios from "axios";
+import { CreateProductComponent } from "../components/addUserProduct/CreateProductForm";
+import { UserProductComponent } from "../components/addUserProduct/UserProductCard";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -14,14 +12,11 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import axios from "axios";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { CreateProductComponent } from "../components/addUserProduct/CreateProductForm";
-import { UserProductComponent } from "../components/addUserProduct/UserProductCard";
-
+import { FilePond, registerPlugin } from "react-filepond";
+import "filepond/dist/filepond.min.css";
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -292,116 +287,118 @@ export const AddUserProducts = () => {
             <CreateProductComponent onAdd={getData} />
           </>
         )}
-        {showPostUpdate ? (
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
-              sx={{
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Typography component="h1" variant="h5">
-                UPDATE PRODUCT
-              </Typography>
-              <Box component="form" noValidate sx={{ mt: 3 }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="Title"
-                      label="Title"
-                      name="Title"
-                      autoComplete="Title"
-                      margin="normal"
-                      type="text"
-                      placeholder="Title"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder=" Enter Your Text Here..."
-                      style={{
-                        marginTop: "10px",
-                        height: "200px",
-                        maxHeight: "250px",
-                        maxWidth: "755px",
-                        width: "100%",
-                        padding: "10px",
-                        borderRadius: "5px",
-                        background: "transparent",
-                      }}
-                    ></textarea>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="Price"
-                      label="Price"
-                      name="Price"
-                      autoComplete="Price"
-                      margin="normal"
-                      type="number"
-                      placeholder="price $"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="count"
-                      label="count"
-                      name="count"
-                      autoComplete="count"
-                      margin="normal"
-                      type="number"
-                      placeholder="count $"
-                      value={productCount}
-                      onChange={(e) => setProductCount(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div>
-                      <FilePond
-                        files={image}
-                        allowMultiple={true}
-                        maxFiles={3}
-                        onupdatefiles={setImage}
-                        name="files"
-                        labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
-                      />
-                    </div>
-                  </Grid>
-                </Grid>
-              </Box>
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={() => UpdateProduct(updateProductId)}
+        {showPostUpdate && (
+          <div>
+            <Container component="main" maxWidth="xs">
+              <CssBaseline />
+              <Box
+                sx={{
+                  marginTop: 8,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
               >
-                Update Product
-              </Button>
-            </Box>
-          </Container>
-        ) : (
-          <div></div>
+                <Typography component="h1" variant="h5">
+                  UPDATE PRODUCT
+                </Typography>
+                <Box component="form" noValidate sx={{ mt: 3 }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="Title"
+                        label="Title"
+                        name="Title"
+                        autoComplete="Title"
+                        margin="normal"
+                        type="text"
+                        placeholder="Title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder=" Enter Your Text Here..."
+                        style={{
+                          marginTop: "10px",
+                          height: "200px",
+                          maxHeight: "250px",
+                          maxWidth: "755px",
+                          width: "100%",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          background: "transparent",
+                        }}
+                      ></textarea>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="Price"
+                        label="Price"
+                        name="Price"
+                        autoComplete="Price"
+                        margin="normal"
+                        type="number"
+                        placeholder="price $"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        id="count"
+                        label="count"
+                        name="count"
+                        autoComplete="count"
+                        margin="normal"
+                        type="number"
+                        placeholder="count $"
+                        value={productCount}
+                        onChange={(e) => setProductCount(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <div>
+                        <FilePond
+                          files={image}
+                          allowMultiple={true}
+                          maxFiles={3}
+                          onupdatefiles={setImage}
+                          name="files"
+                          labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                        />
+                      </div>
+                    </Grid>
+                  </Grid>
+                </Box>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={() => UpdateProduct(updateProductId)}
+                >
+                  Update Product
+                </Button>
+              </Box>
+            </Container>
+          </div>
         )}
         <div className="myshop__products__container">
-          <h1 style={{ paddingTop: "20px", textAlign: "center" }}>
-            My Products
-          </h1>
-          {productData ? (
+          {productData && (
+            <h1 style={{ paddingTop: "20px", textAlign: "center" }}>
+              My Products
+            </h1>
+          )}
+          {productData &&
             productData.map((item: string | any) => {
               return (
                 <>
@@ -416,10 +413,7 @@ export const AddUserProducts = () => {
                   />
                 </>
               );
-            })
-          ) : (
-            <h1>No Product Created Yet..</h1>
-          )}
+            })}
         </div>
       </div>
     </div>
