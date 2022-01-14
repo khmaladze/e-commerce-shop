@@ -11,6 +11,7 @@ import * as updateuserproduct from "./put.updateproductsuser";
 import * as getProductByIdFromUser from "./get.productById";
 import * as latestProduct from "./get.latestProduct";
 import * as lowestPrice from "./get.lowestPrice";
+import * as sale from "./get.sale";
 import { permissionMiddleware } from "../../middleware/permissions";
 let router = express.Router();
 
@@ -24,6 +25,12 @@ router.get(
   "/get/lowestprice/product",
   validationMiddleware(lowestPrice.requestSchema),
   lowestPrice.businessLogic
+);
+
+router.get(
+  "/get/sale",
+  validationMiddleware(sale.requestSchema),
+  sale.businessLogic
 );
 
 router.get(
