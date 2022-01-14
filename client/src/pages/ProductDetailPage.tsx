@@ -91,10 +91,16 @@ export const ProductDetailPage = () => {
                       <div style={{ height: "10px" }}></div>
                       <p className="desc">{item.product_description}</p>
                       <div style={{ height: "10px" }}></div>
-                      <p className="info">
-                        <span>Available : </span>
-                        {item.product_count > 0 ? "In stock" : "out of stock"}
-                      </p>
+                      {item.product_count == 1 ? (
+                        <p className="info">
+                          <span> Only 1 item Left</span>
+                        </p>
+                      ) : (
+                        <p className="info">
+                          <span>Available : </span>
+                          {item.product_count > 0 ? "In stock" : "out of stock"}
+                        </p>
+                      )}
                       <div style={{ height: "20px" }}></div>
                       <hr />
                       <Stack
