@@ -32,7 +32,7 @@ export const LowestPrice: FC = () => {
             <div
               style={{
                 maxWidth: "345px",
-                width: "345px",
+                width: "100%",
                 margin: "0 auto",
                 padding: "15px",
               }}
