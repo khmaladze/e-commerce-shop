@@ -12,15 +12,15 @@ import { Fade } from "react-awesome-reveal";
 
 export const LatestUploads: FC = () => {
   const [data, setData] = useState<[]>([]);
+  const getData = async () => {
+    try {
+      const res = await axios.get("/api/product/get/latest/product");
+      setData(res.data.products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axios.get("/api/product/products");
-        setData(res.data.products);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getData();
   }, []);
   return (
