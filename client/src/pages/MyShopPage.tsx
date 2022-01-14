@@ -19,6 +19,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { serverUrl } from "../App";
+import { MyShopCardComponent } from "../components/MyShopComponent";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -591,45 +592,17 @@ export const MyShopPage: FC = () => {
       <div className="myshop__products__container">
         <h1 style={{ paddingTop: "20px", textAlign: "center" }}>My Products</h1>
         {productData
-          ? productData.map((item: string | any) => {
+          ? productData.map((item: any) => {
               return (
-                <div>
-                  <div
-                    id={item.product_id}
-                    className="myshop__products__card"
-                    key={item.product_id}
-                  >
-                    <div
-                      className="myshop__produts__card__image"
-                      style={{
-                        backgroundImage: `url(${imageFormat(
-                          item.product_image
-                        )})`,
-                      }}
-                    ></div>
-                    <div className="myshop__products__card__content">
-                      <h3>{item.title}</h3>
-                      <h4>{item.product_description.substring(0, 30)}...</h4>
-                      <h5>Price: {item.price}$</h5>
-                    </div>
-                    <AiOutlineDelete
-                      onClick={() => deleteProduct(item.product_id)}
-                      style={{
-                        cursor: "pointer",
-                        fontSize: "20px",
-                        marginRight: "5px",
-                      }}
-                    />
-                    <AiOutlineEdit
-                      style={{
-                        cursor: "pointer",
-                        fontSize: "20px",
-                        marginLeft: "5px",
-                      }}
-                      onClick={() => UpdateProduct(item.product_id)}
-                    />
-                  </div>
-                </div>
+                <MyShopCardComponent
+                  product_id={item.product_id}
+                  product_image={item.product_image}
+                  title={item.title}
+                  price={item.price}
+                  product_description={item.product_description}
+                  onDelete={deleteProduct}
+                  onUpdate={UpdateProduct}
+                />
               );
             })
           : "loading"}
