@@ -187,7 +187,9 @@ const Wrapper = styled.main`
   margin: 0 auto;
   .product-center {
     display: grid;
+    width: 95%;
     gap: 4rem;
+    margin: 0 auto;
     margin-top: 2rem;
   }
   .price {
