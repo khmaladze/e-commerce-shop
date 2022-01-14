@@ -28,6 +28,7 @@ export const businessLogic = async (req: Request, res: Response) => {
     let products = (await db("product")
       .where({ is_blocked: false })
       .orderBy("created_at", "desc")
+      .limit(3)
       .select("*")) as Array<Product>;
     res.send({ success: true, products });
   } catch (error) {

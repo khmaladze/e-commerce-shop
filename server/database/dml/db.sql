@@ -19,3 +19,9 @@ where product_id = 55;
 SELECT *
 FROM public.product
 ORDER BY "created_at" DESC;
+
+-- Get Latest upload Products only 3 for main page
+SELECT *
+FROM public.product
+ORDER BY "created_at" DESC
+LIMIT 3;

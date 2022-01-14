@@ -29,7 +29,6 @@ export const businessLogic = async (req: Request, res: Response) => {
     let product = (await db("product")
       .where({
         product_id: stringId,
-        posted_by_user: req.user.user_id,
         is_blocked: false,
       })
       .select("*")) as Array<Product>;
