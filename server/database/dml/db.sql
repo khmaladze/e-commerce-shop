@@ -31,3 +31,16 @@ SELECT *
 FROM public.product
 ORDER BY "price" ASC
 LIMIT 3; 
+
+-- Get Sale Product only 3 for main page
+SELECT *
+FROM public.product
+WHERE product_count = '1'
+ORDER BY "price" ASC
+LIMIT 3; 
+
+-- Get all Sale Product for main page 
+SELECT *
+FROM public.product
+WHERE product_count = '1'
+ORDER BY "price" ASC;

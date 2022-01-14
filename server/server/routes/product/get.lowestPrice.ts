@@ -26,7 +26,7 @@ export const responseSchema = Joi.object({
 export const businessLogic = async (req: Request, res: Response) => {
   try {
     let products = (await db("product")
-      .where({ is_blocked: false })
+      .where({ is_blocked: false, product_count: "1" })
       .orderBy("price")
       .limit(3)
       .select("*")) as Array<Product>;
