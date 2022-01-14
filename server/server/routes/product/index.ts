@@ -10,6 +10,7 @@ import * as myuserproduct from "./get.myuserproducts";
 import * as updateuserproduct from "./put.updateproductsuser";
 import * as getProductByIdFromUser from "./get.productById";
 import * as latestProduct from "./get.latestProduct";
+import * as lowestPrice from "./get.lowestPrice";
 import { permissionMiddleware } from "../../middleware/permissions";
 let router = express.Router();
 
@@ -17,6 +18,12 @@ router.get(
   "/get/latest/product",
   validationMiddleware(latestProduct.requestSchema),
   latestProduct.businessLogic
+);
+
+router.get(
+  "/get/lowestprice/product",
+  validationMiddleware(lowestPrice.requestSchema),
+  lowestPrice.businessLogic
 );
 
 router.get(

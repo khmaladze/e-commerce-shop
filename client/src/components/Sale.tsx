@@ -23,6 +23,10 @@ export const Sale: FC = () => {
     };
     getData();
   }, []);
+  const randomPrice = (number: number) => {
+    const randomNumber = Math.floor(Math.random() * 1000);
+    return Number(randomNumber + number);
+  };
   return (
     <div>
       <h1 className="container__shop__text">Sale</h1>
@@ -54,8 +58,11 @@ export const Sale: FC = () => {
                     <Typography variant="body2" color="text.secondary">
                       {item.product_description.substring(0, 50)}...
                     </Typography>
-                    <Typography variant="body1" color="text">
-                      Price: {item.price}$
+                    <Typography variant="body1" color="red">
+                      Old Price: {randomPrice(Number(item.price))}$
+                    </Typography>
+                    <Typography variant="body1" color="blue">
+                      New Price: {item.price}$
                     </Typography>
                   </CardContent>
                   <CardActions>

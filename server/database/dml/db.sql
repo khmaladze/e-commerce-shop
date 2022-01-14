@@ -25,3 +25,9 @@ SELECT *
 FROM public.product
 ORDER BY "created_at" DESC
 LIMIT 3;
+
+-- Get Lowest Price Product only 3 for main page
+SELECT *
+FROM public.product
+ORDER BY "price" ASC
+LIMIT 3; 

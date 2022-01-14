@@ -31,12 +31,7 @@ export const ProductDetailPage = () => {
   const getProductById = async (productId: string | number | any) => {
     try {
       console.log(productId);
-      const res = await axios.get(`/api/product/get/product/${productId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("jwt"),
-        },
-      });
+      const res = await axios.get(`/api/product/get/product/${productId}`);
       console.log(res);
       setData(res.data.product);
       imageSlice(res.data.product[0].product_image);

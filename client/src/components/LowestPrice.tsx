@@ -15,7 +15,7 @@ export const LowestPrice: FC = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get("/api/product/products");
+        const res = await axios.get("/api/product/get/lowestprice/product");
         setData(res.data.products);
       } catch (error) {
         console.log(error);
