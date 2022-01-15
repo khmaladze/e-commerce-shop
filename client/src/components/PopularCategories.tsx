@@ -10,7 +10,7 @@ export const PopularCategories: FC = () => {
   return (
     <div>
       <h1 className="container__shop__text">Popular Categories</h1>
-      <Fade cascade>
+      <Fade cascade triggerOnce>
         <div className="container__shop">
           <div
             className="shop__container"
