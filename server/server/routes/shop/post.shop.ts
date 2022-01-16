@@ -20,6 +20,7 @@ export const requestSchema = Joi.object({
     category: Joi.number().required(),
     budget: Joi.string().required(),
     shopImage: Joi.string().required(),
+    shopBackgroundImage: Joi.string().required(),
   }).options({ convert: false }),
 }).description(userEndpointDesc);
 
@@ -29,7 +30,8 @@ export const responseSchema = Joi.object({
 
 export const businessLogic = async (req: Request, res: Response) => {
   try {
-    let { shopName, category, budget, shopImage } = req.body;
+    let { shopName, category, budget, shopImage, shopBackgroundImage } =
+      req.body;
 
     await db("shop").insert({
       shop_name: shopName,
@@ -38,6 +40,7 @@ export const businessLogic = async (req: Request, res: Response) => {
       is_blocked: false,
       budget: budget,
       shop_image: shopImage,
+      shop_background_image: shopBackgroundImage,
     });
 
     res.status(200).send({ success: true });
