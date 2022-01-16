@@ -71,6 +71,7 @@ CREATE TABLE public.shop(
     is_blocked BOOLEAN NOT NULL,
     budget CHARACTER VARYING(50) NOT NULL,
     shop_image CHARACTER VARYING(500) NOT NULL,
+    shop_background_image CHARACTER VARYING(500) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fkey_shop_shop_owner FOREIGN KEY(shop_owner) REFERENCES public.user(user_id) MATCH SIMPLE,
