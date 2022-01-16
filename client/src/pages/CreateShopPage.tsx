@@ -30,6 +30,7 @@ export const CreateShopPage: FC = () => {
   const [category, setCategory] = useState<string>("");
   const [budget, setBudget] = useState<string>("");
   const [shopImage, setShopImage] = useState<any>([]);
+  const [shopBackgroundImage, setShopBackgroundImage] = useState<any>([]);
 
   const history = useNavigate();
 
@@ -38,9 +39,11 @@ export const CreateShopPage: FC = () => {
     category: string;
     budget: string;
     shopImage: string;
+    shopBackgroundImage: string;
   }
 
-  const postCreateShop = async (image: string) => {
+  const postCreateShop = async (image: string, bgImage: string) => {
+    console.log(shopBackgroundImage);
     try {
       if (image && shopName && category && budget && shopImage) {
         const createShop: Shop = {
@@ -48,22 +51,17 @@ export const CreateShopPage: FC = () => {
           category,
           budget,
           shopImage: image,
+          shopBackgroundImage: bgImage,
         };
-        const res = await axios.post(
-          `${serverUrl}/api/shop/add/shop`,
-          createShop,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("jwt"),
-            },
-          }
-        );
-        if (res.status == 200) {
-          toast.success("shop Add Successfully");
-          localStorage.setItem("shop", "shop created successfully");
-          history("/my/shop");
-        }
+        const res = await axios.post(`/api/shop/add/shop`, createShop, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("jwt"),
+          },
+        });
+        toast.success("shop Add Successfully");
+        localStorage.setItem("shop", "shop created successfully");
+        history("/my/shop");
       } else {
         toast.warn("please upload image");
       }
@@ -80,9 +78,9 @@ export const CreateShopPage: FC = () => {
   };
 
   const CreateShop = () => {
-    if (shopName && category && budget && shopImage) {
-      const data = new FormData();
-      data.append("file", shopImage[0].file);
+    if (shopName && category && budget && shopImage && shopBackgroundImage) {
+      let data = new FormData();
+      data.append("file", shopBackgroundImage[0].file);
       data.append(
         "upload_preset",
         "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
@@ -93,9 +91,26 @@ export const CreateShopPage: FC = () => {
         body: data,
       })
         .then((res) => res.json())
-        .then((data) => {
+        .then((dataImg) => {
           toast.success("Image Uploaded");
-          postCreateShop(data.url);
+          data.append("file", shopImage[0].file);
+          data.append(
+            "upload_preset",
+            "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+          );
+          data.append("cloud_name", "dtlhyd02w");
+          fetch("https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload", {
+            method: "post",
+            body: data,
+          })
+            .then((res) => res.json())
+            .then((dataa) => {
+              toast.success("Image Uploaded");
+              postCreateShop(dataImg.url, dataa.url);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch((err) => {
           console.log(err);
@@ -173,12 +188,27 @@ export const CreateShopPage: FC = () => {
                 />
               </Grid>
               <Grid item xs={12}>
+                <Typography component="h1" variant="h5">
+                  IMAGE FOR BACKGROUND
+                </Typography>
                 <div>
                   <FilePond
                     files={shopImage}
                     allowMultiple={true}
                     maxFiles={3}
                     onupdatefiles={setShopImage}
+                    name="files"
+                    labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
+                  />
+                </div>
+              </Grid>
+              <Grid item xs={12}>
+                <div>
+                  <FilePond
+                    files={shopBackgroundImage}
+                    allowMultiple={true}
+                    maxFiles={3}
+                    onupdatefiles={setShopBackgroundImage}
                     name="files"
                     labelIdle='Drag & Drop your files or <span className="filepond--label-action">Browse</span>'
                   />
