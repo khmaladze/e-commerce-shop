@@ -80,6 +80,39 @@ export const CreateProductComponent: FC<ProductUser> = ({ onAdd }) => {
     }
   };
 
+  const createPostWithMultipleImage = async (data: any) => {
+    try {
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload",
+        data
+      );
+      imageList.push(res.data.url);
+      if (imageList.length == image.length) {
+        const res = await postCreateProductForUser(
+          title,
+          description,
+          category,
+          price,
+          productCount,
+          imageList
+        );
+        toast.success("it working good");
+        toast.success("Product Add Successfully");
+        setTitle("");
+        setDescription("");
+        setCategory("");
+        setPrice("");
+        setProductCount("");
+        imageList = [];
+        setImage([]);
+        setImageUrl("");
+        return onAdd();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const AddProduct = () => {
     if (
       !title ||
@@ -90,64 +123,18 @@ export const CreateProductComponent: FC<ProductUser> = ({ onAdd }) => {
       !image[0]
     ) {
       toast.warn("Please add All The filed");
-    }
-    if (image.length == 1) {
+    } else if (image.length == 1) {
       createPost();
-    } else {
-      if (image.length > 1) {
-        for (let i = 0; i < image.length; i++) {
-          const data = new FormData();
-          data.append("file", image[i].file);
-          data.append(
-            "upload_preset",
-            "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
-          );
-          data.append("cloud_name", "dtlhyd02w");
-          const createPost = async () => {
-            try {
-              const res = await axios.post(
-                "https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload",
-                data
-              );
-              imageList.push(res.data.url);
-              if (imageList.length == image.length) {
-                const postData = {
-                  title,
-                  productDescription: description,
-                  category,
-                  price,
-                  productCount,
-                  productImage: String(imageList),
-                  requestedBy: "user",
-                };
-                const response = await axios.post(
-                  "/api/product/add/product",
-                  postData,
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization: "Bearer " + localStorage.getItem("jwt"),
-                    },
-                  }
-                );
-                toast.success("it working good");
-                toast.success("Product Add Successfully");
-                setTitle("");
-                setDescription("");
-                setCategory("");
-                setPrice("");
-                setProductCount("");
-                imageList = [];
-                setImage([]);
-                setImageUrl("");
-                return onAdd();
-              }
-            } catch (error) {
-              console.log(error);
-            }
-          };
-          createPost();
-        }
+    } else if (image.length > 1) {
+      for (let i = 0; i < image.length; i++) {
+        const data = new FormData();
+        data.append("file", image[i].file);
+        data.append(
+          "upload_preset",
+          "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+        );
+        data.append("cloud_name", "dtlhyd02w");
+        createPostWithMultipleImage(data);
       }
     }
   };
