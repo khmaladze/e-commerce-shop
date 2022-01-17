@@ -86,3 +86,26 @@ export const postSettingUpdate = async (
     },
   });
 };
+
+export const postSettingUpdateWithImage = async (
+  userId: string | number,
+  country: string,
+  userAddress: string,
+  newUrl: string,
+  userPassword: string,
+  confirmPassword: string
+) => {
+  const userUpdate: UserUpdate = {
+    country,
+    userAddress,
+    userImage: newUrl,
+    userPassword,
+    confirmPassword,
+  };
+  return await axios.put(`/api/user/profile/update/${userId}`, userUpdate, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("jwt"),
+    },
+  });
+};
