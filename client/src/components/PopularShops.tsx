@@ -4,18 +4,16 @@ import { Fade } from "react-awesome-reveal";
 
 export const PopularShops: FC = () => {
   const [shop, setShop] = useState<any>([]);
+  const getShops = async () => {
+    try {
+      const res = await axios.get(`/api/shop`);
+      setShop(res.data.shop);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const getShops = async () => {
-      try {
-        const res = await axios.get(`/api/shop`);
-        setShop(res.data.shop);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getShops();
-    console.log(shop);
   }, []);
   return (
     <div>

@@ -20,6 +20,14 @@ interface UserRegister {
   confirmPassword: string;
 }
 
+interface UserUpdate {
+  country: string;
+  userAddress: string;
+  userImage: string;
+  userPassword: string;
+  confirmPassword: string;
+}
+
 export const postUserLogin = async (email: string, password: string) => {
   const userLogin: UserLogin = {
     email,
@@ -55,4 +63,26 @@ export const postUserRegisterFunction = async (
     confirmPassword,
   };
   return await axios.post(`${serverUrl}/api/auth/register`, userRegister);
+};
+
+export const postSettingUpdate = async (
+  userId: string | number,
+  country: string,
+  userAddress: string,
+  userPassword: string,
+  confirmPassword: string
+) => {
+  const userUpdate: UserUpdate = {
+    country,
+    userAddress,
+    userImage: "same",
+    userPassword,
+    confirmPassword,
+  };
+  return await axios.put(`/api/user/profile/update/${userId}`, userUpdate, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + localStorage.getItem("jwt"),
+    },
+  });
 };

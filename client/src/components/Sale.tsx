@@ -12,15 +12,15 @@ import { Fade } from "react-awesome-reveal";
 
 export const Sale: FC = () => {
   const [data, setData] = useState<[]>([]);
+  const getData = async () => {
+    try {
+      const res = await axios.get("/api/product/get/sale");
+      setData(res.data.products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axios.get("/api/product/get/sale");
-        setData(res.data.products);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getData();
   }, []);
   const randomPrice = (number: number) => {

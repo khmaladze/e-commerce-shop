@@ -16,6 +16,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { postSettingUpdate } from "../pages/ApiClient";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -31,7 +32,6 @@ export const Settings: FC = () => {
   const [newUserImage, setNewUserImage] = useState<any | []>([]);
   const userId = state?.user_id;
   const [newUrl, setNewUrl] = useState("");
-
   interface UserUpdate {
     country: string;
     userAddress: string;
@@ -39,7 +39,6 @@ export const Settings: FC = () => {
     userPassword: string;
     confirmPassword: string;
   }
-
   const PostUpdateWithImage = () => {
     const data = new FormData();
     data.append("file", newUserImage[0].file);
@@ -124,22 +123,12 @@ export const Settings: FC = () => {
 
   const PostUpdate = async () => {
     try {
-      const userUpdate: UserUpdate = {
+      const res = await postSettingUpdate(
+        userId,
         country,
         userAddress,
-        userImage: "same",
         userPassword,
-        confirmPassword,
-      };
-      const res = await axios.put(
-        `/api/user/profile/update/${userId}`,
-        userUpdate,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("jwt"),
-          },
-        }
+        confirmPassword
       );
       dispatch({
         type: "UPDATE",
