@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { CircularProgress } from "@mui/material";
 
 export const ProductDetailPage = () => {
   const productId = useParams();
@@ -44,93 +45,110 @@ export const ProductDetailPage = () => {
 
   return (
     <div>
-      <Wrapper>
-        <div className="section section-center page">
-          <div>
-            {data.map((item: any) => {
-              return (
-                <div key={item.product_id}>
-                  <div className=" product-center">
-                    <WrapperImage>
-                      <div
-                        style={{
-                          backgroundImage: `url(${mainImage})`,
-                        }}
-                        className="main"
-                      ></div>
-                      <div className="gallery">
-                        {firstImage && (
-                          <img
-                            src={firstImage}
-                            onClick={() => setMainImage(firstImage)}
-                            className={"active"}
-                          />
-                        )}
-                        {secondImage && (
-                          <img
-                            src={secondImage}
-                            onClick={() => setMainImage(secondImage)}
-                            className={"active"}
-                          />
-                        )}
-                        {thirdImage && (
-                          <img
-                            src={thirdImage}
-                            onClick={() => setMainImage(thirdImage)}
-                            className={"active"}
-                          />
-                        )}
-                      </div>
-                    </WrapperImage>
-                    <section className="content">
-                      <h2>Product: {item.title}</h2>
-                      <div style={{ height: "10px" }}></div>
-                      <h5 className="price">Price: {item.price}$</h5>
-                      <div style={{ height: "10px" }}></div>
-                      <p className="desc">{item.product_description}</p>
-                      <div style={{ height: "10px" }}></div>
-                      {item.product_count == 1 ? (
-                        <p className="info">
-                          <span> Only 1 item Left</span>
-                        </p>
-                      ) : (
-                        <p className="info">
-                          <span>Available : </span>
-                          {item.product_count > 0 ? "In stock" : "out of stock"}
-                        </p>
-                      )}
-                      <div style={{ height: "20px" }}></div>
-                      <hr />
-                      <Stack
-                        spacing={2}
-                        direction="row"
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          marginTop: "20px",
-                        }}
-                      >
-                        <Button variant="contained" style={{ width: "45%" }}>
-                          Buy Now
-                        </Button>
-                        <Button
-                          variant="outlined"
+      {data.length > 0 ? (
+        <Wrapper>
+          <div className="section section-center page">
+            <div>
+              {data.map((item: any) => {
+                return (
+                  <div key={item.product_id}>
+                    <div className=" product-center">
+                      <WrapperImage>
+                        <div
                           style={{
-                            width: "45%",
+                            backgroundImage: `url(${mainImage})`,
+                          }}
+                          className="main"
+                        ></div>
+                        <div className="gallery">
+                          {firstImage && (
+                            <img
+                              src={firstImage}
+                              onClick={() => setMainImage(firstImage)}
+                              className={"active"}
+                            />
+                          )}
+                          {secondImage && (
+                            <img
+                              src={secondImage}
+                              onClick={() => setMainImage(secondImage)}
+                              className={"active"}
+                            />
+                          )}
+                          {thirdImage && (
+                            <img
+                              src={thirdImage}
+                              onClick={() => setMainImage(thirdImage)}
+                              className={"active"}
+                            />
+                          )}
+                        </div>
+                      </WrapperImage>
+                      <section className="content">
+                        <h2>Product: {item.title}</h2>
+                        <div style={{ height: "10px" }}></div>
+                        <h5 className="price">Price: {item.price}$</h5>
+                        <div style={{ height: "10px" }}></div>
+                        <p className="desc">{item.product_description}</p>
+                        <div style={{ height: "10px" }}></div>
+                        {item.product_count == 1 ? (
+                          <p className="info">
+                            <span> Only 1 item Left</span>
+                          </p>
+                        ) : (
+                          <p className="info">
+                            <span>Available : </span>
+                            {item.product_count > 0
+                              ? "In stock"
+                              : "out of stock"}
+                          </p>
+                        )}
+                        <div style={{ height: "20px" }}></div>
+                        <hr />
+                        <Stack
+                          spacing={2}
+                          direction="row"
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginTop: "20px",
                           }}
                         >
-                          Add To Cart <AiOutlineShoppingCart />
-                        </Button>
-                      </Stack>
-                    </section>
+                          <Button variant="contained" style={{ width: "45%" }}>
+                            Buy Now
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            style={{
+                              width: "45%",
+                            }}
+                          >
+                            Add To Cart <AiOutlineShoppingCart />
+                          </Button>
+                        </Stack>
+                      </section>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
+        </Wrapper>
+      ) : (
+        <div
+          style={{
+            height: "calc(100vh - 360px)",
+            maxWidth: "1200px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "0 auto",
+          }}
+        >
+          <CircularProgress />
         </div>
-      </Wrapper>
+      )}
     </div>
   );
 };

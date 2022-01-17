@@ -10,8 +10,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
-import { serverUrl } from "../App";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { postUserRegisterFunction } from "./ApiClient";
@@ -125,7 +123,7 @@ export const RegisterPage: FC = () => {
   return (
     <div
       style={{
-        background: "#f7f7f7",
+        // background: "#f7f7f7",
         height: "100%",
         width: "100%",
         display: "flex",
