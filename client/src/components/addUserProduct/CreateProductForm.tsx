@@ -18,6 +18,7 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import { postCreateProductForUser } from "../../pages/ApiClient";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -41,6 +42,44 @@ export const CreateProductComponent: FC<ProductUser> = ({ onAdd }) => {
   };
   let imageList: any = [];
 
+  const createPost = async () => {
+    try {
+      const data = new FormData();
+      data.append("file", image[0].file);
+      data.append(
+        "upload_preset",
+        "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
+      );
+      data.append("cloud_name", "dtlhyd02w");
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload",
+        data
+      );
+      setImageUrl(res.data.url);
+      await postCreateProductForUser(
+        title,
+        description,
+        category,
+        price,
+        productCount,
+        res.data.url
+      );
+      toast.success("it working good");
+      toast.success("Product Add Successfully");
+      setTitle("");
+      setDescription("");
+      setCategory("");
+      setPrice("");
+      setProductCount("");
+      imageList = [];
+      setImage([]);
+      setImageUrl("");
+      return onAdd();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const AddProduct = () => {
     if (
       !title ||
@@ -53,54 +92,6 @@ export const CreateProductComponent: FC<ProductUser> = ({ onAdd }) => {
       toast.warn("Please add All The filed");
     }
     if (image.length == 1) {
-      const data = new FormData();
-      data.append("file", image[0].file);
-      data.append(
-        "upload_preset",
-        "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
-      );
-      data.append("cloud_name", "dtlhyd02w");
-      const createPost = async () => {
-        try {
-          const res = await axios.post(
-            "https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload",
-            data
-          );
-          setImageUrl(res.data.url);
-          const postData = {
-            title,
-            productDescription: description,
-            category,
-            price,
-            productCount,
-            productImage: String(res.data.url),
-            requestedBy: "user",
-          };
-          const response = await axios.post(
-            "/api/product/add/product",
-            postData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("jwt"),
-              },
-            }
-          );
-          toast.success("it working good");
-          toast.success("Product Add Successfully");
-          setTitle("");
-          setDescription("");
-          setCategory("");
-          setPrice("");
-          setProductCount("");
-          imageList = [];
-          setImage([]);
-          setImageUrl("");
-          return onAdd();
-        } catch (error) {
-          console.log(error);
-        }
-      };
       createPost();
     } else {
       if (image.length > 1) {

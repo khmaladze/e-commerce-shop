@@ -1,5 +1,4 @@
 import axios from "axios";
-import { serverUrl } from "../App";
 
 interface UserLogin {
   email: string;
@@ -28,12 +27,22 @@ interface UserUpdate {
   confirmPassword: string;
 }
 
+interface Product {
+  title: string;
+  productDescription: string;
+  category: string;
+  price: string;
+  productCount: string;
+  productImage: string;
+  requestedBy: string;
+}
+
 export const postUserLogin = async (email: string, password: string) => {
   const userLogin: UserLogin = {
     email,
     userPassword: password,
   };
-  return await axios.post(`${serverUrl}/api/auth/login`, userLogin);
+  return await axios.post(`/api/auth/login`, userLogin);
 };
 
 export const postUserRegisterFunction = async (
@@ -62,7 +71,7 @@ export const postUserRegisterFunction = async (
     budget,
     confirmPassword,
   };
-  return await axios.post(`${serverUrl}/api/auth/register`, userRegister);
+  return await axios.post(`/api/auth/register`, userRegister);
 };
 
 export const postSettingUpdate = async (
@@ -108,4 +117,33 @@ export const postSettingUpdateWithImage = async (
       Authorization: "Bearer " + localStorage.getItem("jwt"),
     },
   });
+};
+
+export const postCreateProductForUser = async (
+  title: string,
+  description: string,
+  category: string,
+  price: string,
+  productCount: string,
+  ImageOne: string
+) => {
+  try {
+    const postData: Product = {
+      title,
+      productDescription: description,
+      category,
+      price,
+      productCount,
+      productImage: String(ImageOne),
+      requestedBy: "user",
+    };
+    return await axios.post("/api/product/add/product", postData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
