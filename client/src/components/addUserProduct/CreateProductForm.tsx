@@ -88,7 +88,7 @@ export const CreateProductComponent: FC<ProductUser> = ({ onAdd }) => {
       );
       imageList.push(res.data.url);
       if (imageList.length == image.length) {
-        const res = await postCreateProductForUser(
+        await postCreateProductForUser(
           title,
           description,
           category,

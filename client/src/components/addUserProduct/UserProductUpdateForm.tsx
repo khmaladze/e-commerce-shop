@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FilePond, registerPlugin } from "react-filepond";
@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import axios from "axios";
+import { putUserProductUpdate } from "../../pages/ApiClient";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -44,7 +45,33 @@ export const UserProductUpdateForm: FC<Props> = ({
   const [showAddProduct, setShowAddProduct] = useState<boolean>(true);
 
   let imageList: any = [];
-  const UpdateProduct = (updatePostId: string | number) => {
+
+  const updateUserProduct = async (updatePostId: string) => {
+    try {
+      await putUserProductUpdate(
+        updatePostId,
+        title,
+        description,
+        price,
+        productCount,
+        imageUrl
+      );
+      toast.success("Product Updated  Successfully");
+      setTitle("");
+      setDescription("");
+      setPrice("");
+      setProductCount("");
+      imageList = [];
+      setImage([]);
+      setShowPostUpdate(false);
+      setShowAddProduct(true);
+      return getData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const UpdateProduct = (updatePostId: string) => {
     if (
       !title &&
       !category &&
@@ -54,48 +81,12 @@ export const UserProductUpdateForm: FC<Props> = ({
       !image[0]
     ) {
       toast.warn("Please add minumum one filed");
-    }
-    if (
+    } else if (
       !image[0] &&
       (title || description || category || price || productCount)
     ) {
-      const updateUserProduct = async () => {
-        try {
-          const uploadData = {
-            title,
-            productDescription: description,
-            price,
-            productCount,
-            productImage: imageUrl,
-            requestedBy: "user",
-          };
-          const res = await axios.put(
-            `/api/product/my/user/products/${updatePostId}`,
-            uploadData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("jwt"),
-              },
-            }
-          );
-          toast.success("Product Updated  Successfully");
-          setTitle("");
-          setDescription("");
-          setPrice("");
-          setProductCount("");
-          imageList = [];
-          setImage([]);
-          setShowPostUpdate(false);
-          setShowAddProduct(true);
-          return getData();
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      updateUserProduct();
-    }
-    if (image.length == 1 && showPostUpdate) {
+      updateUserProduct(updatePostId);
+    } else if (image.length == 1 && showPostUpdate) {
       const data = new FormData();
       data.append("file", image[0].file);
       data.append(

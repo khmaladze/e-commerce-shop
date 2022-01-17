@@ -147,3 +147,44 @@ export const postCreateProductForUser = async (
     console.log(error);
   }
 };
+
+interface ProductUpdate {
+  title: string;
+  productDescription: string;
+  price: string;
+  productCount: string;
+  productImage: string;
+  requestedBy: string;
+}
+
+export const putUserProductUpdate = async (
+  updatePostId: string,
+  title: string,
+  description: string,
+  price: string,
+  productCount: string,
+  ImageOne: string
+) => {
+  try {
+    const uploadData: ProductUpdate = {
+      title,
+      productDescription: description,
+      price,
+      productCount,
+      productImage: String(ImageOne),
+      requestedBy: "user",
+    };
+    return await axios.put(
+      `/api/product/my/user/products/${updatePostId}`,
+      uploadData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
+        },
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
