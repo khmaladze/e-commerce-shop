@@ -20,21 +20,28 @@ import {
   postSettingUpdateWithImage,
 } from "../pages/ApiClient";
 import { RootStateOrAny, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { login } from "../features/user";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 export const Settings: FC = () => {
   const navigate = useNavigate();
+  const newdispatch = useDispatch();
   const user = useSelector((state: RootStateOrAny) => state.user.value);
   console.log(user);
   const { state, dispatch } = useContext(UserContext);
-  const [country, setCountry] = useState<string>(user.country);
-  const [userAddress, setUserAddress] = useState<string>(user.user_address);
+  const [country, setCountry] = useState<string>(
+    user ? user.country : state?.country
+  );
+  const [userAddress, setUserAddress] = useState<string>(
+    user ? user.user_address : state?.user_address
+  );
   const [userPassword, setUserPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [newUserImage, setNewUserImage] = useState<any | []>([]);
-  const userId = state?.user_id;
+  const userId = user ? user.user_id : state?.user_id;
   const [newUrl, setNewUrl] = useState("");
   const PostUpdateWithImage = () => {
     const data = new FormData();
@@ -77,8 +84,30 @@ export const Settings: FC = () => {
           user_image: res.data.user.user_image,
         },
       });
+      newdispatch(
+        login({
+          birth_date: res.data.user.birth_date,
+          browser_type: res.data.user.browser_type,
+          budget: res.data.user.budget,
+          card_password: res.data.user.card_password,
+          country: res.data.user.country,
+          created_at: res.data.user.created_at,
+          email: res.data.user.email,
+          first_name: res.data.user.first_name,
+          ip_address: res.data.user.ip_address,
+          is_blocked: false,
+          last_name: res.data.user.last_name,
+          permission: res.data.user.permission,
+          updated_at: res.data.user.updated_at,
+          user_address: res.data.user.user_address,
+          user_card: res.data.user.user_card,
+          user_id: res.data.user.user_id,
+          user_image: res.data.user.user_image,
+          user_password: res.data.user.user_password,
+        })
+      );
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      toast.success("SETTINGS UPDATED SUCCESSFULLY");
+      toast.success("settings updated successfully");
       navigate("/profile");
     } catch (error: any) {
       console.log(error);
