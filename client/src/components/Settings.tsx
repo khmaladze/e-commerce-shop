@@ -19,22 +19,23 @@ import {
   postSettingUpdate,
   postSettingUpdateWithImage,
 } from "../pages/ApiClient";
+import { RootStateOrAny, useSelector } from "react-redux";
 
 toast.configure();
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 export const Settings: FC = () => {
   const navigate = useNavigate();
-
+  const user = useSelector((state: RootStateOrAny) => state.user.value);
+  console.log(user);
   const { state, dispatch } = useContext(UserContext);
-  const [country, setCountry] = useState<string>(state?.country);
-  const [userAddress, setUserAddress] = useState<string>(state?.user_address);
+  const [country, setCountry] = useState<string>(user.country);
+  const [userAddress, setUserAddress] = useState<string>(user.user_address);
   const [userPassword, setUserPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [newUserImage, setNewUserImage] = useState<any | []>([]);
   const userId = state?.user_id;
   const [newUrl, setNewUrl] = useState("");
-
   const PostUpdateWithImage = () => {
     const data = new FormData();
     data.append("file", newUserImage[0].file);

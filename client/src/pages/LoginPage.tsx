@@ -12,6 +12,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { postUserLogin } from "./ApiClient";
+import { useDispatch } from "react-redux";
+import { login } from "../features/user";
 
 toast.configure();
 
@@ -19,6 +21,7 @@ const theme = createTheme();
 
 export const LoginPage: FC = () => {
   const { dispatch } = useContext(UserContext);
+  const newdispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -37,11 +40,33 @@ export const LoginPage: FC = () => {
         if (res.data.user) {
           localStorage.setItem("user", JSON.stringify(res.data.user));
         }
-
         if (res.data.shop) {
           localStorage.setItem("shop", JSON.stringify(res.data.shop));
         }
+
         dispatch({ type: "USER", payload: res.data.user });
+        newdispatch(
+          login({
+            birth_date: res.data.user.birth_date,
+            browser_type: res.data.user.browser_type,
+            budget: res.data.user.budget,
+            card_password: res.data.user.card_password,
+            country: res.data.user.country,
+            created_at: res.data.user.created_at,
+            email: res.data.user.email,
+            first_name: res.data.user.first_name,
+            ip_address: res.data.user.ip_address,
+            is_blocked: false,
+            last_name: res.data.user.last_name,
+            permission: res.data.user.permission,
+            updated_at: res.data.user.updated_at,
+            user_address: res.data.user.user_address,
+            user_card: res.data.user.user_card,
+            user_id: res.data.user.user_id,
+            user_image: res.data.user.user_image,
+            user_password: res.data.user.user_password,
+          })
+        );
       } catch (error: any) {
         if (error.response.data) {
           for (let errDetail of error.response.data.detail) {
@@ -59,7 +84,7 @@ export const LoginPage: FC = () => {
   return (
     <div
       style={{
-        background: "#f7f7f7",
+        // background: "#f7f7f7",
         height: "100%",
         width: "100%",
         display: "flex",

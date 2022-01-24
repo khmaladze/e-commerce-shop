@@ -86,54 +86,6 @@ export const UserProductUpdateForm: FC<Props> = ({
       (title || description || category || price || productCount)
     ) {
       updateUserProduct(updatePostId);
-    } else if (image.length == 1 && showPostUpdate) {
-      const data = new FormData();
-      data.append("file", image[0].file);
-      data.append(
-        "upload_preset",
-        "afdffasfdsgsfgfasdasasgfherhrehrehrehrhrhrhr"
-      );
-      data.append("cloud_name", "dtlhyd02w");
-      console.log(data);
-      const updateUserProduct = async () => {
-        try {
-          const res = await axios.post(
-            "https://api.cloudinary.com/v1_1/dtlhyd02w/image/upload",
-            data
-          );
-          const uploadData = {
-            title,
-            productDescription: description,
-            price,
-            productCount,
-            productImage: res.data.url,
-            requestedBy: "user",
-          };
-          const response = await axios.put(
-            `/api/product/my/user/products/${updatePostId}`,
-            uploadData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("jwt"),
-              },
-            }
-          );
-          toast.success("Product Updated Successfully");
-          setTitle("");
-          setDescription("");
-          setPrice("");
-          setProductCount("");
-          imageList = [];
-          setImage([]);
-          setShowPostUpdate(false);
-          setShowAddProduct(true);
-          return getData();
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      updateUserProduct();
     } else if (image.length > 1 && showPostUpdate) {
       for (let i = 0; i < image.length; i++) {
         const data = new FormData();
@@ -155,7 +107,7 @@ export const UserProductUpdateForm: FC<Props> = ({
             console.log(imageList, "imageList");
             toast.success("Image Uploaded");
             if (imageList.length == image.length) {
-              fetch(`/api/product/my/user/products/:${updatePostId}`, {
+              fetch(`/api/product/my/user/products/${updatePostId}`, {
                 method: "put",
                 headers: {
                   "Content-Type": "application/json",
