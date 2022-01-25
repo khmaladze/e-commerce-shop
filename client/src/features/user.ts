@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState } from "../reducers/userReducer";
 
 interface User {
   birth_date: string;
