@@ -42,7 +42,7 @@ export const Sale: FC = () => {
               }}
               key={item.product_id}
             >
-              <Fade>
+              <Fade triggerOnce>
                 <Card sx={{ maxWidth: 345 }}>
                   <CardMedia
                     style={{ objectFit: "contain", padding: "5px" }}
